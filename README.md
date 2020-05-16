@@ -1,6 +1,6 @@
 # kasm
 
-This is Kris's Assembler for the (K64)[https://github.com/transitorykris/krisos].
+This is Kris's Assembler for the [K64](https://github.com/transitorykris/krisos).
 
 ## Goals
 
