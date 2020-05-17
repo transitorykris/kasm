@@ -28,9 +28,17 @@ fn main() {
 }
 
 fn pass1(source: &str) {
+    // Iterate over each line of source file
+    // Identify directives, labels, and symbols
+    // Strip comments -- Careful with string literals
+    // Store labels in a label table to have their addresses determined later
+    // Determine length in bytes the symbol requires
 }
 
 fn pass2() {
+    // Determine the location of each of the labels
+    // Update each reference to the symbol
+    // Question
 }
 
 fn assemble() -> Vec<u8> {
