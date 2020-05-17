@@ -15,17 +15,32 @@ fn main() {
     println!("{}", source);
 
     // Parse source file
+    parse(&source);
 
     // Resolve references
+    resolve();
 
+    // Assemble
+    let output = assemble();
+
+    // Write output file
+    write_out(OUTFILE, output);
+}
+
+fn parse(source: &str) {
+}
+
+fn resolve() {
+}
+
+fn assemble() -> Vec<u8> {
     let mut output: Vec<u8> = Vec::with_capacity(OUTSIZE);
 
     for _index in 1..OUTSIZE {       // Zero out our outout file
         output.push(0);
     }
 
-    // Write output file
-    write_out(OUTFILE, output);
+    output
 }
 
 fn read_source(file: &str) -> String {
