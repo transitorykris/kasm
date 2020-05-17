@@ -14,11 +14,11 @@ fn main() {
     let source = read_source(INFILE);
     println!("{}", source);
 
-    // Parse source file
-    parse(&source);
+    // Pass 1
+    pass1(&source);
 
-    // Resolve references
-    resolve();
+    // Pass 2
+    pass2();
 
     // Assemble
     let output = assemble();
@@ -27,10 +27,10 @@ fn main() {
     write_out(OUTFILE, output);
 }
 
-fn parse(source: &str) {
+fn pass1(source: &str) {
 }
 
-fn resolve() {
+fn pass2() {
 }
 
 fn assemble() -> Vec<u8> {
