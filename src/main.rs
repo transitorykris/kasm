@@ -10,8 +10,26 @@ const INFILE: &str = "example.s";   // Hardcode our source filename for the time
 fn main() {
     println!("kasm");
 
-    // Read source file
-    let path = Path::new(INFILE);
+    // Read our source file
+    let source = read_source(INFILE);
+    println!("{}", source);
+
+    // Parse source file
+
+    // Resolve references
+
+    let mut output: Vec<u8> = Vec::with_capacity(OUTSIZE);
+
+    for _index in 1..OUTSIZE {       // Zero out our outout file
+        output.push(0);
+    }
+
+    // Write output file
+    write_out(OUTFILE, output);
+}
+
+fn read_source(file: &str) -> String {
+    let path = Path::new(file);
     let display = path.display();
     let mut f = match File::open(path) {
         Err(why) => {
@@ -25,22 +43,13 @@ fn main() {
         Err(why) => {
             panic!("Couldn't read {}: {}", display, why.to_string())
         },
-        Ok(f) => f,
+        Ok(source) => source,
     };
-    println!("{}", source);
+    source
+}
 
-    // Parse source file
-    
-    // Resolve references
-
-    let mut output: Vec<u8> = Vec::with_capacity(OUTSIZE);
-
-    for _index in 1..OUTSIZE {       // Zero out our outout file
-        output.push(0);
-    }
-
-    // Write output file
-    let path = Path::new(OUTFILE);
+fn write_out(filename: &str, output: Vec<u8>) {
+    let path = Path::new(filename);
     let display = path.display();
     let mut f = match File::create(&path) {
         Err(why) => {
@@ -48,6 +57,7 @@ fn main() {
         },
         Ok(f) => f,
     };
+
     let _ = match f.write_all(&output) {
         Err(why) => {
             panic!("Couldn't write {}: {}", display, why.to_string())
