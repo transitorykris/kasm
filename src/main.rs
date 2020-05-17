@@ -34,12 +34,7 @@ fn resolve() {
 }
 
 fn assemble() -> Vec<u8> {
-    let mut output: Vec<u8> = Vec::with_capacity(OUTSIZE);
-
-    for _index in 1..OUTSIZE {       // Zero out our outout file
-        output.push(0);
-    }
-
+    let mut output = vec![0; OUTSIZE];
     output
 }
 
