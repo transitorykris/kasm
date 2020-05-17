@@ -5,19 +5,28 @@ use std::string::String;
 
 const OUTSIZE: usize = 16384;       // We're generating binaries for a 16KB EEPROM
 const OUTFILE: &str = "a.out";      // A typical default
+const INFILE: &str = "example.s";   // Hardcode our source filename for the time being
 
 fn main() {
     println!("kasm");
 
     // Read source file
-    let source = String::from("\
-; This is my simple program
+    let path = Path::new(INFILE);
+    let display = path.display();
+    let mut f = match File::open(path) {
+        Err(why) => {
+            panic!("Couldn't open {}: {}", display, why.to_string())
+        },
+        Ok(f) => f,
+    };
 
-    lda #$00            ; Load 0 into the A register
-    inc                 ; Add 1 to it
-    sta $00             ; Store it in the zeropage at $00
-");
-
+    let mut source = String::new();
+    let _ = match f.read_to_string(&mut source) {
+        Err(why) => {
+            panic!("Couldn't read {}: {}", display, why.to_string())
+        },
+        Ok(f) => f,
+    };
     println!("{}", source);
 
     // Parse source file
