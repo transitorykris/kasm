@@ -4,7 +4,7 @@ This is Kris's Assembler for the [K64](https://github.com/transitorykris/krisos)
 
 ## Goals
 
- * Implement the WDC 6502 [instruction set](instructions.md)
+ * Implement the WDC 6502 [instruction set](instructions.md) -- using the [WDC6502 datasheet](https://eater.net/datasheets/w65c02s.pdf)
  * Provide basic [assembler directives](directives.md)
 
 ## Non-goals
