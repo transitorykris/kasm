@@ -35,3 +35,15 @@ Example:
 ```
 
 Puts the next instruction in location `$FFFC`
+
+## .equ
+
+Sets a label to a specific value
+
+Example:
+
+```
+.equ myvalue 123
+```
+
+Will replace all occurences of `myvalue` with `123`
