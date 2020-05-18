@@ -56,6 +56,10 @@ fn main() {
     // Get our instruction set
     let mut instruction_set = generate_instruction_set();
 
+    println!("{:X}", get_instruction(&instruction_set, Mnemonic::LDA, AddressMode::Immediate));
+    println!("{:X}", get_instruction(&instruction_set, Mnemonic::INC, AddressMode::Implied));
+    println!("{:X}", get_instruction(&instruction_set, Mnemonic::STA, AddressMode::Zeropage));
+
     // Pass 1
     pass1(&source);
 
@@ -148,6 +152,14 @@ fn add_instruction(instruction_set: &mut InstructionMap, mnemonic: Mnemonic,
     instruction_set.insert(InstructionKey{mnemonic, address_mode}, opcode);
 }
 
+fn get_instruction(instruction_set: &InstructionMap, mnemonic: Mnemonic,
+        address_mode: AddressMode) -> u8 {
+    match instruction_set.get(&InstructionKey{mnemonic, address_mode}) {
+        Some(opcode) => *opcode,
+        None => panic!("No valid opcode"),
+    }
+}
+
 // Something will inevitably wrong in the below!
 fn generate_instruction_set() -> InstructionMap {
     let mut instruction_set = InstructionMap::new();
@@ -232,6 +244,7 @@ fn generate_instruction_set() -> InstructionMap {
     add_instruction(&mut instruction_set, Mnemonic::EOR, AddressMode::AbsoluteY, 0x59);
     add_instruction(&mut instruction_set, Mnemonic::EOR, AddressMode::IndirectX, 0x41);
     add_instruction(&mut instruction_set, Mnemonic::EOR, AddressMode::IndirectY, 0x51);
+    add_instruction(&mut instruction_set, Mnemonic::INC, AddressMode::Implied, 0x1a);
     add_instruction(&mut instruction_set, Mnemonic::INC, AddressMode::Zeropage, 0xe6);
     add_instruction(&mut instruction_set, Mnemonic::INC, AddressMode::ZeropageX, 0xf6);
     add_instruction(&mut instruction_set, Mnemonic::INC, AddressMode::Absolute, 0xee);
