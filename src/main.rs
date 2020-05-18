@@ -1,3 +1,5 @@
+use std::env;
+
 mod files;
 pub use crate::files::read_source;
 pub use crate::files::write_out;
@@ -10,13 +12,18 @@ pub use crate::instructions::AddressMode;
 
 const OUTSIZE: usize = 16384;       // We're generating binaries for a 16KB EEPROM
 const OUTFILE: &str = "a.out";      // A typical default
-const INFILE: &str = "example.s";   // Hardcode our source filename for the time being
 
-fn main() {
-    println!("kasm");
+fn main() { 
+    let args: Vec<String> = env::args().collect();
+    if args.len() < 2 {
+        println!("usage: kasm <source>");
+        return
+    }
+
+    let source_file = &args[1];
 
     // Read our source file
-    let source = read_source(INFILE);
+    let source = read_source(&source_file);
     println!("{}", source);
 
     // Get our instruction set
