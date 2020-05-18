@@ -16,10 +16,9 @@ const OUTFILE: &str = "a.out";      // A typical default
 fn main() { 
     let args: Vec<String> = env::args().collect();
     if args.len() < 2 {
-        println!("usage: kasm <source>");
+        println!("usage: {} <source>", &args[0]);
         return
     }
-
     let source_file = &args[1];
 
     // Read our source file
