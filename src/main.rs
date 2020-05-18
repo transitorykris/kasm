@@ -54,7 +54,7 @@ fn main() {
     println!("{}", source);
 
     // Get our instruction set
-    let mut instruction_set = generate_instruction_set();
+    let instruction_set = generate_instruction_set();
 
     println!("{:X}", get_instruction(&instruction_set, Mnemonic::LDA, AddressMode::Immediate));
     println!("{:X}", get_instruction(&instruction_set, Mnemonic::INC, AddressMode::Implied));
