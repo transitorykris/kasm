@@ -1,16 +1,16 @@
 # Directives
 
-## .org
+## .ascii
 
-Sets the location counter to this value
+Stores a string of ascii characters at the current address
 
 Example:
 
 ```
-.org $FFFC
+.ascii "Hello, World!\n\r"
 ```
 
-Puts the next instruction in location `$FFFC`
+Stores ```48656C6C6F2C20576F726C06421A0C``` at the current address
 
 ## .byte
 
@@ -24,14 +24,14 @@ Example:
 
 Stores `0102FF` at the current address
 
-## .ascii
+## .org
 
-Stores a string of ascii characters at the current address
+Sets the location counter to this value
 
 Example:
 
 ```
-.ascii "Hello, World!\n\r"
+.org $FFFC
 ```
 
-Stores ```48656C6C6F2C20576F726C06421A0C``` at the current address
+Puts the next instruction in location `$FFFC`
