@@ -117,8 +117,6 @@ fn get_operand_type(operand: &str) -> (AddressMode, Value) {
         raw_operand.truncate(raw_operand.len()-2);
     }
 
-    // XXX the strings are hex, but right now they read as decimal
-    // XXX from_str_radix?
     if raw_operand.starts_with("$") {
         if raw_operand.len() == 3 && x_indexed {
             println!("zeropage");
