@@ -14,6 +14,9 @@ pub enum AddressMode {
     Zeropage,
     ZeropageX,
     ZeropageY,
+    Unknown,    // Used in the first pass
+    UnknownX,
+    UnknownY,
 }
 
 #[derive(PartialEq, Eq, Hash)]
@@ -31,12 +34,12 @@ pub enum Mnemonic {
 
 #[derive(PartialEq, Eq, Hash)]
 pub struct InstructionKey{
-    mnemonic: Mnemonic,
-    address_mode: AddressMode,
+    pub mnemonic: Mnemonic,
+    pub address_mode: AddressMode,
 }
 
 type Opcode = u8;
-type InstructionMap = HashMap<InstructionKey, Opcode>;
+pub type InstructionMap = HashMap<InstructionKey, Opcode>;
 
 // returns the length in bytes of instruction for the given the AddressMode
 pub fn address_mode_length(address_mode: AddressMode) -> u8 {
@@ -53,6 +56,29 @@ pub fn address_mode_length(address_mode: AddressMode) -> u8 {
         AddressMode::Zeropage => 2,
         AddressMode::ZeropageX => 2,
         AddressMode::ZeropageY => 2,
+        AddressMode::Unknown => 0,
+        AddressMode::UnknownX => 0,
+        AddressMode::UnknownY => 0,
+    }
+}
+
+pub fn address_mode_name(address_mode: AddressMode) -> String {
+    match address_mode {
+        AddressMode::Absolute => String::from("Absolute"),
+        AddressMode::AbsoluteX => String::from("AbsoluteX"),
+        AddressMode::AbsoluteY => String::from("AbsoluteY"),
+        AddressMode::Immediate => String::from("Immediate"),
+        AddressMode::Implied => String::from("Implied"),
+        AddressMode::Indirect => String::from("Indirect"),
+        AddressMode::IndirectX => String::from("IndirectX"),
+        AddressMode::IndirectY => String::from("IndirectY"),
+        AddressMode::Relative => String::from("Relative"),
+        AddressMode::Zeropage => String::from("Zeropage"),
+        AddressMode::ZeropageX => String::from("ZeropageX"),
+        AddressMode::ZeropageY => String::from("ZeropageY"),
+        AddressMode::Unknown => String::from("Unknown"),
+        AddressMode::UnknownX => String::from("UnknownX"),
+        AddressMode::UnknownY => String::from("UnknownY"),
     }
 }
 
