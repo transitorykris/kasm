@@ -1,7 +1,7 @@
 ; This is my simple program
 
-    lda #$1a            ; Load 0 into the A register
+    lda #$1a            ; Load 0x1a into the A register
     inc                 ; Add 1 to it
-    sta $a45f           ; Store it in the zeropage at $00
+    sta $a45f           ; Store it at the absolute location $a45f
 
     ; End
