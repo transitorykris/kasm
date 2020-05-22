@@ -208,17 +208,12 @@ fn get_operand_type(operand: &str) -> (AddressMode, Value) {
     }
     
     // Check if this is X or Y indexed
-    if raw_operand.ends_with(",X") {
+    if raw_operand.ends_with(",x") {
         println!("X indexed");
         x_indexed = true;
-    } else if raw_operand.ends_with(",Y") {
+    } else if raw_operand.ends_with(",y") {
         println!("Y indexed");
         y_indexed = true;
-    }
-
-    // If it is, strip off the index
-    if x_indexed || y_indexed {
-        raw_operand.truncate(raw_operand.len()-2);
     }
 
     if raw_operand.starts_with("$") {
@@ -243,12 +238,26 @@ fn get_operand_type(operand: &str) -> (AddressMode, Value) {
         println!("immediate");
         let val = u8::from_str_radix(raw_operand.trim_start_matches("#$"), 16);
         return (AddressMode::Immediate, Value::U8(val.unwrap()));
-    } else if raw_operand.starts_with("($") {
+    } else if raw_operand.starts_with("($") && operand.ends_with(")") {
         println!("indirect");
-        let val = u16::from_str_radix(raw_operand.trim_start_matches("($"), 16);
+        let operand_trimmed = raw_operand.trim_start_matches("($").trim_end_matches(")");
+        let val = u16::from_str_radix(operand_trimmed, 16);
         return (AddressMode::Indirect, Value::U16(val.unwrap()));
+    } else if raw_operand.starts_with("($") && x_indexed {
+        println!("indirectX");
+        println!("{}", raw_operand);
+        let operand_trimmed = raw_operand.trim_start_matches("($").trim_end_matches(",x");
+        println!("{}", operand_trimmed);
+        let val = u16::from_str_radix(operand_trimmed, 16);
+        return (AddressMode::IndirectX, Value::U16(val.unwrap()));
+    } else if raw_operand.starts_with("($") && y_indexed {
+        println!("indirectY");
+        let operand_trimmed = raw_operand.trim_start_matches("($").trim_end_matches("),y");
+        let val = u16::from_str_radix(operand_trimmed, 16);
+        return (AddressMode::IndirectY, Value::U16(val.unwrap()));
+    } else {
+        // Otherwise must be a label
+        println!("unknown");
+        (AddressMode::Unknown, Value::String(raw_operand))
     }
-    // Otherwise must be a label
-    println!("unknown");
-    (AddressMode::Unknown, Value::String(raw_operand))
 }
