@@ -275,7 +275,7 @@ pub fn generate_instruction_set() -> InstructionMap {
     add_instruction(&mut instruction_set, Mnemonic::STA, AddressMode::AbsoluteY, 0x99);
     add_instruction(&mut instruction_set, Mnemonic::STA, AddressMode::IndirectX, 0x81);
     add_instruction(&mut instruction_set, Mnemonic::STA, AddressMode::IndirectY, 0x91);
-    add_instruction(&mut instruction_set, Mnemonic::STP, AddressMode::Relative, 0xdb);
+    add_instruction(&mut instruction_set, Mnemonic::STP, AddressMode::Implied, 0xdb);
     add_instruction(&mut instruction_set, Mnemonic::STX, AddressMode::Zeropage, 0x85);
     add_instruction(&mut instruction_set, Mnemonic::STX, AddressMode::ZeropageY, 0x95);
     add_instruction(&mut instruction_set, Mnemonic::STX, AddressMode::Absolute, 0x8d);

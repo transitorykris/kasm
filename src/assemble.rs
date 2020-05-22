@@ -5,7 +5,10 @@ pub use crate::pass1::Value::{String, U8, U16, Null};
 
 pub fn assemble(instruction_set: InstructionMap, program: Program, size: usize) -> Vec<u8> {
     let mut output = Vec::new();
+    let mut count = 0;
     for line in program.code {
+        count = count + 1;
+        println!("{}", count);
         let instruction_key = InstructionKey {
             mnemonic: line.0,
             address_mode: line.1,
