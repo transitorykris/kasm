@@ -30,28 +30,24 @@ pub struct Program {
     pub code: CodeTable,
 }
 
-pub fn pass1(source: &str) -> Program {
+pub fn pass1(source: &Vec<(String, u16)>) -> Program {
     let mut program = Program {
         symbol_table: SymbolTable::new(),
         code: CodeTable::new(),
     };
 
     // Iterate over each line of source file
-    for raw_line in source.lines() {
-        let line = raw_line.trim();     // Trim off leading and trailing whitespace
-        if line.len() == 0 {
-            // We got a blank line
-        } else if line.chars().next().unwrap() == ';' {
-            // We got a comment
-        } else if line.chars().next().unwrap() == '.' {
+    for line in source {
+        if line.0.chars().next().unwrap() == '.' {
             // We've got a directive
-            handle_directive(&mut program, line);
-        } else if line.chars().next().unwrap().is_ascii_alphabetic() {
+            handle_directive(&mut program, &line.0);
+        } else if line.0.chars().next().unwrap().is_ascii_alphabetic() {
+            // TODO: this doesn't handle labels:
             // We got an instruction
-            handle_instruction(&mut program, line);
+            handle_instruction(&mut program, &line.0);
         } else {
             // this isn't good!
-            panic!("Unknown syntax: {}", line);
+            panic!("Unknown syntax: {} at line: {}", line.0, line.1);
         }
     }
     // Store labels in a label table to have their addresses determined later
@@ -60,11 +56,11 @@ pub fn pass1(source: &str) -> Program {
 }
 
 // TODO: implement directives!
-fn handle_directive(program: &mut Program, line: &str) {
+fn handle_directive(program: &mut Program, line: &String) {
 
 }
 
-fn handle_instruction(program: &mut Program, line: &str) {
+fn handle_instruction(program: &mut Program, line: &String) {
     let mut parts = line.split_ascii_whitespace();
     let instruction = parts.next().unwrap().to_lowercase();
     println!("About to handle instruction {}", instruction);
@@ -91,12 +87,6 @@ fn get_operand_type(operand: &str) -> (AddressMode, Value) {
 
     println!("Checking operand {} length {}", raw_operand, raw_operand.len());
     if raw_operand == "" {
-        println!("implied");
-        return (AddressMode::Implied, Value::Null);
-    }
-
-    if raw_operand.starts_with(";") {
-        // That's a comment there!
         println!("implied");
         return (AddressMode::Implied, Value::Null);
     }
