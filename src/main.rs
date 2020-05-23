@@ -32,25 +32,29 @@ fn main() {
     }
     let source_file = &args[1];
 
-    // Read our source file
+    // Read in the source file
+    // TODO: Change this to returning a vector of tuples
+    //       <(source_line, line_number)>
+    //       and strip out comments
     let source = read_source(&source_file);
 
-    // Get our instruction set
+    // Create a data structure containing details of our
+    // instruction set
     let instruction_set = generate_instruction_set();
 
-    println!("{:X}", get_instruction(&instruction_set, Mnemonic::LDA, AddressMode::Immediate));
-    println!("{:X}", get_instruction(&instruction_set, Mnemonic::INC, AddressMode::Implied));
-    println!("{:X}", get_instruction(&instruction_set, Mnemonic::STA, AddressMode::Zeropage));
-
-    // Pass 1
+    // Create a data structure containing the instruction,
+    // the addressing mode, and the value
+    // TODO: Also generate a table of labels that need to
+    //       be resolved into addresses
     let pass1_code = pass1(&source);
 
-    // Pass 2
+    // Create a new data structure of instructions by resolving
+    // all the labels
+    // TODO: Resolve the labels!
     let pass2_code = pass2(pass1_code);
 
-    // Assemble
+    // Convert into a binary suitable for writing to disk
     let output = assemble(instruction_set, pass2_code, OUTSIZE);
 
-    // Write output file
     write_out(OUTFILE, output);
 }
