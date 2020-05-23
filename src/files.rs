@@ -40,7 +40,7 @@ pub fn read_source(file: &str) -> Vec<(String, Line)> {
         // TODO: take care to handle semicolons in strings
         let comment_find = line.find(';');
         if comment_find.is_some() {
-            let (code, comment) = line.split_at(comment_find.unwrap());
+            let (code, _) = line.split_at(comment_find.unwrap());
             line = String::from(code);
             line = line.trim().to_string();   // May have space between instruction and comment
             println!("stripped comment {}", line);
