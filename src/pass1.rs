@@ -90,6 +90,20 @@ fn get_operand_type(operand: &str) -> (AddressMode, Value) {
         println!("implied");
         return (AddressMode::Implied, Value::Null);
     }
+
+    // ^\$([0-9a-f]{2})$                ; Zeropage
+    // ^\$([0-9a-f]{2})\s*,\s*x$        ; ZeropageX
+    // ^\$([0-9a-f]{2})\s*,\s*y$        ; ZeropageY
+    // ^#\$([0-9a-f]{2})$               ; Immediate
+    // ^\$([0-9a-f]{4})$                ; Absolute
+    // ^\$([0-9a-f]{4})\s*,\s*x$        ; AbsoluteX
+    // ^\$([0-9a-f]{4})\s*,\s*y$        ; AbsoluteY
+    // ^\(\$([0-9a-f]{4})\)$            ; Indirect
+    // ^\(\$([0-9a-f]{4}\s*,\s*x)\)$    ; x-indexed indirect
+    // ^\(\$([0-9a-f]{4})\)\s*,\s*y$    ; indirect y-indexed
+    // oh no... forgot about opcode $ab relative address mode...
+    // for branch targets...
+
     
     // Check if this is X or Y indexed
     if raw_operand.ends_with(",x") {
