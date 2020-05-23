@@ -48,7 +48,6 @@ pub fn pass1(source: &str) -> Program {
             handle_directive(&mut program, line);
         } else if line.chars().next().unwrap().is_ascii_alphabetic() {
             // We got an instruction
-            println!("Instruction found: {}", line);
             handle_instruction(&mut program, line);
         } else {
             // this isn't good!

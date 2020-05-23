@@ -1,12 +1,7 @@
 pub use crate::instructions::Mnemonic;
 pub use crate::instructions::AddressMode;
+pub use crate::instructions::Value;
 pub use crate::pass1;
-
-enum Value {
-    U8(u8),
-    U16(u16),
-    Null,
-}
 
 // This isn't right, I'll come back to it
 type CodeTable = Vec<(Mnemonic, AddressMode, pass1::Value)>;
