@@ -171,21 +171,6 @@ pub fn address_mode_name(address_mode: AddressMode) -> String {
     }
 }
 
-fn add_instruction(
-    instruction_set: &mut InstructionMap,
-    mnemonic: Mnemonic,
-    address_mode: AddressMode,
-    opcode: u8,
-) {
-    instruction_set.insert(
-        InstructionKey {
-            mnemonic,
-            address_mode,
-        },
-        opcode,
-    );
-}
-
 pub fn get_instruction(
     instruction_set: &InstructionMap,
     mnemonic: Mnemonic,
@@ -203,1192 +188,1397 @@ pub fn get_instruction(
 // Something will inevitably wrong in the below!
 pub fn generate_instruction_set() -> InstructionMap {
     let mut instruction_set = InstructionMap::new();
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::ADC,
-        AddressMode::Immediate,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::ADC,
+            address_mode: AddressMode::Immediate,
+        },
         0x69,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::ADC,
-        AddressMode::Zeropage,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::ADC,
+            address_mode: AddressMode::Immediate,
+        },
+        0x69,
+    );
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::ADC,
+            address_mode: AddressMode::Zeropage,
+        },
         0x65,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::ADC,
-        AddressMode::ZeropageX,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::ADC,
+            address_mode: AddressMode::ZeropageX,
+        },
         0x75,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::ADC,
-        AddressMode::Absolute,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::ADC,
+            address_mode: AddressMode::Absolute,
+        },
         0x6d,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::ADC,
-        AddressMode::AbsoluteX,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::ADC,
+            address_mode: AddressMode::AbsoluteX,
+        },
         0x7d,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::ADC,
-        AddressMode::AbsoluteY,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::ADC,
+            address_mode: AddressMode::AbsoluteY,
+        },
         0x79,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::ADC,
-        AddressMode::IndirectX,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::ADC,
+            address_mode: AddressMode::IndirectX,
+        },
         0x61,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::ADC,
-        AddressMode::IndirectY,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::ADC,
+            address_mode: AddressMode::IndirectY,
+        },
         0x71,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::AND,
-        AddressMode::Immediate,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::AND,
+            address_mode: AddressMode::Immediate,
+        },
         0x29,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::AND,
-        AddressMode::Zeropage,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::AND,
+            address_mode: AddressMode::Zeropage,
+        },
         0x25,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::AND,
-        AddressMode::ZeropageX,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::AND,
+            address_mode: AddressMode::ZeropageX,
+        },
         0x35,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::AND,
-        AddressMode::Absolute,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::AND,
+            address_mode: AddressMode::Absolute,
+        },
         0x2d,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::AND,
-        AddressMode::AbsoluteX,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::AND,
+            address_mode: AddressMode::AbsoluteX,
+        },
         0x3d,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::AND,
-        AddressMode::AbsoluteY,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::AND,
+            address_mode: AddressMode::AbsoluteY,
+        },
         0x39,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::AND,
-        AddressMode::IndirectX,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::AND,
+            address_mode: AddressMode::IndirectX,
+        },
         0x21,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::AND,
-        AddressMode::IndirectY,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::AND,
+            address_mode: AddressMode::IndirectY,
+        },
         0x31,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::ASL,
-        AddressMode::Implied,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::ASL,
+            address_mode: AddressMode::Implied,
+        },
         0x0a,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::ASL,
-        AddressMode::Zeropage,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::ASL,
+            address_mode: AddressMode::Zeropage,
+        },
         0x06,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::ASL,
-        AddressMode::ZeropageX,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::ASL,
+            address_mode: AddressMode::ZeropageX,
+        },
         0x16,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::ASL,
-        AddressMode::Absolute,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::ASL,
+            address_mode: AddressMode::Absolute,
+        },
         0x0e,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::ASL,
-        AddressMode::AbsoluteX,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::ASL,
+            address_mode: AddressMode::AbsoluteX,
+        },
         0x1e,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::BBR0,
-        AddressMode::Relative,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::BBR0,
+            address_mode: AddressMode::Relative,
+        },
         0x0f,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::BBR1,
-        AddressMode::Relative,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::BBR1,
+            address_mode: AddressMode::Relative,
+        },
         0x1f,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::BBR2,
-        AddressMode::Relative,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::BBR2,
+            address_mode: AddressMode::Relative,
+        },
         0x2f,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::BBR3,
-        AddressMode::Relative,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::BBR3,
+            address_mode: AddressMode::Relative,
+        },
         0x3f,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::BBR4,
-        AddressMode::Relative,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::BBR4,
+            address_mode: AddressMode::Relative,
+        },
         0x4f,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::BBR5,
-        AddressMode::Relative,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::BBR5,
+            address_mode: AddressMode::Relative,
+        },
         0x5f,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::BBR6,
-        AddressMode::Relative,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::BBR6,
+            address_mode: AddressMode::Relative,
+        },
         0x6f,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::BBR7,
-        AddressMode::Relative,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::BBR7,
+            address_mode: AddressMode::Relative,
+        },
         0x7f,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::BBS0,
-        AddressMode::Relative,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::BBS0,
+            address_mode: AddressMode::Relative,
+        },
         0x8f,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::BBS1,
-        AddressMode::Relative,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::BBS1,
+            address_mode: AddressMode::Relative,
+        },
         0x9f,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::BBS2,
-        AddressMode::Relative,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::BBS2,
+            address_mode: AddressMode::Relative,
+        },
         0xaf,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::BBS3,
-        AddressMode::Relative,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::BBS3,
+            address_mode: AddressMode::Relative,
+        },
         0xbf,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::BBS4,
-        AddressMode::Relative,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::BBS4,
+            address_mode: AddressMode::Relative,
+        },
         0xcf,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::BBS5,
-        AddressMode::Relative,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::BBS5,
+            address_mode: AddressMode::Relative,
+        },
         0xdf,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::BBS6,
-        AddressMode::Relative,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::BBS6,
+            address_mode: AddressMode::Relative,
+        },
         0xef,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::BBS7,
-        AddressMode::Relative,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::BBS7,
+            address_mode: AddressMode::Relative,
+        },
         0xff,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::BCC,
-        AddressMode::Relative,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::BCC,
+            address_mode: AddressMode::Relative,
+        },
         0x90,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::BCS,
-        AddressMode::Relative,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::BCS,
+            address_mode: AddressMode::Relative,
+        },
         0xb0,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::BEQ,
-        AddressMode::Relative,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::BEQ,
+            address_mode: AddressMode::Relative,
+        },
         0xf0,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::BIT,
-        AddressMode::Absolute,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::BIT,
+            address_mode: AddressMode::Absolute,
+        },
         0x2c,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::BIT,
-        AddressMode::Zeropage,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::BIT,
+            address_mode: AddressMode::Zeropage,
+        },
         0x24,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::BMI,
-        AddressMode::Relative,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::BMI,
+            address_mode: AddressMode::Relative,
+        },
         0x30,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::BNE,
-        AddressMode::Relative,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::BNE,
+            address_mode: AddressMode::Relative,
+        },
         0xd0,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::BPL,
-        AddressMode::Relative,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::BPL,
+            address_mode: AddressMode::Relative,
+        },
         0x10,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::BRA,
-        AddressMode::Relative,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::BRA,
+            address_mode: AddressMode::Relative,
+        },
         0x80,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::BRK,
-        AddressMode::Implied,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::BRK,
+            address_mode: AddressMode::Implied,
+        },
         0x00,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::BVC,
-        AddressMode::Relative,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::BVC,
+            address_mode: AddressMode::Relative,
+        },
         0x50,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::BVS,
-        AddressMode::Relative,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::BVS,
+            address_mode: AddressMode::Relative,
+        },
         0x70,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::CLC,
-        AddressMode::Implied,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::CLC,
+            address_mode: AddressMode::Implied,
+        },
         0x18,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::CLD,
-        AddressMode::Implied,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::CLD,
+            address_mode: AddressMode::Implied,
+        },
         0xd8,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::CLI,
-        AddressMode::Implied,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::CLI,
+            address_mode: AddressMode::Implied,
+        },
         0x58,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::CLV,
-        AddressMode::Implied,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::CLV,
+            address_mode: AddressMode::Implied,
+        },
         0xb8,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::CMP,
-        AddressMode::Immediate,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::CMP,
+            address_mode: AddressMode::Immediate,
+        },
         0xc9,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::CMP,
-        AddressMode::Zeropage,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::CMP,
+            address_mode: AddressMode::Zeropage,
+        },
         0xc5,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::CMP,
-        AddressMode::ZeropageX,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::CMP,
+            address_mode: AddressMode::ZeropageX,
+        },
         0xd5,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::CMP,
-        AddressMode::Absolute,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::CMP,
+            address_mode: AddressMode::Absolute,
+        },
         0xcd,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::CMP,
-        AddressMode::AbsoluteX,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::CMP,
+            address_mode: AddressMode::AbsoluteX,
+        },
         0xdd,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::CMP,
-        AddressMode::AbsoluteY,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::CMP,
+            address_mode: AddressMode::AbsoluteY,
+        },
         0xd9,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::CMP,
-        AddressMode::IndirectX,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::CMP,
+            address_mode: AddressMode::IndirectX,
+        },
         0xc1,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::CMP,
-        AddressMode::IndirectY,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::CMP,
+            address_mode: AddressMode::IndirectY,
+        },
         0xd1,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::CPX,
-        AddressMode::Implied,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::CPX,
+            address_mode: AddressMode::Implied,
+        },
         0xe0,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::CPX,
-        AddressMode::Zeropage,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::CPX,
+            address_mode: AddressMode::Zeropage,
+        },
         0xe4,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::CPX,
-        AddressMode::Absolute,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::CPX,
+            address_mode: AddressMode::Absolute,
+        },
         0xec,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::CPY,
-        AddressMode::Implied,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::CPY,
+            address_mode: AddressMode::Implied,
+        },
         0xc0,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::CPY,
-        AddressMode::Zeropage,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::CPY,
+            address_mode: AddressMode::Zeropage,
+        },
         0xc4,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::CPY,
-        AddressMode::Absolute,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::CPY,
+            address_mode: AddressMode::Absolute,
+        },
         0xcc,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::DEC,
-        AddressMode::Zeropage,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::DEC,
+            address_mode: AddressMode::Zeropage,
+        },
         0xc6,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::DEC,
-        AddressMode::ZeropageX,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::DEC,
+            address_mode: AddressMode::ZeropageX,
+        },
         0xd6,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::DEC,
-        AddressMode::Absolute,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::DEC,
+            address_mode: AddressMode::Absolute,
+        },
         0xce,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::DEC,
-        AddressMode::AbsoluteX,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::DEC,
+            address_mode: AddressMode::AbsoluteX,
+        },
         0xde,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::DEX,
-        AddressMode::Implied,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::DEX,
+            address_mode: AddressMode::Implied,
+        },
         0xca,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::DEY,
-        AddressMode::Implied,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::DEY,
+            address_mode: AddressMode::Implied,
+        },
         0x88,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::EOR,
-        AddressMode::Immediate,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::EOR,
+            address_mode: AddressMode::Immediate,
+        },
         0x49,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::EOR,
-        AddressMode::Zeropage,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::EOR,
+            address_mode: AddressMode::Zeropage,
+        },
         0x45,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::EOR,
-        AddressMode::ZeropageX,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::EOR,
+            address_mode: AddressMode::ZeropageX,
+        },
         0x45,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::EOR,
-        AddressMode::Absolute,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::EOR,
+            address_mode: AddressMode::Absolute,
+        },
         0x4d,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::EOR,
-        AddressMode::AbsoluteX,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::EOR,
+            address_mode: AddressMode::AbsoluteX,
+        },
         0x5d,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::EOR,
-        AddressMode::AbsoluteY,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::EOR,
+            address_mode: AddressMode::AbsoluteY,
+        },
         0x59,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::EOR,
-        AddressMode::IndirectX,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::EOR,
+            address_mode: AddressMode::IndirectX,
+        },
         0x41,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::EOR,
-        AddressMode::IndirectY,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::EOR,
+            address_mode: AddressMode::IndirectY,
+        },
         0x51,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::INC,
-        AddressMode::Implied,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::INC,
+            address_mode: AddressMode::Implied,
+        },
         0x1a,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::INC,
-        AddressMode::Zeropage,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::INC,
+            address_mode: AddressMode::Zeropage,
+        },
         0xe6,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::INC,
-        AddressMode::ZeropageX,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::INC,
+            address_mode: AddressMode::ZeropageX,
+        },
         0xf6,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::INC,
-        AddressMode::Absolute,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::INC,
+            address_mode: AddressMode::Absolute,
+        },
         0xee,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::INC,
-        AddressMode::AbsoluteX,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::INC,
+            address_mode: AddressMode::AbsoluteX,
+        },
         0xfe,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::INX,
-        AddressMode::Implied,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::INX,
+            address_mode: AddressMode::Implied,
+        },
         0xe8,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::INY,
-        AddressMode::Implied,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::INY,
+            address_mode: AddressMode::Implied,
+        },
         0xc8,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::JMP,
-        AddressMode::Absolute,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::JMP,
+            address_mode: AddressMode::Absolute,
+        },
         0x4c,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::JMP,
-        AddressMode::Indirect,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::JMP,
+            address_mode: AddressMode::Indirect,
+        },
         0x6c,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::JSR,
-        AddressMode::Absolute,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::JSR,
+            address_mode: AddressMode::Absolute,
+        },
         0x20,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::LDA,
-        AddressMode::Immediate,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::LDA,
+            address_mode: AddressMode::Immediate,
+        },
         0xa9,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::LDA,
-        AddressMode::Zeropage,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::LDA,
+            address_mode: AddressMode::Zeropage,
+        },
         0xa5,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::LDA,
-        AddressMode::ZeropageX,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::LDA,
+            address_mode: AddressMode::ZeropageX,
+        },
         0xb5,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::LDA,
-        AddressMode::Absolute,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::LDA,
+            address_mode: AddressMode::Absolute,
+        },
         0xad,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::LDA,
-        AddressMode::AbsoluteX,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::LDA,
+            address_mode: AddressMode::AbsoluteX,
+        },
         0xbd,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::LDA,
-        AddressMode::AbsoluteY,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::LDA,
+            address_mode: AddressMode::AbsoluteY,
+        },
         0xb9,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::LDA,
-        AddressMode::IndirectX,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::LDA,
+            address_mode: AddressMode::IndirectX,
+        },
         0xa1,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::LDA,
-        AddressMode::IndirectY,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::LDA,
+            address_mode: AddressMode::IndirectY,
+        },
         0xb1,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::LDX,
-        AddressMode::Immediate,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::LDX,
+            address_mode: AddressMode::Immediate,
+        },
         0xa2,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::LDX,
-        AddressMode::Zeropage,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::LDX,
+            address_mode: AddressMode::Zeropage,
+        },
         0xa6,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::LDX,
-        AddressMode::ZeropageX,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::LDX,
+            address_mode: AddressMode::ZeropageX,
+        },
         0xb6,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::LDX,
-        AddressMode::Absolute,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::LDX,
+            address_mode: AddressMode::Absolute,
+        },
         0xae,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::LDX,
-        AddressMode::AbsoluteX,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::LDX,
+            address_mode: AddressMode::AbsoluteX,
+        },
         0xbe,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::LDY,
-        AddressMode::Immediate,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::LDY,
+            address_mode: AddressMode::Immediate,
+        },
         0xa0,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::LDY,
-        AddressMode::Zeropage,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::LDY,
+            address_mode: AddressMode::Zeropage,
+        },
         0xa4,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::LDY,
-        AddressMode::ZeropageX,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::LDY,
+            address_mode: AddressMode::ZeropageX,
+        },
         0xb4,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::LDY,
-        AddressMode::Absolute,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::LDY,
+            address_mode: AddressMode::Absolute,
+        },
         0xac,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::LDY,
-        AddressMode::AbsoluteX,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::LDY,
+            address_mode: AddressMode::AbsoluteX,
+        },
         0xbc,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::LSR,
-        AddressMode::Immediate,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::LSR,
+            address_mode: AddressMode::Immediate,
+        },
         0x4a,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::LSR,
-        AddressMode::Zeropage,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::LSR,
+            address_mode: AddressMode::Zeropage,
+        },
         0x46,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::LSR,
-        AddressMode::ZeropageX,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::LSR,
+            address_mode: AddressMode::ZeropageX,
+        },
         0x56,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::LSR,
-        AddressMode::Absolute,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::LSR,
+            address_mode: AddressMode::Absolute,
+        },
         0x4e,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::LSR,
-        AddressMode::AbsoluteX,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::LSR,
+            address_mode: AddressMode::AbsoluteX,
+        },
         0x5e,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::NOP,
-        AddressMode::Implied,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::NOP,
+            address_mode: AddressMode::Implied,
+        },
         0xea,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::ORA,
-        AddressMode::Immediate,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::ORA,
+            address_mode: AddressMode::Immediate,
+        },
         0x09,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::ORA,
-        AddressMode::Zeropage,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::ORA,
+            address_mode: AddressMode::Zeropage,
+        },
         0x05,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::ORA,
-        AddressMode::ZeropageX,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::ORA,
+            address_mode: AddressMode::ZeropageX,
+        },
         0x15,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::ORA,
-        AddressMode::Absolute,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::ORA,
+            address_mode: AddressMode::Absolute,
+        },
         0x0d,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::ORA,
-        AddressMode::AbsoluteX,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::ORA,
+            address_mode: AddressMode::AbsoluteX,
+        },
         0x1d,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::ORA,
-        AddressMode::AbsoluteY,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::ORA,
+            address_mode: AddressMode::AbsoluteY,
+        },
         0x19,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::ORA,
-        AddressMode::IndirectX,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::ORA,
+            address_mode: AddressMode::IndirectX,
+        },
         0x01,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::ORA,
-        AddressMode::IndirectY,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::ORA,
+            address_mode: AddressMode::IndirectY,
+        },
         0x11,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::PHA,
-        AddressMode::Implied,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::PHA,
+            address_mode: AddressMode::Implied,
+        },
         0x48,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::PHP,
-        AddressMode::Implied,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::PHP,
+            address_mode: AddressMode::Implied,
+        },
         0x08,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::PHX,
-        AddressMode::Implied,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::PHX,
+            address_mode: AddressMode::Implied,
+        },
         0xda,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::PHY,
-        AddressMode::Implied,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::PHY,
+            address_mode: AddressMode::Implied,
+        },
         0x5a,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::PLA,
-        AddressMode::Implied,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::PLA,
+            address_mode: AddressMode::Implied,
+        },
         0x68,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::PLP,
-        AddressMode::Implied,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::PLP,
+            address_mode: AddressMode::Implied,
+        },
         0x28,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::PLX,
-        AddressMode::Relative,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::PLX,
+            address_mode: AddressMode::Relative,
+        },
         0xfa,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::PLY,
-        AddressMode::Relative,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::PLY,
+            address_mode: AddressMode::Relative,
+        },
         0x7a,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::RMB0,
-        AddressMode::Zeropage,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::RMB0,
+            address_mode: AddressMode::Zeropage,
+        },
         0x07,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::RMB1,
-        AddressMode::Zeropage,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::RMB1,
+            address_mode: AddressMode::Zeropage,
+        },
         0x17,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::RMB2,
-        AddressMode::Zeropage,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::RMB2,
+            address_mode: AddressMode::Zeropage,
+        },
         0x27,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::RMB3,
-        AddressMode::Zeropage,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::RMB3,
+            address_mode: AddressMode::Zeropage,
+        },
         0x37,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::RMB4,
-        AddressMode::Zeropage,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::RMB4,
+            address_mode: AddressMode::Zeropage,
+        },
         0x47,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::RMB5,
-        AddressMode::Zeropage,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::RMB5,
+            address_mode: AddressMode::Zeropage,
+        },
         0x57,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::RMB6,
-        AddressMode::Zeropage,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::RMB6,
+            address_mode: AddressMode::Zeropage,
+        },
         0x67,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::RMB7,
-        AddressMode::Zeropage,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::RMB7,
+            address_mode: AddressMode::Zeropage,
+        },
         0x77,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::ROL,
-        AddressMode::Implied,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::ROL,
+            address_mode: AddressMode::Implied,
+        },
         0x2a,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::ROL,
-        AddressMode::Zeropage,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::ROL,
+            address_mode: AddressMode::Zeropage,
+        },
         0x26,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::ROL,
-        AddressMode::ZeropageX,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::ROL,
+            address_mode: AddressMode::ZeropageX,
+        },
         0x36,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::ROL,
-        AddressMode::Absolute,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::ROL,
+            address_mode: AddressMode::Absolute,
+        },
         0x2e,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::ROL,
-        AddressMode::AbsoluteX,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::ROL,
+            address_mode: AddressMode::AbsoluteX,
+        },
         0x3e,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::ROR,
-        AddressMode::Implied,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::ROR,
+            address_mode: AddressMode::Implied,
+        },
         0x6a,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::ROR,
-        AddressMode::Zeropage,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::ROR,
+            address_mode: AddressMode::Zeropage,
+        },
         0x66,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::ROR,
-        AddressMode::ZeropageX,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::ROR,
+            address_mode: AddressMode::ZeropageX,
+        },
         0x76,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::ROR,
-        AddressMode::Absolute,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::ROR,
+            address_mode: AddressMode::Absolute,
+        },
         0x6e,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::ROR,
-        AddressMode::AbsoluteX,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::ROR,
+            address_mode: AddressMode::AbsoluteX,
+        },
         0x7e,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::RTI,
-        AddressMode::Implied,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::RTI,
+            address_mode: AddressMode::Implied,
+        },
         0x40,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::RTS,
-        AddressMode::Implied,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::RTS,
+            address_mode: AddressMode::Implied,
+        },
         0x60,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::SBC,
-        AddressMode::Immediate,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::SBC,
+            address_mode: AddressMode::Immediate,
+        },
         0xe9,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::SBC,
-        AddressMode::Zeropage,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::SBC,
+            address_mode: AddressMode::Zeropage,
+        },
         0xe5,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::SBC,
-        AddressMode::ZeropageX,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::SBC,
+            address_mode: AddressMode::ZeropageX,
+        },
         0xf5,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::SBC,
-        AddressMode::Absolute,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::SBC,
+            address_mode: AddressMode::Absolute,
+        },
         0xed,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::SBC,
-        AddressMode::AbsoluteX,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::SBC,
+            address_mode: AddressMode::AbsoluteX,
+        },
         0xfd,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::SBC,
-        AddressMode::AbsoluteY,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::SBC,
+            address_mode: AddressMode::AbsoluteY,
+        },
         0xf9,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::SBC,
-        AddressMode::IndirectX,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::SBC,
+            address_mode: AddressMode::IndirectX,
+        },
         0xe1,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::SBC,
-        AddressMode::IndirectY,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::SBC,
+            address_mode: AddressMode::IndirectY,
+        },
         0xf1,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::SEC,
-        AddressMode::Implied,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::SEC,
+            address_mode: AddressMode::Implied,
+        },
         0x38,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::SED,
-        AddressMode::Implied,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::SED,
+            address_mode: AddressMode::Implied,
+        },
         0xf8,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::SEI,
-        AddressMode::Implied,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::SEI,
+            address_mode: AddressMode::Implied,
+        },
         0x78,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::SMB0,
-        AddressMode::Zeropage,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::SMB0,
+            address_mode: AddressMode::Zeropage,
+        },
         0x87,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::SMB1,
-        AddressMode::Zeropage,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::SMB1,
+            address_mode: AddressMode::Zeropage,
+        },
         0x97,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::SMB2,
-        AddressMode::Zeropage,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::SMB2,
+            address_mode: AddressMode::Zeropage,
+        },
         0xa7,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::SMB3,
-        AddressMode::Zeropage,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::SMB3,
+            address_mode: AddressMode::Zeropage,
+        },
         0xb7,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::SMB4,
-        AddressMode::Zeropage,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::SMB4,
+            address_mode: AddressMode::Zeropage,
+        },
         0xc7,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::SMB5,
-        AddressMode::Zeropage,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::SMB5,
+            address_mode: AddressMode::Zeropage,
+        },
         0xd7,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::SMB6,
-        AddressMode::Zeropage,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::SMB6,
+            address_mode: AddressMode::Zeropage,
+        },
         0xe7,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::SMB7,
-        AddressMode::Zeropage,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::SMB7,
+            address_mode: AddressMode::Zeropage,
+        },
         0xf7,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::STA,
-        AddressMode::Zeropage,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::STA,
+            address_mode: AddressMode::Zeropage,
+        },
         0x85,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::STA,
-        AddressMode::ZeropageX,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::STA,
+            address_mode: AddressMode::ZeropageX,
+        },
         0x95,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::STA,
-        AddressMode::Absolute,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::STA,
+            address_mode: AddressMode::Absolute,
+        },
         0x8d,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::STA,
-        AddressMode::AbsoluteX,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::STA,
+            address_mode: AddressMode::AbsoluteX,
+        },
         0x9d,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::STA,
-        AddressMode::AbsoluteY,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::STA,
+            address_mode: AddressMode::AbsoluteY,
+        },
         0x99,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::STA,
-        AddressMode::IndirectX,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::STA,
+            address_mode: AddressMode::IndirectX,
+        },
         0x81,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::STA,
-        AddressMode::IndirectY,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::STA,
+            address_mode: AddressMode::IndirectY,
+        },
         0x91,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::STP,
-        AddressMode::Implied,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::STP,
+            address_mode: AddressMode::Implied,
+        },
         0xdb,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::STX,
-        AddressMode::Zeropage,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::STX,
+            address_mode: AddressMode::Zeropage,
+        },
         0x85,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::STX,
-        AddressMode::ZeropageY,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::STX,
+            address_mode: AddressMode::ZeropageY,
+        },
         0x95,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::STX,
-        AddressMode::Absolute,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::STX,
+            address_mode: AddressMode::Absolute,
+        },
         0x8d,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::STY,
-        AddressMode::Zeropage,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::STY,
+            address_mode: AddressMode::Zeropage,
+        },
         0x85,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::STY,
-        AddressMode::ZeropageX,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::STY,
+            address_mode: AddressMode::ZeropageX,
+        },
         0x95,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::STY,
-        AddressMode::Absolute,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::STY,
+            address_mode: AddressMode::Absolute,
+        },
         0x8d,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::STZ,
-        AddressMode::Zeropage,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::STZ,
+            address_mode: AddressMode::Zeropage,
+        },
         0x64,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::STZ,
-        AddressMode::ZeropageX,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::STZ,
+            address_mode: AddressMode::ZeropageX,
+        },
         0x94,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::STZ,
-        AddressMode::Absolute,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::STZ,
+            address_mode: AddressMode::Absolute,
+        },
         0x9c,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::TAX,
-        AddressMode::Implied,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::TAX,
+            address_mode: AddressMode::Implied,
+        },
         0xaa,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::TAY,
-        AddressMode::Implied,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::TAY,
+            address_mode: AddressMode::Implied,
+        },
         0xa8,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::TRB,
-        AddressMode::Absolute,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::TRB,
+            address_mode: AddressMode::Absolute,
+        },
         0x1c,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::TRB,
-        AddressMode::Zeropage,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::TRB,
+            address_mode: AddressMode::Zeropage,
+        },
         0x14,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::TSB,
-        AddressMode::Absolute,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::TSB,
+            address_mode: AddressMode::Absolute,
+        },
         0x0c,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::TSB,
-        AddressMode::Zeropage,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::TSB,
+            address_mode: AddressMode::Zeropage,
+        },
         0x04,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::TSX,
-        AddressMode::Implied,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::TSX,
+            address_mode: AddressMode::Implied,
+        },
         0xba,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::TXA,
-        AddressMode::Implied,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::TXA,
+            address_mode: AddressMode::Implied,
+        },
         0x8a,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::TXS,
-        AddressMode::Implied,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::TXS,
+            address_mode: AddressMode::Implied,
+        },
         0x9a,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::TYA,
-        AddressMode::Implied,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::TYA,
+            address_mode: AddressMode::Implied,
+        },
         0x98,
     );
-    add_instruction(
-        &mut instruction_set,
-        Mnemonic::WAI,
-        AddressMode::Relative,
+    instruction_set.insert(
+        InstructionKey {
+            mnemonic: Mnemonic::WAI,
+            address_mode: AddressMode::Relative,
+        },
         0xcb,
     );
     instruction_set
