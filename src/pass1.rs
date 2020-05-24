@@ -1,7 +1,7 @@
-pub use crate::instructions::Mnemonic;
-pub use crate::instructions::AddressMode;
-pub use crate::instructions::Value;
 pub use crate::instructions::str_to_instruction;
+pub use crate::instructions::AddressMode;
+pub use crate::instructions::Mnemonic;
+pub use crate::instructions::Value;
 use regex::Regex;
 
 enum Instruction {
@@ -17,7 +17,7 @@ enum Instruction {
     Zeropage(Counter, Mnemonic, u8),
     ZeropageX(Counter, Mnemonic, u8),
     ZeropageY(Counter, Mnemonic, u8),
-    Unresolved(Counter, Mnemonic),  // Uses a label we haven't resolved
+    Unresolved(Counter, Mnemonic), // Uses a label we haven't resolved
 }
 
 type SymbolTable = Vec<(String, Address, Line)>;
@@ -57,9 +57,7 @@ pub fn pass1(source: &Vec<(String, u16)>) -> Program {
 }
 
 // TODO: implement directives!
-fn handle_directive(program: &mut Program, line: &String) {
-
-}
+fn handle_directive(program: &mut Program, line: &String) {}
 
 fn handle_instruction(program: &mut Program, line: &String) {
     let mut parts = line.split_ascii_whitespace();
@@ -78,11 +76,13 @@ fn handle_instruction(program: &mut Program, line: &String) {
         operand_type = operand_type_tmp;
         value = value_tmp;
     }
-    program.code.push(str_to_instruction(instruction, operand_type, value));
+    program
+        .code
+        .push(str_to_instruction(instruction, operand_type, value));
 }
 
 fn get_operand_type(operand: &str) -> (AddressMode, Value) {
-    // TODO: use lazy_static somehow!    
+    // TODO: use lazy_static somehow!
     let implied_re = Regex::new(r"^$").unwrap();
     let zeropage_re = Regex::new(r"^\$([0-9a-f]{2})$").unwrap();
     let zeropagex_re = Regex::new(r"^\$([0-9a-f]{2})\s*,\s*x$").unwrap();
@@ -140,6 +140,6 @@ fn get_operand_type(operand: &str) -> (AddressMode, Value) {
         let val = u16::from_str_radix(&caps[1], 16).unwrap();
         return (AddressMode::IndirectY, Value::U16(val));
     }
-    
+
     (AddressMode::Unknown, Value::String(String::from(operand)))
 }

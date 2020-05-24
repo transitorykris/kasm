@@ -5,12 +5,12 @@ pub use crate::files::read_source;
 pub use crate::files::write_out;
 
 mod instructions;
-pub use crate::instructions::generate_instruction_set;
-pub use crate::instructions::get_instruction;
-pub use crate::instructions::Mnemonic;
-pub use crate::instructions::AddressMode;
 pub use crate::instructions::address_mode_length;
 pub use crate::instructions::address_mode_name;
+pub use crate::instructions::generate_instruction_set;
+pub use crate::instructions::get_instruction;
+pub use crate::instructions::AddressMode;
+pub use crate::instructions::Mnemonic;
 
 mod pass1;
 pub use crate::pass1::pass1;
@@ -21,14 +21,14 @@ pub use crate::pass2::pass2;
 mod assemble;
 pub use crate::assemble::assemble;
 
-const OUTSIZE: usize = 16384;       // We're generating binaries for a 16KB EEPROM
-const OUTFILE: &str = "a.out";      // A typical default
+const OUTSIZE: usize = 16384; // We're generating binaries for a 16KB EEPROM
+const OUTFILE: &str = "a.out"; // A typical default
 
-fn main() { 
+fn main() {
     let args: Vec<String> = env::args().collect();
     if args.len() < 2 {
         println!("usage: {} <source>", &args[0]);
-        return
+        return;
     }
     let source_file = &args[1];
 

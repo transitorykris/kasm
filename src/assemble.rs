@@ -1,7 +1,7 @@
-pub use crate::instructions::InstructionMap;
 pub use crate::instructions::InstructionKey;
+pub use crate::instructions::InstructionMap;
+pub use crate::pass1::Value::{Null, String, U16, U8};
 pub use crate::pass2::Program;
-pub use crate::pass1::Value::{String, U8, U16, Null};
 
 pub fn assemble(instruction_set: InstructionMap, program: Program, size: usize) -> Vec<u8> {
     let mut output = Vec::new();
@@ -18,17 +18,21 @@ pub fn assemble(instruction_set: InstructionMap, program: Program, size: usize) 
         output.push(*machine_code.unwrap());
         match line.2 {
             U8(val) => {
-                println!("{:02x}",val);
+                println!("{:02x}", val);
                 output.push(val);
-            },
+            }
             U16(val) => {
-                println!("{:04x}",val);
+                println!("{:04x}", val);
                 let bytes = val.to_be_bytes();
-                output.push(bytes[1]);  // Note: little endian!
+                output.push(bytes[1]); // Note: little endian!
                 output.push(bytes[0]);
-            },
-            Null => {println!("");},
-            String(label) => {panic!("Found unresolved label: {}", label);}
+            }
+            Null => {
+                println!("");
+            }
+            String(label) => {
+                panic!("Found unresolved label: {}", label);
+            }
         };
     }
     output

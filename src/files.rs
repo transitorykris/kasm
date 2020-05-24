@@ -9,17 +9,13 @@ pub fn read_source(file: &str) -> Vec<(String, Line)> {
     let path = Path::new(file);
     let display = path.display();
     let mut f = match File::open(path) {
-        Err(why) => {
-            panic!("Couldn't open {}: {}", display, why.to_string())
-        },
+        Err(why) => panic!("Couldn't open {}: {}", display, why.to_string()),
         Ok(f) => f,
     };
 
     let mut raw_source = String::new();
     let _ = match f.read_to_string(&mut raw_source) {
-        Err(why) => {
-            panic!("Couldn't read {}: {}", display, why.to_string())
-        },
+        Err(why) => panic!("Couldn't read {}: {}", display, why.to_string()),
         Ok(raw_source) => raw_source,
     };
 
@@ -42,18 +38,18 @@ pub fn read_source(file: &str) -> Vec<(String, Line)> {
         if comment_find.is_some() {
             let (code, _) = line.split_at(comment_find.unwrap());
             line = String::from(code);
-            line = line.trim().to_string();   // May have space between instruction and comment
+            line = line.trim().to_string(); // May have space between instruction and comment
             println!("stripped comment {}", line);
         }
 
         if line.len() == 0 {
             println!("Empty line, skipping");
-            continue
+            continue;
         }
 
         if line.starts_with(";") {
             println!("Comment found, skipping");
-            continue
+            continue;
         }
         source.push((line, count));
     }
@@ -65,16 +61,12 @@ pub fn write_out(filename: &str, output: Vec<u8>) {
     let path = Path::new(filename);
     let display = path.display();
     let mut f = match File::create(&path) {
-        Err(why) => {
-            panic!("Couldn't create {}: {}", display, why.to_string())
-        },
+        Err(why) => panic!("Couldn't create {}: {}", display, why.to_string()),
         Ok(f) => f,
     };
 
     let _ = match f.write_all(&output) {
-        Err(why) => {
-            panic!("Couldn't write {}: {}", display, why.to_string())
-        },
+        Err(why) => panic!("Couldn't write {}: {}", display, why.to_string()),
         Ok(f) => f,
     };
 }
