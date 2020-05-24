@@ -12,6 +12,9 @@ pub use crate::instructions::get_instruction;
 pub use crate::instructions::AddressMode;
 pub use crate::instructions::Mnemonic;
 
+mod scanner;
+pub use crate::scanner::scanner;
+
 mod pass1;
 pub use crate::pass1::pass1;
 
@@ -33,10 +36,12 @@ fn main() {
     let source_file = &args[1];
 
     // Read in the source file
+    let source = read_source(&source_file);
+
     // TODO: Change this to returning a vector of tuples
     //       <(source_line, line_number)>
     //       and strip out comments
-    let source = read_source(&source_file);
+    let scanned = scanner(source);
 
     // Create a data structure containing details of our
     // instruction set
@@ -46,7 +51,7 @@ fn main() {
     // the addressing mode, and the value
     // TODO: Also generate a table of labels that need to
     //       be resolved into addresses
-    let pass1_code = pass1(&source);
+    let pass1_code = pass1(&scanned);
 
     // Create a new data structure of instructions by resolving
     // all the labels
