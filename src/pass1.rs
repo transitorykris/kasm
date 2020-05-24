@@ -82,10 +82,6 @@ fn handle_instruction(program: &mut Program, line: &String) {
 }
 
 fn get_operand_type(operand: &str) -> (AddressMode, Value) {
-    let mut raw_operand = String::from(operand);
-
-    println!("Checking operand {} length {}", raw_operand, raw_operand.len());
-
     // TODO: use lazy_static somehow!    
     let implied_re = Regex::new(r"^$").unwrap();
     let zeropage_re = Regex::new(r"^\$([0-9a-f]{2})$").unwrap();
