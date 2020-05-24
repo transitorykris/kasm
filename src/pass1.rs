@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 pub use crate::instructions::str_to_instruction;
 pub use crate::instructions::AddressMode;
 pub use crate::instructions::Mnemonic;
@@ -23,10 +25,16 @@ enum Instruction {
     Unresolved(Counter, Mnemonic), // Uses a label we haven't resolved
 }
 
-type SymbolTable = Vec<(String, Address, Line)>;
+struct Symbol {
+    address: Address,
+    line: Line,
+}
+
+type SymbolTable = HashMap<String, Symbol>;
 type Address = u16;
 type Counter = u16;
 type Line = u16;
+
 pub type CodeTable = Vec<(Mnemonic, AddressMode, Value)>;
 
 pub struct Program {
@@ -45,7 +53,7 @@ pub fn pass1(source: &SourceTable) -> Program {
         let mut chars = line.line.chars();
         if line.line.ends_with(":") {
             // That's a label there
-            handle_label(&mut program, &line.line);
+            handle_label(&mut program, line.line.to_string());
         } else if chars.next().unwrap() == '.' {
             // We've got a directive
             handle_directive(&mut program, &line.line);
@@ -66,8 +74,9 @@ pub fn pass1(source: &SourceTable) -> Program {
 }
 
 // TODO: implement labels!
-fn handle_label(program: &mut Program, line: &String) {
+fn handle_label(program: &mut Program, line: String) {
     println!("Warning: labels are not implemented yet: {}", line);
+    program.symbol_table.insert(line, Symbol{address: 0, line: 0});
 }
 
 // TODO: implement directives!
