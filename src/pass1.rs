@@ -25,12 +25,12 @@ enum Instruction {
     Unresolved(Counter, Mnemonic), // Uses a label we haven't resolved
 }
 
-struct Symbol {
+struct Label {
     address: Address,
     line: Line,
 }
 
-type SymbolTable = HashMap<String, Symbol>;
+type LabelTable = HashMap<String, Label>;
 type Address = u16;
 type Counter = u16;
 type Line = u16;
@@ -38,13 +38,13 @@ type Line = u16;
 pub type CodeTable = Vec<(Mnemonic, AddressMode, Value)>;
 
 pub struct Program {
-    symbol_table: SymbolTable,
+    symbol_table: LabelTable,
     pub code: CodeTable,
 }
 
 pub fn pass1(source: &SourceTable) -> Program {
     let mut program = Program {
-        symbol_table: SymbolTable::new(),
+        symbol_table: LabelTable::new(),
         code: CodeTable::new(),
     };
 
@@ -53,7 +53,7 @@ pub fn pass1(source: &SourceTable) -> Program {
         let mut chars = line.line.chars();
         if line.line.ends_with(":") {
             // That's a label there
-            handle_label(&mut program, line.line.to_string());
+            handle_label(&mut program, line.line.to_string(), line.line_number);
         } else if chars.next().unwrap() == '.' {
             // We've got a directive
             handle_directive(&mut program, &line.line);
@@ -74,13 +74,13 @@ pub fn pass1(source: &SourceTable) -> Program {
 }
 
 // TODO: implement labels!
-fn handle_label(program: &mut Program, line: String) {
-    println!("Warning: labels are not implemented yet: {}", line);
+fn handle_label(program: &mut Program, label: String, line_number: Line) {
+    println!("Warning: labels are not implemented yet: {}", label);
     program.symbol_table.insert(
-        line,
-        Symbol {
+        label,
+        Label {
             address: 0,
-            line: 0,
+            line: line_number,
         },
     );
 }
@@ -96,6 +96,7 @@ fn handle_instruction(program: &mut Program, line: &String) {
     let operand_part = parts.next();
     let value: Value;
     let operand_type: AddressMode;
+
     if operand_part.is_none() {
         operand_type = AddressMode::Implied;
         value = Value::Null;
@@ -104,6 +105,7 @@ fn handle_instruction(program: &mut Program, line: &String) {
         operand_type = operand_type_tmp;
         value = value_tmp;
     }
+
     program
         .code
         .push(str_to_instruction(instruction, operand_type, value));
