@@ -63,7 +63,9 @@ pub fn pass1(source: &SourceTable) -> Program {
 }
 
 // TODO: implement directives!
-fn handle_directive(program: &mut Program, line: &String) {}
+fn handle_directive(program: &mut Program, line: &String) {
+    println!("Warning: directives are not implemented yet");
+}
 
 fn handle_instruction(program: &mut Program, line: &String) {
     let mut parts = line.split_ascii_whitespace();
