@@ -24,8 +24,7 @@ pub fn scanner(raw_source: String) -> SourceTable {
         let comment_find = line.find(';');
         if comment_find.is_some() {
             let (code, _) = line.split_at(comment_find.unwrap());
-            line = String::from(code);
-            line = line.trim().to_string(); // May have space between instruction and comment
+            line = String::from(code).trim().to_string();
         }
 
         if line.len() == 0 {
@@ -35,6 +34,7 @@ pub fn scanner(raw_source: String) -> SourceTable {
         if line.starts_with(";") {
             continue;
         }
+
         source.push(SourceLine { line, line_number });
     }
 
