@@ -9,22 +9,6 @@ pub use crate::scanner::SourceTable;
 
 use regex::Regex;
 
-enum Instruction {
-    Absolute(Counter, Mnemonic, u16),
-    AbsoluteX(Counter, Mnemonic, u16),
-    AbsoluteY(Counter, Mnemonic, u16),
-    Immediate(Counter, Mnemonic, u8),
-    Implied(Counter, Mnemonic),
-    Indirect(Counter, Mnemonic, u8),
-    IndirectX(Counter, Mnemonic, u8),
-    IndirectY(Counter, Mnemonic, u8),
-    Relative(Counter, Mnemonic, u8),
-    Zeropage(Counter, Mnemonic, u8),
-    ZeropageX(Counter, Mnemonic, u8),
-    ZeropageY(Counter, Mnemonic, u8),
-    Unresolved(Counter, Mnemonic), // Uses a label we haven't resolved
-}
-
 struct Label {
     address: Address,
     line: Line,
@@ -32,7 +16,6 @@ struct Label {
 
 type LabelTable = HashMap<String, Label>;
 type Address = u16;
-type Counter = u16;
 type Line = u16;
 
 pub type CodeTable = Vec<(Mnemonic, AddressMode, Value)>;
@@ -76,6 +59,11 @@ pub fn pass1(source: &SourceTable) -> Program {
 // TODO: implement labels!
 fn handle_label(program: &mut Program, label: String, line_number: Line) {
     println!("Warning: labels are not implemented yet: {}", label);
+
+    if program.symbol_table.contains_key(&label) {
+        panic!("Duplicate label found: {}", label);
+    }
+
     program.symbol_table.insert(
         label,
         Label {

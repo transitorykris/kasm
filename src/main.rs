@@ -21,7 +21,6 @@ pub use crate::pass1::pass1;
 mod pass2;
 pub use crate::pass2::pass2;
 
-const OUTSIZE: usize = 16384; // We're generating binaries for a 16KB EEPROM
 const OUTFILE: &str = "a.out"; // A typical default
 
 fn main() {
