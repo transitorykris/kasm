@@ -51,16 +51,12 @@ pub fn pass1(source: &SourceTable) -> Program {
     for line in source {
         let mut chars = line.line.chars();
         if line.line.ends_with(":") {
-            // That's a label there
             handle_label(&mut program, line.line.to_string(), line.line_number);
         } else if chars.next().unwrap() == '.' {
-            // We've got a directive
             handle_directive(&mut program, &line.line);
         } else if chars.next().unwrap().is_ascii_alphabetic() {
-            // We got an instruction
             handle_instruction(&mut program, &line.line);
         } else {
-            // this isn't good!
             panic!(
                 "Unknown syntax: {} at line: {}",
                 line.line, line.line_number
