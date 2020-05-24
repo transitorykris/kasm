@@ -141,5 +141,5 @@ fn get_operand_type(operand: &str) -> (AddressMode, Value) {
         return (AddressMode::IndirectY, Value::U16(val));
     }
     
-    (AddressMode::Unknown, Value::String(raw_operand))
+    (AddressMode::Unknown, Value::String(String::from(operand)))
 }
