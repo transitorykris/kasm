@@ -5,12 +5,7 @@ pub use crate::files::read_source;
 pub use crate::files::write_out;
 
 mod instructions;
-pub use crate::instructions::address_mode_length;
-pub use crate::instructions::address_mode_name;
 pub use crate::instructions::generate_instruction_set;
-pub use crate::instructions::get_instruction;
-pub use crate::instructions::AddressMode;
-pub use crate::instructions::Mnemonic;
 
 mod scanner;
 pub use crate::scanner::scanner;
@@ -34,7 +29,7 @@ fn main() {
     // Read in the source file
     let source = read_source(&source_file);
 
-    // Scan in and clean up the raw source
+    // Scan in and clean up the raw
     let scanned = scanner(source);
 
     // Create a data structure containing details of our
