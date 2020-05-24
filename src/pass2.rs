@@ -6,9 +6,6 @@ pub use crate::instructions::Value;
 pub use crate::pass1;
 pub use crate::pass1::Value::{Null, String, U16, U8};
 
-// This isn't right, I'll come back to it
-//type CodeTable = Vec<(Mnemonic, AddressMode, pass1::Value)>;
-
 pub type MachineCode = Vec<u8>;
 
 pub fn pass2(instruction_set: InstructionMap, program: pass1::Program) -> MachineCode {
