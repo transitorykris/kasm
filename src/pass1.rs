@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-pub use crate::instructions::str_to_instruction;
+pub use crate::instructions::str_to_mnemonic;
 pub use crate::instructions::AddressMode;
 pub use crate::instructions::Mnemonic;
 pub use crate::instructions::Value;
@@ -18,7 +18,12 @@ type LabelTable = HashMap<String, Label>;
 type Address = u16;
 type Line = u16;
 
-pub type CodeTable = Vec<(Mnemonic, AddressMode, Value)>;
+pub struct Code {
+    pub mnemonic: Mnemonic,
+    pub address_mode: AddressMode,
+    pub value: Value,
+}
+pub type CodeTable = Vec<Code>;
 
 pub struct Program {
     symbol_table: LabelTable,
@@ -83,20 +88,22 @@ fn handle_instruction(program: &mut Program, line: &String) {
     let instruction = parts.next().unwrap().to_lowercase();
     let operand_part = parts.next();
     let value: Value;
-    let operand_type: AddressMode;
+    let address_mode: AddressMode;
 
     if operand_part.is_none() {
-        operand_type = AddressMode::Implied;
+        address_mode = AddressMode::Implied;
         value = Value::Null;
     } else {
-        let (operand_type_tmp, value_tmp) = get_operand_type(operand_part.unwrap());
-        operand_type = operand_type_tmp;
+        let (address_mode_tmp, value_tmp) = get_operand_type(operand_part.unwrap());
+        address_mode = address_mode_tmp;
         value = value_tmp;
     }
 
-    program
-        .code
-        .push(str_to_instruction(instruction, operand_type, value));
+    program.code.push(Code {
+        mnemonic: str_to_mnemonic(instruction),
+        address_mode,
+        value,
+    });
 }
 
 fn get_operand_type(operand: &str) -> (AddressMode, Value) {

@@ -18,12 +18,12 @@ pub fn pass2(instruction_set: InstructionMap, program: pass1::Program) -> Machin
     for line in program.code {
         count = count + 1;
         let instruction_key = InstructionKey {
-            mnemonic: line.0,
-            address_mode: line.1,
+            mnemonic: line.mnemonic,
+            address_mode: line.address_mode,
         };
         let machine_code = instruction_set.get(&instruction_key);
         output.push(*machine_code.unwrap());
-        match line.2 {
+        match line.value {
             U8(val) => {
                 output.push(val);
             }
