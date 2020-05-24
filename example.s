@@ -1,5 +1,6 @@
 ; This is my simple program
 
+start:
     lda #$2b            ; Load 0x1a into the A register
     inc                 ; Add 1 to it
     sta $a45f           ; Store it at the absolute location $a45f
@@ -8,11 +9,15 @@
     sta ($4321,x)      ; to be implemented
     sta ($0001),y
 
+no_opping:
     nop
     nop
     nop
     
+wrap_it_up:
     pha
     stp
+
+
 
     ; End

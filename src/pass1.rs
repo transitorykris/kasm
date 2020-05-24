@@ -42,11 +42,14 @@ pub fn pass1(source: &SourceTable) -> Program {
 
     // Iterate over each line of source file
     for line in source {
-        if line.line.chars().next().unwrap() == '.' {
+        let mut chars = line.line.chars();
+        if line.line.ends_with(":") {
+            // That's a label there
+            handle_label(&mut program, &line.line);
+        } else if chars.next().unwrap() == '.' {
             // We've got a directive
             handle_directive(&mut program, &line.line);
-        } else if line.line.chars().next().unwrap().is_ascii_alphabetic() {
-            // TODO: this doesn't handle labels:
+        } else if chars.next().unwrap().is_ascii_alphabetic() {
             // We got an instruction
             handle_instruction(&mut program, &line.line);
         } else {
@@ -62,24 +65,26 @@ pub fn pass1(source: &SourceTable) -> Program {
     program
 }
 
+// TODO: implement labels!
+fn handle_label(program: &mut Program, line: &String) {
+    println!("Warning: labels are not implemented yet: {}", line);
+}
+
 // TODO: implement directives!
 fn handle_directive(program: &mut Program, line: &String) {
-    println!("Warning: directives are not implemented yet");
+    println!("Warning: directives are not implemented yet: {}", line);
 }
 
 fn handle_instruction(program: &mut Program, line: &String) {
     let mut parts = line.split_ascii_whitespace();
     let instruction = parts.next().unwrap().to_lowercase();
-    println!("About to handle instruction {}", instruction);
     let operand_part = parts.next();
     let value: Value;
     let operand_type: AddressMode;
     if operand_part.is_none() {
-        println!("is_none!!!!");
         operand_type = AddressMode::Implied;
         value = Value::Null;
     } else {
-        println!("unwrap!!!!");
         let (operand_type_tmp, value_tmp) = get_operand_type(operand_part.unwrap());
         operand_type = operand_type_tmp;
         value = value_tmp;
