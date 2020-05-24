@@ -2,6 +2,9 @@ pub use crate::instructions::str_to_instruction;
 pub use crate::instructions::AddressMode;
 pub use crate::instructions::Mnemonic;
 pub use crate::instructions::Value;
+
+pub use crate::scanner::SourceTable;
+
 use regex::Regex;
 
 enum Instruction {
@@ -31,7 +34,7 @@ pub struct Program {
     pub code: CodeTable,
 }
 
-pub fn pass1(source: &Vec<(String, u16)>) -> Program {
+pub fn pass1(source: &SourceTable) -> Program {
     let mut program = Program {
         symbol_table: SymbolTable::new(),
         code: CodeTable::new(),
@@ -39,16 +42,19 @@ pub fn pass1(source: &Vec<(String, u16)>) -> Program {
 
     // Iterate over each line of source file
     for line in source {
-        if line.0.chars().next().unwrap() == '.' {
+        if line.line.chars().next().unwrap() == '.' {
             // We've got a directive
-            handle_directive(&mut program, &line.0);
-        } else if line.0.chars().next().unwrap().is_ascii_alphabetic() {
+            handle_directive(&mut program, &line.line);
+        } else if line.line.chars().next().unwrap().is_ascii_alphabetic() {
             // TODO: this doesn't handle labels:
             // We got an instruction
-            handle_instruction(&mut program, &line.0);
+            handle_instruction(&mut program, &line.line);
         } else {
             // this isn't good!
-            panic!("Unknown syntax: {} at line: {}", line.0, line.1);
+            panic!(
+                "Unknown syntax: {} at line: {}",
+                line.line, line.line_number
+            );
         }
     }
     // Store labels in a label table to have their addresses determined later

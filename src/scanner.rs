@@ -1,8 +1,15 @@
 type Line = u16;
 
-pub fn scanner(raw_source: String) -> Vec<(String, Line)> {
-    let mut source = Vec::new();
-    let mut count = 0;
+pub struct SourceLine {
+    pub line: String,
+    pub line_number: Line,
+}
+
+pub type SourceTable = Vec<SourceLine>;
+
+pub fn scanner(raw_source: String) -> SourceTable {
+    let mut source = SourceTable::new();
+    let mut line_number = 0;
 
     for raw_line in raw_source.split('\n') {
         let mut line = String::from(raw_line);
@@ -12,7 +19,7 @@ pub fn scanner(raw_source: String) -> Vec<(String, Line)> {
 
         // We count all the lines to help the programmer with
         // finding errors later
-        count = count + 1;
+        line_number = line_number + 1;
 
         // Strip out comments
         // TODO: take care to handle semicolons in strings
@@ -33,7 +40,7 @@ pub fn scanner(raw_source: String) -> Vec<(String, Line)> {
             println!("Comment found, skipping");
             continue;
         }
-        source.push((line, count));
+        source.push(SourceLine { line, line_number });
     }
 
     source
