@@ -29,9 +29,9 @@ pub struct Directive {
 }
 
 pub enum CodeTableEntry {
-    Code(Code),
-    Label(String),
-    Directive(Directive),
+    Code(Address, Code),
+    Label(Address, String),
+    Directive(Address, Directive),
 }
 
 pub type CodeTable = Vec<CodeTableEntry>;
@@ -39,15 +39,26 @@ pub type CodeTable = Vec<CodeTableEntry>;
 pub struct Program {
     symbol_table: LabelTable,
     pub code: CodeTable,
+    counter: Address,   // The current address as we go through pass1
 }
 
 pub fn pass1(source: &SourceTable) -> Program {
     let mut program = Program {
         symbol_table: LabelTable::new(),
         code: CodeTable::new(),
+        counter: 0,
     };
 
+    // zeropage is addresses $00 through to $ff
+    // We track whether we're in zeropage or not because it affects
+    // how we handle labels (1 byte vs 2 bytes!)
+    let mut zeropage = true;
+
     for line in source {
+        program.counter = program.counter + 1;
+        if program.counter > 0xff {
+            zeropage = false;
+        }
         let mut chars = line.line.chars();
         if line.line.ends_with(":") {
             handle_label(&mut program, line.line.to_string(), line.line_number);
@@ -105,7 +116,7 @@ fn handle_instruction(program: &mut Program, line: &String) {
         value = value_tmp;
     }
 
-    let entry = CodeTableEntry::Code(Code{
+    let entry = CodeTableEntry::Code(program.counter, Code{
             mnemonic: str_to_mnemonic(instruction),
             address_mode,
             value,

@@ -1,5 +1,7 @@
 ; This is my simple program
 
+.org $1000
+
 start:
     lda #$2b            ; Load 0x1a into the A register
     inc                 ; Add 1 to it

@@ -19,7 +19,7 @@ pub fn pass2(instruction_set: InstructionMap, program: pass1::Program) -> Machin
     for line in program.code {
         count = count + 1;
         match line {
-            Code(line) => {
+            Code(address, line) => {
                 let instruction_key = InstructionKey {
                     mnemonic: line.mnemonic,
                     address_mode: line.address_mode,
@@ -41,8 +41,8 @@ pub fn pass2(instruction_set: InstructionMap, program: pass1::Program) -> Machin
                     }
                 };
             },
-            Label(symbol) => println!("Labels not yet implemented in pass2"),
-            Directive(directive) => println!("Directives not yet implemented in pass2"),
+            Label(address, symbol) => println!("Labels not yet implemented in pass2"),
+            Directive(address, directive) => println!("Directives not yet implemented in pass2"),
         }
     }
 
