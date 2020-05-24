@@ -34,9 +34,7 @@ fn main() {
     // Read in the source file
     let source = read_source(&source_file);
 
-    // TODO: Change this to returning a vector of tuples
-    //       <(source_line, line_number)>
-    //       and strip out comments
+    // Scan in and clean up the raw source
     let scanned = scanner(source);
 
     // Create a data structure containing details of our
