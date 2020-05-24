@@ -47,7 +47,6 @@ pub fn pass1(source: &SourceTable) -> Program {
         code: CodeTable::new(),
     };
 
-    // Iterate over each line of source file
     for line in source {
         let mut chars = line.line.chars();
         if line.line.ends_with(":") {
