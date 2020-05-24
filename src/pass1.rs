@@ -2,6 +2,7 @@ pub use crate::instructions::Mnemonic;
 pub use crate::instructions::AddressMode;
 pub use crate::instructions::Value;
 pub use crate::instructions::str_to_instruction;
+use regex::Regex;
 
 enum Instruction {
     Absolute(Counter, Mnemonic, u16),
@@ -81,81 +82,68 @@ fn handle_instruction(program: &mut Program, line: &String) {
 }
 
 fn get_operand_type(operand: &str) -> (AddressMode, Value) {
-    let mut x_indexed = false;
-    let mut y_indexed = false;
     let mut raw_operand = String::from(operand);
 
     println!("Checking operand {} length {}", raw_operand, raw_operand.len());
-    if raw_operand == "" {
-        println!("implied");
-        return (AddressMode::Implied, Value::Null);
-    }
 
-    // ^\$([0-9a-f]{2})$                ; Zeropage
-    // ^\$([0-9a-f]{2})\s*,\s*x$        ; ZeropageX
-    // ^\$([0-9a-f]{2})\s*,\s*y$        ; ZeropageY
-    // ^#\$([0-9a-f]{2})$               ; Immediate
-    // ^\$([0-9a-f]{4})$                ; Absolute
-    // ^\$([0-9a-f]{4})\s*,\s*x$        ; AbsoluteX
-    // ^\$([0-9a-f]{4})\s*,\s*y$        ; AbsoluteY
-    // ^\(\$([0-9a-f]{4})\)$            ; Indirect
-    // ^\(\$([0-9a-f]{4}\s*,\s*x)\)$    ; x-indexed indirect
-    // ^\(\$([0-9a-f]{4})\)\s*,\s*y$    ; indirect y-indexed
+    // TODO: use lazy_static somehow!    
+    let implied_re = Regex::new(r"^$").unwrap();
+    let zeropage_re = Regex::new(r"^\$([0-9a-f]{2})$").unwrap();
+    let zeropagex_re = Regex::new(r"^\$([0-9a-f]{2})\s*,\s*x$").unwrap();
+    let zeropagey_re = Regex::new(r"^\$([0-9a-f]{2})\s*,\s*y$").unwrap();
+    let immediate_re = Regex::new(r"^#\$([0-9a-f]{2})$").unwrap();
+    let absolute_re = Regex::new(r"^\$([0-9a-f]{4})$").unwrap();
+    let absolutex_re = Regex::new(r"^\$([0-9a-f]{4})\s*,\s*x$").unwrap();
+    let absolutey_re = Regex::new(r"^\$([0-9a-f]{4})\s*,\s*y$").unwrap();
+    let indirect_re = Regex::new(r"^\(\$([0-9a-f]{4})\)$").unwrap();
+    let xindexed_re = Regex::new(r"^\(\$([0-9a-f]{4})\s*,\s*x\)$").unwrap();
+    let yindexed_re = Regex::new(r"^\(\$([0-9a-f]{4})\)\s*,\s*y$").unwrap();
     // oh no... forgot about opcode $ab relative address mode...
     // for branch targets...
 
+    if implied_re.is_match(operand) {
+        return (AddressMode::Implied, Value::Null);
+    } else if zeropage_re.is_match(operand) {
+        let caps = zeropage_re.captures(operand).unwrap();
+        let val = u8::from_str_radix(&caps[1], 16).unwrap();
+        return (AddressMode::Zeropage, Value::U8(val));
+    } else if zeropagex_re.is_match(operand) {
+        let caps = zeropagex_re.captures(operand).unwrap();
+        let val = u8::from_str_radix(&caps[1], 16).unwrap();
+        return (AddressMode::ZeropageX, Value::U8(val));
+    } else if zeropagey_re.is_match(operand) {
+        let caps = zeropagey_re.captures(operand).unwrap();
+        let val = u8::from_str_radix(&caps[1], 16).unwrap();
+        return (AddressMode::ZeropageY, Value::U8(val));
+    } else if immediate_re.is_match(operand) {
+        let caps = immediate_re.captures(operand).unwrap();
+        let val = u8::from_str_radix(&caps[1], 16).unwrap();
+        return (AddressMode::Immediate, Value::U8(val));
+    } else if absolute_re.is_match(operand) {
+        let caps = absolute_re.captures(operand).unwrap();
+        let val = u16::from_str_radix(&caps[1], 16).unwrap();
+        return (AddressMode::Absolute, Value::U16(val));
+    } else if absolutex_re.is_match(operand) {
+        let caps = absolutex_re.captures(operand).unwrap();
+        let val = u16::from_str_radix(&caps[1], 16).unwrap();
+        return (AddressMode::AbsoluteX, Value::U16(val));
+    } else if absolutey_re.is_match(operand) {
+        let caps = absolutey_re.captures(operand).unwrap();
+        let val = u16::from_str_radix(&caps[1], 16).unwrap();
+        return (AddressMode::AbsoluteY, Value::U16(val));
+    } else if indirect_re.is_match(operand) {
+        let caps = indirect_re.captures(operand).unwrap();
+        let val = u16::from_str_radix(&caps[1], 16).unwrap();
+        return (AddressMode::Indirect, Value::U16(val));
+    } else if xindexed_re.is_match(operand) {
+        let caps = xindexed_re.captures(operand).unwrap();
+        let val = u16::from_str_radix(&caps[1], 16).unwrap();
+        return (AddressMode::IndirectX, Value::U16(val));
+    } else if yindexed_re.is_match(operand) {
+        let caps = yindexed_re.captures(operand).unwrap();
+        let val = u16::from_str_radix(&caps[1], 16).unwrap();
+        return (AddressMode::IndirectY, Value::U16(val));
+    }
     
-    // Check if this is X or Y indexed
-    if raw_operand.ends_with(",x") {
-        println!("X indexed");
-        x_indexed = true;
-    } else if raw_operand.ends_with(",y") {
-        println!("Y indexed");
-        y_indexed = true;
-    }
-
-    if raw_operand.starts_with("$") {
-        if raw_operand.len() == 3 && x_indexed {
-            println!("zeropage");
-            let val = u8::from_str_radix(raw_operand.trim_start_matches("$"), 16);
-            return (AddressMode::ZeropageX, Value::U8(val.unwrap()));
-        } else if raw_operand.len() == 3 && y_indexed {
-            println!("zeropage");
-            let val = u8::from_str_radix(raw_operand.trim_start_matches("$"), 16);
-            return (AddressMode::ZeropageY, Value::U8(val.unwrap()));
-        } else if raw_operand.len() == 3 {
-            println!("absolute zeropage");
-            let val = u8::from_str_radix(raw_operand.trim_start_matches("$"), 16);
-            return (AddressMode::Absolute, Value::U8(val.unwrap()));
-        } else {
-            println!("absolute");
-            let val = u16::from_str_radix(raw_operand.trim_start_matches("$"), 16);
-            return (AddressMode::Absolute, Value::U16(val.unwrap()));
-        }
-    } else if raw_operand.starts_with("#$") {
-        println!("immediate");
-        let val = u8::from_str_radix(raw_operand.trim_start_matches("#$"), 16);
-        return (AddressMode::Immediate, Value::U8(val.unwrap()));
-    } else if raw_operand.starts_with("($") && operand.ends_with(")") {
-        println!("indirect");
-        let operand_trimmed = raw_operand.trim_start_matches("($").trim_end_matches(")");
-        let val = u16::from_str_radix(operand_trimmed, 16);
-        return (AddressMode::Indirect, Value::U16(val.unwrap()));
-    } else if raw_operand.starts_with("($") && x_indexed {
-        println!("indirectX");
-        println!("{}", raw_operand);
-        let operand_trimmed = raw_operand.trim_start_matches("($").trim_end_matches(",x");
-        println!("{}", operand_trimmed);
-        let val = u16::from_str_radix(operand_trimmed, 16);
-        return (AddressMode::IndirectX, Value::U16(val.unwrap()));
-    } else if raw_operand.starts_with("($") && y_indexed {
-        println!("indirectY");
-        let operand_trimmed = raw_operand.trim_start_matches("($").trim_end_matches("),y");
-        let val = u16::from_str_radix(operand_trimmed, 16);
-        return (AddressMode::IndirectY, Value::U16(val.unwrap()));
-    } else {
-        // Otherwise must be a label
-        println!("unknown");
-        (AddressMode::Unknown, Value::String(raw_operand))
-    }
+    (AddressMode::Unknown, Value::String(raw_operand))
 }

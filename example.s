@@ -5,7 +5,7 @@
     sta $a45f           ; Store it at the absolute location $a45f
 
     ; The assembler is hitting only a few addressing modes at the moment
-    ;sta ($4321,x)      ; to be implemented
+    sta ($4321,x)      ; to be implemented
     sta ($0001),y
 
     nop
