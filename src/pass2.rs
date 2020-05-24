@@ -5,6 +5,7 @@ pub use crate::instructions::Mnemonic;
 pub use crate::instructions::Value;
 pub use crate::pass1;
 pub use crate::pass1::Value::{Null, String, U16, U8};
+pub use crate::pass1::CodeTableEntry::{Code, Label, Directive};
 
 pub type MachineCode = Vec<u8>;
 
@@ -17,26 +18,33 @@ pub fn pass2(instruction_set: InstructionMap, program: pass1::Program) -> Machin
 
     for line in program.code {
         count = count + 1;
-        let instruction_key = InstructionKey {
-            mnemonic: line.mnemonic,
-            address_mode: line.address_mode,
-        };
-        let machine_code = instruction_set.get(&instruction_key);
-        output.push(*machine_code.unwrap());
-        match line.value {
-            U8(val) => {
-                output.push(val);
-            }
-            U16(val) => {
-                let bytes = val.to_be_bytes();
-                output.push(bytes[1]); // Note: little endian!
-                output.push(bytes[0]);
-            }
-            Null => {}
-            String(label) => {
-                panic!("Found unresolved label: {}", label);
-            }
-        };
+        match line {
+            Code(line) => {
+                let instruction_key = InstructionKey {
+                    mnemonic: line.mnemonic,
+                    address_mode: line.address_mode,
+                };
+                let machine_code = instruction_set.get(&instruction_key);
+                output.push(*machine_code.unwrap());
+                match line.value {
+                    U8(val) => {
+                        output.push(val);
+                    }
+                    U16(val) => {
+                        let bytes = val.to_be_bytes();
+                        output.push(bytes[1]); // Note: little endian!
+                        output.push(bytes[0]);
+                    }
+                    Null => {}
+                    String(label) => {
+                        panic!("Found unresolved label: {}", label);
+                    }
+                };
+            },
+            Label(symbol) => println!("Labels not yet implemented in pass2"),
+            Directive(directive) => println!("Directives not yet implemented in pass2"),
+        }
     }
+
     output
 }

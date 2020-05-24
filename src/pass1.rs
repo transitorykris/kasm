@@ -23,7 +23,18 @@ pub struct Code {
     pub address_mode: AddressMode,
     pub value: Value,
 }
-pub type CodeTable = Vec<Code>;
+
+pub struct Directive {
+    pub label: String,
+}
+
+pub enum CodeTableEntry {
+    Code(Code),
+    Label(String),
+    Directive(Directive),
+}
+
+pub type CodeTable = Vec<CodeTableEntry>;
 
 pub struct Program {
     symbol_table: LabelTable,
@@ -99,11 +110,13 @@ fn handle_instruction(program: &mut Program, line: &String) {
         value = value_tmp;
     }
 
-    program.code.push(Code {
-        mnemonic: str_to_mnemonic(instruction),
-        address_mode,
-        value,
-    });
+    let entry = CodeTableEntry::Code(Code{
+            mnemonic: str_to_mnemonic(instruction),
+            address_mode,
+            value,
+        });
+
+    program.code.push(entry);
 }
 
 fn get_operand_type(operand: &str) -> (AddressMode, Value) {
