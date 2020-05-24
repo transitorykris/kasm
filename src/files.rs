@@ -3,6 +3,8 @@ use std::io::prelude::*;
 use std::path::Path;
 use std::string::String;
 
+pub use crate::pass2::MachineCode;
+
 pub fn read_source(file: &str) -> String {
     let path = Path::new(file);
     let display = path.display();
@@ -20,7 +22,7 @@ pub fn read_source(file: &str) -> String {
     raw_source
 }
 
-pub fn write_out(filename: &str, output: Vec<u8>) {
+pub fn write_out(filename: &str, output: MachineCode) {
     let path = Path::new(filename);
     let display = path.display();
     let mut f = match File::create(&path) {

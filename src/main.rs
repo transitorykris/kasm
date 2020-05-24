@@ -21,9 +21,6 @@ pub use crate::pass1::pass1;
 mod pass2;
 pub use crate::pass2::pass2;
 
-mod assemble;
-pub use crate::assemble::assemble;
-
 const OUTSIZE: usize = 16384; // We're generating binaries for a 16KB EEPROM
 const OUTFILE: &str = "a.out"; // A typical default
 
@@ -56,10 +53,7 @@ fn main() {
     // Create a new data structure of instructions by resolving
     // all the labels
     // TODO: Resolve the labels!
-    let pass2_code = pass2(pass1_code);
-
-    // Convert into a binary suitable for writing to disk
-    let output = assemble(instruction_set, pass2_code, OUTSIZE);
+    let output = pass2(instruction_set, pass1_code);
 
     write_out(OUTFILE, output);
 }
