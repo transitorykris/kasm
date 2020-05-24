@@ -76,7 +76,13 @@ pub fn pass1(source: &SourceTable) -> Program {
 // TODO: implement labels!
 fn handle_label(program: &mut Program, line: String) {
     println!("Warning: labels are not implemented yet: {}", line);
-    program.symbol_table.insert(line, Symbol{address: 0, line: 0});
+    program.symbol_table.insert(
+        line,
+        Symbol {
+            address: 0,
+            line: 0,
+        },
+    );
 }
 
 // TODO: implement directives!
