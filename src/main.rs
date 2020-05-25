@@ -51,7 +51,8 @@ fn main() {
         temp_val = val;
     }
 
-    if source_file == "" || temp_val != "" {
+    // If there's a value in temp_val we're missing a flag!
+    if temp_val != "" {
         usage(&command);
         return;
     }
