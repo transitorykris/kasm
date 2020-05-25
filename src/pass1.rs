@@ -126,42 +126,39 @@ fn handle_label(program: &mut Program, raw_label: String, line_number: Line) {
     );
 }
 
-// TODO: implement directives!
+// TODO: .equ directive
 fn handle_directive(program: &mut Program, raw_line: &String) {
-    println!(
-        "Warning: directives are not fully implemented yet: {}",
-        raw_line
-    );
-    let trimmed = raw_line.trim_start_matches(".");
+    let trimmed = raw_line.trim().trim_start_matches(".");
     println!("Hanlding directive: {}", trimmed);
-    let mut split = trimmed.split_ascii_whitespace();
-    let dir = split.next().unwrap();
+
+    //let mut split = trimmed.split_ascii_whitespace();
+    let split: Vec<&str> = trimmed.splitn(2, " ").collect(); // Get two parts, the directive and data
+    let dir = split[0];
+    let value = String::from(split[1]);
     match dir {
         "org" => {
             // XXX this feels gross
-            let value = split.next().unwrap().trim_start_matches("$");
+            let value = value.trim_start_matches("$");
             let address = u16::from_str_radix(value, 16).unwrap();
             program.counter = address;
         }
         "byte" => {
-            for part in split {
-                let (data, size) = parse_bytes(String::from(part));
-                program.code.push(CodeTableEntry {
-                    address: program.counter,
-                    content: Content::Data(data),
-                });
-                program.counter += size;
-            }
+            let (data, size) = parse_bytes(value);
+            program.code.push(CodeTableEntry {
+                address: program.counter,
+                content: Content::Data(data),
+            });
+            program.counter += size;
         }
         "ascii" => {
-            for part in split {
-                //let (data, size) = ascii_to_bytes(String::from(part));
-                //program.code.push(CodeTableEntry {
-                //    address: program.counter,
-                //    content: Content::Data(data),
-                //});
-                //program.counter += size;
-            }
+            let raw_string = String::from(value);
+            let trimmed = String::from(raw_string.trim_start_matches("\"").trim_end_matches("\""));
+            let (data, size) = ascii_to_bytes(trimmed);
+            program.code.push(CodeTableEntry {
+                address: program.counter,
+                content: Content::Data(data),
+            });
+            program.counter += size;
         }
         _ => panic!("Unknown directive: {}", raw_line),
     }
@@ -182,10 +179,46 @@ fn parse_bytes(bytes: String) -> (Data, u16) {
     (data, size)
 }
 
-//fn ascii_to_bytes(chars: String) -> (Data, u16) {
-//    let mut data = Vec::new();
-//    let size =0;
-//}
+fn ascii_to_bytes(ascii: String) -> (Data, u16) {
+    let mut data = Vec::new();
+    let mut size = 0;
+    let mut in_escape = false; // track whether we're in an escape or not
+    for ch in ascii.bytes() {
+        if in_escape {
+            data.push(unescape(ch));
+            size += 1;
+            println!("CHAR: {:02x}", unescape(ch));
+            in_escape = false;
+        } else if ch == 0x5c {
+            // 0x5c is ascii backslash
+            in_escape = true;
+        } else {
+            data.push(ch);
+            size += 1;
+            println!("CHAR: {:02x}", ch);
+        }
+    }
+    (data, size)
+}
+
+fn unescape(ch: u8) -> u8 {
+    // Standard C escape sequences
+    match ch {
+        0x61 => return 0x07, // \a Alert
+        0x62 => return 0x08, // \b Backspace
+        0x65 => return 0x1b, // \e Escape
+        0x66 => return 0x0c, // \f Formfeed
+        0x6e => return 0x0a, // \n Newline
+        0x72 => return 0x0d, // \r Carriage Return
+        0x74 => return 0x09, // \t Horizontal Tab
+        0x7c => return 0x0b, // \v Vertical Tab
+        0x5c => return 0x5c, // \\ Backslash
+        0x27 => return 0x27, // \' Apostrophe
+        0x22 => return 0x22, // \" Double Quotation Mark
+        0x3f => return 0x34, // \? Question Mark
+        _ => panic!("Unknown escape code: \\{}", ch),
+    }
+}
 
 fn handle_instruction(program: &mut Program, line: &String) {
     let mut parts = line.split_ascii_whitespace();
