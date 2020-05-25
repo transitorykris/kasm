@@ -20,22 +20,26 @@ pub fn pass2(instruction_set: InstructionMap, program: pass1::Program) -> Machin
         count = count + 1;
         match line {
             Code(address, line) => {
+                print!("{:04x}: ", address);
                 let instruction_key = InstructionKey {
                     mnemonic: line.mnemonic,
                     address_mode: line.address_mode,
                 };
                 let machine_code = instruction_set.get(&instruction_key);
+                print!("{:02x} ", machine_code.unwrap());
                 output.push(*machine_code.unwrap());
                 match line.value {
                     U8(val) => {
                         output.push(val);
+                        println!("{:02x}", val);
                     }
                     U16(val) => {
                         let bytes = val.to_be_bytes();
                         output.push(bytes[1]); // Note: little endian!
                         output.push(bytes[0]);
+                        println!("{:02x} {:02x}", bytes[1], bytes[0]);
                     }
-                    Null => {}
+                    Null => {println!();}
                     String(label) => {
                         panic!("Found unresolved label: {}", label);
                     }

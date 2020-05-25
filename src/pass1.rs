@@ -47,18 +47,18 @@ pub fn pass1(source: &SourceTable) -> Program {
     let mut program = Program {
         symbol_table: LabelTable::new(),
         code: CodeTable::new(),
-        counter: 0,
+        counter: 0x1000,      // Worry about zeropage a little later
     };
 
     // zeropage is addresses $00 through to $ff
     // We track whether we're in zeropage or not because it affects
     // how we handle labels (1 byte vs 2 bytes!)
-    let mut zeropage = true;
+    //let mut zeropage = true;
 
     for line in source {
-        if program.counter > 0xff {
-            zeropage = false;
-        }
+        //if program.counter > 0xff {
+        //    zeropage = false;
+        //}
         let mut chars = line.line.chars();
         if line.line.ends_with(":") {
             handle_label(&mut program, line.line.to_string(), line.line_number);
@@ -125,7 +125,7 @@ fn handle_instruction(program: &mut Program, line: &String) {
     program.code.push(entry);
 
     // Move our program counter to the next free location
-    //program.counter = program.counter + address_mode_length(address_mode);
+    program.counter += address_mode_length(address_mode);
 }
 
 fn get_operand_type(operand: &str) -> (AddressMode, Value) {
@@ -139,8 +139,8 @@ fn get_operand_type(operand: &str) -> (AddressMode, Value) {
     let absolutex_re = Regex::new(r"^\$([0-9a-f]{4})\s*,\s*x$").unwrap();
     let absolutey_re = Regex::new(r"^\$([0-9a-f]{4})\s*,\s*y$").unwrap();
     let indirect_re = Regex::new(r"^\(\$([0-9a-f]{4})\)$").unwrap();
-    let xindexed_re = Regex::new(r"^\(\$([0-9a-f]{4})\s*,\s*x\)$").unwrap();
-    let yindexed_re = Regex::new(r"^\(\$([0-9a-f]{4})\)\s*,\s*y$").unwrap();
+    let xindexed_re = Regex::new(r"^\(\$([0-9a-f]{2})\s*,\s*x\)$").unwrap();
+    let yindexed_re = Regex::new(r"^\(\$([0-9a-f]{2})\)\s*,\s*y$").unwrap();
     // oh no... forgot about opcode $ab relative address mode...
     // for branch targets...
 
@@ -180,12 +180,12 @@ fn get_operand_type(operand: &str) -> (AddressMode, Value) {
         return (AddressMode::Indirect, Value::U16(val));
     } else if xindexed_re.is_match(operand) {
         let caps = xindexed_re.captures(operand).unwrap();
-        let val = u16::from_str_radix(&caps[1], 16).unwrap();
-        return (AddressMode::IndirectX, Value::U16(val));
+        let val = u8::from_str_radix(&caps[1], 16).unwrap();
+        return (AddressMode::IndirectX, Value::U8(val));
     } else if yindexed_re.is_match(operand) {
         let caps = yindexed_re.captures(operand).unwrap();
-        let val = u16::from_str_radix(&caps[1], 16).unwrap();
-        return (AddressMode::IndirectY, Value::U16(val));
+        let val = u8::from_str_radix(&caps[1], 16).unwrap();
+        return (AddressMode::IndirectY, Value::U8(val));
     }
 
     (AddressMode::Unknown, Value::String(String::from(operand)))
