@@ -20,7 +20,7 @@ pub fn pass2(instruction_set: InstructionMap, program: pass1::Program) -> Machin
         count = count + 1;
         match line {
             Code(address, line) => {
-                print!("{:04x}: ", address);
+                print!("${:04x}: ", address);
                 let instruction_key = InstructionKey {
                     mnemonic: line.mnemonic,
                     address_mode: line.address_mode,
