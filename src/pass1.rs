@@ -21,6 +21,13 @@ pub struct Label {
 type LabelTable = HashMap<String, Label>;
 type Address = u16;
 type Line = u16;
+type Data = Vec<u8>;
+
+#[derive(Eq, PartialEq)]
+pub enum Content {
+    Code(Code),
+    Data(Data),
+}
 
 #[derive(Eq, PartialEq)]
 pub struct Code {
@@ -32,7 +39,7 @@ pub struct Code {
 #[derive(Eq)]
 pub struct CodeTableEntry {
     pub address: Address,
-    pub code: Code,
+    pub content: Content,
 }
 
 impl Ord for CodeTableEntry {
@@ -158,11 +165,11 @@ fn handle_instruction(program: &mut Program, line: &String) {
 
     let entry = CodeTableEntry {
         address: program.counter,
-        code: Code {
+        content: Content::Code(Code {
             mnemonic: str_to_mnemonic(instruction),
             address_mode,
             value,
-        },
+        }),
     };
 
     program.code.push(entry);
