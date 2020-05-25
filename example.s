@@ -43,6 +43,7 @@ wrap_it_up:
     nop
     brk
     nop
+    .ascii "Hello, World!"
 out_of_order:
     nop
     nop

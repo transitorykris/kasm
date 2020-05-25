@@ -153,6 +153,16 @@ fn handle_directive(program: &mut Program, raw_line: &String) {
                 program.counter += size;
             }
         }
+        "ascii" => {
+            for part in split {
+                //let (data, size) = ascii_to_bytes(String::from(part));
+                //program.code.push(CodeTableEntry {
+                //    address: program.counter,
+                //    content: Content::Data(data),
+                //});
+                //program.counter += size;
+            }
+        }
         _ => panic!("Unknown directive: {}", raw_line),
     }
 }
@@ -168,6 +178,11 @@ fn parse_bytes(bytes: String) -> (Data, u16) {
     let size = 0;
     (data, size)
 }
+
+//fn ascii_to_bytes(chars: String) -> (Data, u16) {
+//    let mut data = Vec::new();
+//    let size =0;
+//}
 
 fn handle_instruction(program: &mut Program, line: &String) {
     let mut parts = line.split_ascii_whitespace();
