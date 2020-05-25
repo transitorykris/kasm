@@ -14,7 +14,8 @@ use regex::Regex;
 
 pub struct Label {
     pub address: Address,
-    line: Line, // XXX is this needed?
+    #[allow(dead_code)]
+    line: Line,
 }
 
 type LabelTable = HashMap<String, Label>;
@@ -26,10 +27,6 @@ pub struct Code {
     pub mnemonic: Mnemonic,
     pub address_mode: AddressMode,
     pub value: Value,
-}
-
-pub struct Directive {
-    pub label: String,
 }
 
 #[derive(Eq)]

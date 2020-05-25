@@ -151,6 +151,7 @@ pub fn address_mode_length(address_mode: AddressMode) -> u16 {
     }
 }
 
+#[allow(dead_code)]
 pub fn address_mode_name(address_mode: AddressMode) -> String {
     match address_mode {
         AddressMode::Absolute => String::from("Absolute"),
@@ -171,6 +172,7 @@ pub fn address_mode_name(address_mode: AddressMode) -> String {
     }
 }
 
+#[allow(dead_code)]
 pub fn get_instruction(
     instruction_set: &InstructionMap,
     mnemonic: Mnemonic,
