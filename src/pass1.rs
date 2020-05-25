@@ -10,9 +10,9 @@ pub use crate::scanner::SourceTable;
 
 use regex::Regex;
 
-struct Label {
-    address: Address,
-    line: Line,
+pub struct Label {
+    pub address: Address,
+    line: Line, // XXX is this needed?
 }
 
 type LabelTable = HashMap<String, Label>;
@@ -38,7 +38,7 @@ pub enum CodeTableEntry {
 pub type CodeTable = Vec<CodeTableEntry>;
 
 pub struct Program {
-    symbol_table: LabelTable,
+    pub symbol_table: LabelTable,
     pub code: CodeTable,
     counter: Address,   // The current address as we go through pass1
 }
@@ -81,8 +81,10 @@ pub fn pass1(source: &SourceTable) -> Program {
 }
 
 // TODO: implement labels!
-fn handle_label(program: &mut Program, label: String, line_number: Line) {
-    println!("Warning: labels are not implemented yet: {}", label);
+fn handle_label(program: &mut Program, raw_label: String, line_number: Line) {
+    println!("Warning: labels are not implemented yet: {}", raw_label);
+
+    let label = String::from(raw_label.trim_end_matches(":"));
 
     if program.symbol_table.contains_key(&label) {
         panic!("Duplicate label found: {}", label);
@@ -189,6 +191,48 @@ fn get_operand_type(operand: &str) -> (AddressMode, Value) {
         let caps = yindexed_re.captures(operand).unwrap();
         let val = u8::from_str_radix(&caps[1], 16).unwrap();
         return (AddressMode::IndirectY, Value::U8(val));
+    }
+
+    // Now do it all again for labels :(
+    // Note: we don't quite know where the labels are in memory right now
+    // XXX we have no real limit on the length of a label right now
+    let l_absolute_re = Regex::new(r"^([a-z_][0-9a-z_]*)$").unwrap();
+    let l_absolutex_re = Regex::new(r"^([a-z_][0-9a-z_])\s*,\s*x$").unwrap();
+    let l_absolutey_re = Regex::new(r"^([a-z_][0-9a-z_])\s*,\s*y$").unwrap();
+    let l_immediate_re = Regex::new(r"^#([a-z_][0-9a-z_])$").unwrap();
+    let l_indirect_re = Regex::new(r"^\(([a-z_][0-9a-z_])\)$").unwrap();
+    let l_xindexed_re = Regex::new(r"^\(([a-z_][0-9a-z_])\s*,\s*x\)$").unwrap();
+    let l_yindexed_re = Regex::new(r"^\(([a-z_][0-9a-z_])\)\s*,\s*y$").unwrap();
+    // also missing relative mode
+
+    if l_absolute_re.is_match(operand) {
+        let caps = l_absolute_re.captures(operand).unwrap();
+        let label = String::from(&caps[1]);
+        return (AddressMode::Absolute, Value::String(label));
+    } else if l_absolutex_re.is_match(operand) {
+        let caps = l_absolutex_re.captures(operand).unwrap();
+        let label = String::from(&caps[1]);
+        return (AddressMode::ZeropageX, Value::String(label));
+    } else if l_absolutey_re.is_match(operand) {
+        let caps = l_absolutey_re.captures(operand).unwrap();
+        let label = String::from(&caps[1]);
+        return (AddressMode::AbsoluteY, Value::String(label));
+    } else if l_immediate_re.is_match(operand) {
+        let caps = l_immediate_re.captures(operand).unwrap();
+        let label = String::from(&caps[1]);
+        return (AddressMode::Immediate, Value::String(label));
+    } else if l_indirect_re.is_match(operand) {
+        let caps = l_indirect_re.captures(operand).unwrap();
+        let label = String::from(&caps[1]);
+        return (AddressMode::Indirect, Value::String(label));
+    } else if l_xindexed_re.is_match(operand) {
+        let caps = l_xindexed_re.captures(operand).unwrap();
+        let label = String::from(&caps[1]);
+        return (AddressMode::IndirectX, Value::String(label));
+    } else if l_yindexed_re.is_match(operand) {
+        let caps = l_yindexed_re.captures(operand).unwrap();
+        let label = String::from(&caps[1]);
+        return (AddressMode::IndirectY, Value::String(label));
     }
 
     println!("Warning! Unknown addressing mode");
