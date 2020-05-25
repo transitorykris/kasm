@@ -52,13 +52,15 @@ pub fn pass2(instruction_set: InstructionMap, program: pass1::Program) -> Machin
                                 output.push(bytes[0]);
                                 println!("{:02x} {:02x}", bytes[1], bytes[0]);
                             },
-                            None => panic!("Found unresolved label: {}", label),
+                            // This should never happen
+                            None => panic!("Unknown label: {}", label),
                         }
                     }
                 };
             },
-            Label(address, symbol) => println!("Labels not yet implemented in pass2"),
-            Directive(address, directive) => println!("Directives not yet implemented in pass2"),
+            // XXX this shouldn't be necessary in the second pass
+            Label(_address, _symbol) => println!("Labels not yet implemented in pass2"),
+            Directive(_address, _directive) => println!("Directives not yet implemented in pass2"),
         }
     }
 

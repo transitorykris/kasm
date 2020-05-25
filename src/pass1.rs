@@ -82,9 +82,9 @@ pub fn pass1(source: &SourceTable) -> Program {
 
 // TODO: implement labels!
 fn handle_label(program: &mut Program, raw_label: String, line_number: Line) {
-    println!("Warning: labels are not implemented yet: {}", raw_label);
-
     let label = String::from(raw_label.trim_end_matches(":"));
+
+    println!("Warning: labels are partially implemented: {}", label);
 
     if program.symbol_table.contains_key(&label) {
         panic!("Duplicate label found: {}", label);
