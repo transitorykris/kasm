@@ -197,6 +197,7 @@ fn get_operand_type(operand: &str) -> (AddressMode, Value) {
 
     // Now do it all again for labels :(
     // Note: we don't quite know where the labels are in memory right now
+    // TODO: Add #< and #> for lo byte and hi byte
     // XXX we have no real limit on the length of a label right now
     let l_absolute_re = Regex::new(r"^([a-z_][0-9a-z_]*)$").unwrap();
     let l_absolutex_re = Regex::new(r"^([a-z_][0-9a-z_])\s*,\s*x$").unwrap();
