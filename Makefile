@@ -8,3 +8,6 @@ run:
 
 fmt:
 	rustfmt src/*
+
+dump:
+	hexdump -C a.out
