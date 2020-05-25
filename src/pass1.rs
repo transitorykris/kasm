@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
-pub use crate::instructions::str_to_mnemonic;
 pub use crate::instructions::address_mode_length;
+pub use crate::instructions::str_to_mnemonic;
 pub use crate::instructions::AddressMode;
 pub use crate::instructions::Mnemonic;
 pub use crate::instructions::Value;
@@ -40,14 +40,14 @@ pub type CodeTable = Vec<CodeTableEntry>;
 pub struct Program {
     pub symbol_table: LabelTable,
     pub code: CodeTable,
-    counter: Address,   // The current address as we go through pass1
+    counter: Address, // The current address as we go through pass1
 }
 
 pub fn pass1(source: &SourceTable) -> Program {
     let mut program = Program {
         symbol_table: LabelTable::new(),
         code: CodeTable::new(),
-        counter: 0x1000,      // Worry about zeropage a little later
+        counter: 0x1000, // Worry about zeropage a little later
     };
 
     // TODO:
@@ -121,11 +121,14 @@ fn handle_instruction(program: &mut Program, line: &String) {
         value = value_tmp;
     }
 
-    let entry = CodeTableEntry::Code(program.counter, Code{
+    let entry = CodeTableEntry::Code(
+        program.counter,
+        Code {
             mnemonic: str_to_mnemonic(instruction),
             address_mode,
             value,
-        });
+        },
+    );
 
     program.code.push(entry);
 

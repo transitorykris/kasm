@@ -1591,9 +1591,7 @@ pub enum Value {
     Null,
 }
 
-pub fn str_to_mnemonic(
-    instruction: String
-) -> Mnemonic {
+pub fn str_to_mnemonic(instruction: String) -> Mnemonic {
     match instruction.as_str() {
         "adc" => return Mnemonic::ADC,
         "and" => return Mnemonic::AND,

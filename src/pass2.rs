@@ -4,8 +4,8 @@ pub use crate::instructions::InstructionMap;
 pub use crate::instructions::Mnemonic;
 pub use crate::instructions::Value;
 pub use crate::pass1;
+pub use crate::pass1::CodeTableEntry::{Code, Directive, Label};
 pub use crate::pass1::Value::{Null, String, U16, U8};
-pub use crate::pass1::CodeTableEntry::{Code, Label, Directive};
 
 pub type MachineCode = Vec<u8>;
 
@@ -29,7 +29,7 @@ pub fn pass2(instruction_set: InstructionMap, program: pass1::Program) -> Machin
                     Some(machine_code) => {
                         print!("{:02x} ", machine_code);
                         output.push(*machine_code);
-                    },
+                    }
                     None => panic!("Invalid instruction found"),
                 }
                 match line.value {
@@ -43,21 +43,23 @@ pub fn pass2(instruction_set: InstructionMap, program: pass1::Program) -> Machin
                         output.push(bytes[0]);
                         println!("{:02x} {:02x}", bytes[1], bytes[0]);
                     }
-                    Null => {println!();}
+                    Null => {
+                        println!();
+                    }
                     String(label) => {
                         match program.symbol_table.get(&label) {
                             Some(val) => {
                                 let bytes = val.address.to_be_bytes();
-                                output.push(bytes[1]);  // Note: little endian!
+                                output.push(bytes[1]); // Note: little endian!
                                 output.push(bytes[0]);
                                 println!("{:02x} {:02x}", bytes[1], bytes[0]);
-                            },
+                            }
                             // This should never happen
                             None => panic!("Unknown label: {}", label),
                         }
                     }
                 };
-            },
+            }
             // XXX this shouldn't be necessary in the second pass
             Label(_address, _symbol) => println!("Labels not yet implemented in pass2"),
             Directive(_address, _directive) => println!("Directives not yet implemented in pass2"),
