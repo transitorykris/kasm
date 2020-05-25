@@ -1,5 +1,5 @@
-use std::collections::HashMap;
 use std::cmp::Ordering;
+use std::collections::HashMap;
 
 pub use crate::instructions::address_mode_length;
 pub use crate::instructions::address_mode_name;
@@ -124,7 +124,10 @@ fn handle_label(program: &mut Program, raw_label: String, line_number: Line) {
 
 // TODO: implement directives!
 fn handle_directive(program: &mut Program, raw_line: &String) {
-    println!("Warning: directives are not fully implemented yet: {}", raw_line);
+    println!(
+        "Warning: directives are not fully implemented yet: {}",
+        raw_line
+    );
     let trimmed = raw_line.trim_start_matches(".");
     println!("Hanlding directive: {}", trimmed);
     let mut split = trimmed.split_ascii_whitespace();
@@ -135,7 +138,7 @@ fn handle_directive(program: &mut Program, raw_line: &String) {
             let value = split.next().unwrap().trim_start_matches("$");
             let address = u16::from_str_radix(value, 16).unwrap();
             program.counter = address;
-        },
+        }
         _ => panic!("Unknown directive: {}", raw_line),
     }
 }
