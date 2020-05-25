@@ -29,10 +29,9 @@ pub struct Directive {
     pub label: String,
 }
 
-pub enum CodeTableEntry {
-    Code(Address, Code),
-    Label(Address, String),
-    Directive(Address, Directive),
+pub struct CodeTableEntry {
+    pub address: Address,
+    pub code: Code,
 }
 
 pub type CodeTable = Vec<CodeTableEntry>;
@@ -121,14 +120,14 @@ fn handle_instruction(program: &mut Program, line: &String) {
         value = value_tmp;
     }
 
-    let entry = CodeTableEntry::Code(
-        program.counter,
-        Code {
+    let entry = CodeTableEntry {
+        address: program.counter,
+        code: Code {
             mnemonic: str_to_mnemonic(instruction),
             address_mode,
             value,
         },
-    );
+    };
 
     program.code.push(entry);
 
