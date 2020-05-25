@@ -10,13 +10,7 @@ pub use crate::pass1::Value::{Null, String, U16, U8};
 pub type MachineCode = Vec<u8>;
 
 pub fn pass2(instruction_set: InstructionMap, program: pass1::Program) -> MachineCode {
-    // Determine the location of each of the labels
-    // Update each reference to the symbol
-    // For now we're not worrying about labels
     let mut output = MachineCode::new();
-
-    // TODO:
-    // - Fill gaps between code with $00
 
     let mut next_address = 0;
 
