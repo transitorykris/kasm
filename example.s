@@ -26,6 +26,7 @@ no_opping:
     sta no_opping,y
     jmp (wrap_it_up)
     
+    jmp out_of_order
 
     .org $2abc
 
@@ -33,6 +34,17 @@ wrap_it_up:
     pha
     stp
 
-
+.org $2000
+    brk
+    nop
+    brk
+    nop
+    brk
+    nop
+out_of_order:
+    nop
+    nop
+    nop
+    brk
 
     ; End
