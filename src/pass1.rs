@@ -86,6 +86,7 @@ fn handle_label(program: &mut Program, label: String, line_number: Line) {
         panic!("Duplicate label found: {}", label);
     }
 
+    println!("{:04x}: {}", program.counter, label);
     program.symbol_table.insert(
         label,
         Label {
