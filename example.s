@@ -26,6 +26,9 @@ no_opping:
     sta no_opping,y
     jmp (wrap_it_up)
     
+
+    .org $2abc
+
 wrap_it_up:
     pha
     stp
