@@ -1584,6 +1584,7 @@ pub fn generate_instruction_set() -> InstructionMap {
     instruction_set
 }
 
+#[derive(Eq, PartialEq)]
 pub enum Value {
     String(String),
     U8(u8),

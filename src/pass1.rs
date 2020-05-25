@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use std::cmp::Ordering;
 
 pub use crate::instructions::address_mode_length;
 pub use crate::instructions::str_to_mnemonic;
@@ -19,6 +20,7 @@ type LabelTable = HashMap<String, Label>;
 type Address = u16;
 type Line = u16;
 
+#[derive(Eq, PartialEq)]
 pub struct Code {
     pub mnemonic: Mnemonic,
     pub address_mode: AddressMode,
@@ -29,9 +31,28 @@ pub struct Directive {
     pub label: String,
 }
 
+#[derive(Eq)]
 pub struct CodeTableEntry {
     pub address: Address,
     pub code: Code,
+}
+
+impl Ord for CodeTableEntry {
+    fn cmp(&self, other: &Self) -> Ordering {
+        self.address.cmp(&other.address)
+    }
+}
+
+impl PartialOrd for CodeTableEntry {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
+impl PartialEq for CodeTableEntry {
+    fn eq(&self, other: &Self) -> bool {
+        self.address == other.address
+    }
 }
 
 pub type CodeTable = Vec<CodeTableEntry>;
@@ -76,6 +97,7 @@ pub fn pass1(source: &SourceTable) -> Program {
     }
     // Store labels in a label table to have their addresses determined later
     // Determine length in bytes the symbol requires
+    program.code.sort();
     program
 }
 

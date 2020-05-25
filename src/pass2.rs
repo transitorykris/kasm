@@ -17,7 +17,6 @@ pub fn pass2(instruction_set: InstructionMap, program: pass1::Program) -> Machin
     let mut count = 0;
 
     // TODO:
-    // - Ensure the instructions are all in order
     // - Fill gaps between code with $00
 
     for line in program.code {
