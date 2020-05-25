@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 
 pub use crate::instructions::str_to_mnemonic;
+pub use crate::instructions::address_mode_length;
 pub use crate::instructions::AddressMode;
 pub use crate::instructions::Mnemonic;
 pub use crate::instructions::Value;
@@ -55,7 +56,6 @@ pub fn pass1(source: &SourceTable) -> Program {
     let mut zeropage = true;
 
     for line in source {
-        program.counter = program.counter + 1;
         if program.counter > 0xff {
             zeropage = false;
         }
@@ -89,7 +89,7 @@ fn handle_label(program: &mut Program, label: String, line_number: Line) {
     program.symbol_table.insert(
         label,
         Label {
-            address: 0,
+            address: program.counter,
             line: line_number,
         },
     );
@@ -123,6 +123,9 @@ fn handle_instruction(program: &mut Program, line: &String) {
         });
 
     program.code.push(entry);
+
+    // Move our program counter to the next free location
+    //program.counter = program.counter + address_mode_length(address_mode);
 }
 
 fn get_operand_type(operand: &str) -> (AddressMode, Value) {

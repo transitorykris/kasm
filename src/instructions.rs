@@ -131,7 +131,7 @@ type Opcode = u8;
 pub type InstructionMap = HashMap<InstructionKey, Opcode>;
 
 // returns the length in bytes of instruction for the given the AddressMode
-pub fn address_mode_length(address_mode: AddressMode) -> u8 {
+pub fn address_mode_length(address_mode: AddressMode) -> u16 {
     match address_mode {
         AddressMode::Absolute => 3,
         AddressMode::AbsoluteX => 3,
