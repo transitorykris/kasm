@@ -138,7 +138,7 @@ pub fn address_mode_length(address_mode: AddressMode) -> u16 {
         AddressMode::AbsoluteY => 3,
         AddressMode::Immediate => 2,
         AddressMode::Implied => 1,
-        AddressMode::Indirect => 2,
+        AddressMode::Indirect => 3,
         AddressMode::IndirectX => 2,
         AddressMode::IndirectY => 2,
         AddressMode::Relative => 2,

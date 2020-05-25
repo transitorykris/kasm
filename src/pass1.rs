@@ -2,6 +2,7 @@ use std::collections::HashMap;
 use std::cmp::Ordering;
 
 pub use crate::instructions::address_mode_length;
+pub use crate::instructions::address_mode_name;
 pub use crate::instructions::str_to_mnemonic;
 pub use crate::instructions::AddressMode;
 pub use crate::instructions::Mnemonic;
@@ -250,7 +251,7 @@ fn get_operand_type(operand: &str) -> (AddressMode, Value) {
     } else if l_absolutex_re.is_match(operand) {
         let caps = l_absolutex_re.captures(operand).unwrap();
         let label = String::from(&caps[1]);
-        return (AddressMode::ZeropageX, Value::String(label));
+        return (AddressMode::AbsoluteX, Value::String(label));
     } else if l_absolutey_re.is_match(operand) {
         let caps = l_absolutey_re.captures(operand).unwrap();
         let label = String::from(&caps[1]);

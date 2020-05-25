@@ -18,31 +18,42 @@ pub fn pass2(instruction_set: InstructionMap, program: pass1::Program) -> Machin
     // TODO:
     // - Fill gaps between code with $00
 
+    let mut next_address = 0;
+
     for line in program.code {
-        let address = line.address;
+        let mut address = line.address;
         let code = line.code;
+
+        for _ in next_address..address {
+            output.push(0);
+        }
 
         print!("${:04x}: ", address);
         let instruction_key = InstructionKey {
             mnemonic: code.mnemonic,
             address_mode: code.address_mode,
         };
+
         match instruction_set.get(&instruction_key) {
             Some(machine_code) => {
                 print!("{:02x} ", machine_code);
                 output.push(*machine_code);
+                address += 1;
             }
             None => panic!("Invalid instruction found"),
         }
+
         match code.value {
             U8(val) => {
                 output.push(val);
+                address += 1;
                 println!("{:02x}", val);
             }
             U16(val) => {
                 let bytes = val.to_be_bytes();
                 output.push(bytes[1]); // Note: little endian!
                 output.push(bytes[0]);
+                address += 2;
                 println!("{:02x} {:02x}", bytes[1], bytes[0]);
             }
             Null => {
@@ -54,6 +65,7 @@ pub fn pass2(instruction_set: InstructionMap, program: pass1::Program) -> Machin
                         let bytes = val.address.to_be_bytes();
                         output.push(bytes[1]); // Note: little endian!
                         output.push(bytes[0]);
+                        address += 2;
                         println!("{:02x} {:02x}", bytes[1], bytes[0]);
                     }
                     // This should never happen
@@ -61,6 +73,8 @@ pub fn pass2(instruction_set: InstructionMap, program: pass1::Program) -> Machin
                 }
             }
         };
+
+        next_address = address;
     }
 
     output
