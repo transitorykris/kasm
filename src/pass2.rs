@@ -10,6 +10,16 @@ pub use crate::pass1::Value::{Null, String, U16, U8};
 
 pub type MachineCode = Vec<u8>;
 
+macro_rules! verbose {
+    ($fmt:expr) => (print!(concat!($fmt)));
+    ($fmt:expr, $($arg:tt)*) => (print!(concat!($fmt), $($arg)*));
+}
+
+macro_rules! verboseln {
+    ($fmt:expr) => (print!(concat!($fmt, "\n")));
+    ($fmt:expr, $($arg:tt)*) => (print!(concat!($fmt, "\n"), $($arg)*));
+}
+
 pub fn pass2(instruction_set: InstructionMap, program: Program) -> MachineCode {
     let mut output = MachineCode::new();
 
@@ -23,7 +33,7 @@ pub fn pass2(instruction_set: InstructionMap, program: Program) -> MachineCode {
                     output.push(0);
                 }
 
-                print!("${:04x}: ", address);
+                verbose!("${:04x}: ", address);
                 let instruction_key = InstructionKey {
                     mnemonic: code.mnemonic,
                     address_mode: code.address_mode,
@@ -31,7 +41,7 @@ pub fn pass2(instruction_set: InstructionMap, program: Program) -> MachineCode {
 
                 match instruction_set.get(&instruction_key) {
                     Some(machine_code) => {
-                        print!("{:02x} ", machine_code);
+                        verbose!("{:02x} ", machine_code);
                         output.push(*machine_code);
                         address += 1;
                     }
@@ -42,18 +52,16 @@ pub fn pass2(instruction_set: InstructionMap, program: Program) -> MachineCode {
                     U8(val) => {
                         output.push(val);
                         address += 1;
-                        println!("{:02x}", val);
+                        verbose!("{:02x}", val);
                     }
                     U16(val) => {
                         let bytes = val.to_be_bytes();
                         output.push(bytes[1]); // Note: little endian!
                         output.push(bytes[0]);
                         address += 2;
-                        println!("{:02x} {:02x}", bytes[1], bytes[0]);
+                        verbose!("{:02x} {:02x}", bytes[1], bytes[0]);
                     }
-                    Null => {
-                        println!();
-                    }
+                    Null => {}
                     String(label) => {
                         match program.symbol_table.get(&label) {
                             Some(val) => {
@@ -61,7 +69,7 @@ pub fn pass2(instruction_set: InstructionMap, program: Program) -> MachineCode {
                                 output.push(bytes[1]); // Note: little endian!
                                 output.push(bytes[0]);
                                 address += 2;
-                                println!("{:02x} {:02x}", bytes[1], bytes[0]);
+                                verbose!("{:02x} {:02x}", bytes[1], bytes[0]);
                             }
                             // This should never happen
                             None => panic!("Unknown label: {}", label),
@@ -70,16 +78,15 @@ pub fn pass2(instruction_set: InstructionMap, program: Program) -> MachineCode {
                 };
             }
             Data(data) => {
-                print!("${:04x}: ", address);
+                verbose!("${:04x}: ", address);
                 for byte in data {
                     output.push(byte);
                     address += 1;
-                    print!("{:02x} ", byte);
+                    verbose!("{:02x} ", byte);
                 }
-                println!("");
             }
         }
-
+        verboseln!("");
         next_address = address;
     }
 
