@@ -191,5 +191,6 @@ fn get_operand_type(operand: &str) -> (AddressMode, Value) {
         return (AddressMode::IndirectY, Value::U8(val));
     }
 
+    println!("Warning! Unknown addressing mode");
     (AddressMode::Unknown, Value::String(String::from(operand)))
 }
