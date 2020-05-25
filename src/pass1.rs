@@ -106,17 +106,14 @@ pub fn pass1(source: &SourceTable) -> Program {
     program
 }
 
-// TODO: implement labels!
+// TODO: finish implement labels!
 fn handle_label(program: &mut Program, raw_label: String, line_number: Line) {
     let label = String::from(raw_label.trim_end_matches(":"));
-
-    println!("Warning: labels are partially implemented: {}", label);
 
     if program.symbol_table.contains_key(&label) {
         panic!("Duplicate label found: {}", label);
     }
 
-    println!("${:04x}: {}", program.counter, label);
     program.symbol_table.insert(
         label,
         Label {
@@ -129,7 +126,6 @@ fn handle_label(program: &mut Program, raw_label: String, line_number: Line) {
 // TODO: .equ directive
 fn handle_directive(program: &mut Program, raw_line: &String) {
     let trimmed = raw_line.trim().trim_start_matches(".");
-    println!("Hanlding directive: {}", trimmed);
 
     //let mut split = trimmed.split_ascii_whitespace();
     let split: Vec<&str> = trimmed.splitn(2, " ").collect(); // Get two parts, the directive and data
@@ -187,7 +183,6 @@ fn ascii_to_bytes(ascii: String) -> (Data, u16) {
         if in_escape {
             data.push(unescape(ch));
             size += 1;
-            println!("CHAR: {:02x}", unescape(ch));
             in_escape = false;
         } else if ch == 0x5c {
             // 0x5c is ascii backslash
@@ -195,7 +190,6 @@ fn ascii_to_bytes(ascii: String) -> (Data, u16) {
         } else {
             data.push(ch);
             size += 1;
-            println!("CHAR: {:02x}", ch);
         }
     }
     (data, size)

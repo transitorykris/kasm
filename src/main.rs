@@ -38,13 +38,10 @@ fn main() {
 
     // Create a data structure containing the instruction,
     // the addressing mode, and the value
-    // TODO: Also generate a table of labels that need to
-    //       be resolved into addresses
     let pass1_code = pass1(&scanned);
 
     // Create a new data structure of instructions by resolving
     // all the labels
-    // TODO: Resolve the labels!
     let output = pass2(instruction_set, pass1_code);
 
     write_out(OUTFILE, output);
