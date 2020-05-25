@@ -14,7 +14,6 @@ pub fn pass2(instruction_set: InstructionMap, program: pass1::Program) -> Machin
     // Update each reference to the symbol
     // For now we're not worrying about labels
     let mut output = MachineCode::new();
-    let mut count = 0;
 
     // TODO:
     // - Fill gaps between code with $00
@@ -22,7 +21,6 @@ pub fn pass2(instruction_set: InstructionMap, program: pass1::Program) -> Machin
     for line in program.code {
         let address = line.address;
         let code = line.code;
-        count = count + 1;
 
         print!("${:04x}: ", address);
         let instruction_key = InstructionKey {
