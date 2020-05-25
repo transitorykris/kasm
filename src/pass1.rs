@@ -143,8 +143,33 @@ fn handle_directive(program: &mut Program, raw_line: &String) {
             let address = u16::from_str_radix(value, 16).unwrap();
             program.counter = address;
         }
+        "byte" => {
+            for part in split {
+                let (data, size) = parse_bytes(String::from(part));
+                program.code.push(CodeTableEntry {
+                    address: program.counter,
+                    content: Content::Data(data),
+                });
+                program.counter += size;
+            }
+        }
         _ => panic!("Unknown directive: {}", raw_line),
     }
+}
+
+fn parse_bytes(bytes: String) -> (Data, u16) {
+    let mut data = Vec::new();
+    let parts = bytes.split_terminator(",");
+    for part in parts {
+        println!("parse_bytes: {}", part);
+        let raw_value = part.trim().trim_start_matches("$");
+        println!("parse_bytes: {}", raw_value);
+        let value = u8::from_str_radix(raw_value, 16).unwrap();
+        println!("parse_bytes: {:02x}", value);
+        data.push(value);
+    }
+    let size = 0;
+    (data, size)
 }
 
 fn handle_instruction(program: &mut Program, line: &String) {

@@ -28,6 +28,8 @@ no_opping:
     
     jmp out_of_order
 
+.byte $01,$02, $a3,$b4,$c5
+
     .org $2abc
 
 wrap_it_up:

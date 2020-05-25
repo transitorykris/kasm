@@ -70,10 +70,13 @@ pub fn pass2(instruction_set: InstructionMap, program: Program) -> MachineCode {
                 };
             }
             Data(data) => {
+                print!("${:04x}: ", address);
                 for byte in data {
                     output.push(byte);
                     address += 1;
+                    print!("{:02x} ", byte);
                 }
+                println!("");
             }
         }
 
