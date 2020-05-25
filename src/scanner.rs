@@ -21,7 +21,7 @@ pub fn scanner(raw_source: String) -> SourceTable {
 
         // We count all the lines to help the programmer with
         // finding errors later
-        line_number = line_number + 1;
+        line_number += 1;
 
         // Strip out comments
         // TODO: take care to handle semicolons in strings
