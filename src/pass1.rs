@@ -200,12 +200,12 @@ fn get_operand_type(operand: &str) -> (AddressMode, Value) {
     // TODO: Add #< and #> for lo byte and hi byte
     // XXX we have no real limit on the length of a label right now
     let l_absolute_re = Regex::new(r"^([a-z_][0-9a-z_]*)$").unwrap();
-    let l_absolutex_re = Regex::new(r"^([a-z_][0-9a-z_])\s*,\s*x$").unwrap();
-    let l_absolutey_re = Regex::new(r"^([a-z_][0-9a-z_])\s*,\s*y$").unwrap();
-    let l_immediate_re = Regex::new(r"^#([a-z_][0-9a-z_])$").unwrap();
-    let l_indirect_re = Regex::new(r"^\(([a-z_][0-9a-z_])\)$").unwrap();
-    let l_xindexed_re = Regex::new(r"^\(([a-z_][0-9a-z_])\s*,\s*x\)$").unwrap();
-    let l_yindexed_re = Regex::new(r"^\(([a-z_][0-9a-z_])\)\s*,\s*y$").unwrap();
+    let l_absolutex_re = Regex::new(r"^([a-z_][0-9a-z_]*)\s*,\s*x$").unwrap();
+    let l_absolutey_re = Regex::new(r"^([a-z_][0-9a-z_]*)\s*,\s*y$").unwrap();
+    let l_immediate_re = Regex::new(r"^#([a-z_][0-9a-z_]*)$").unwrap();
+    let l_indirect_re = Regex::new(r"^\(([a-z_][0-9a-z_]*)\)$").unwrap();
+    let l_xindexed_re = Regex::new(r"^\(([a-z_][0-9a-z_]*)\s*,\s*x\)$").unwrap();
+    let l_yindexed_re = Regex::new(r"^\(([a-z_][0-9a-z_]*)\)\s*,\s*y$").unwrap();
     // also missing relative mode
 
     if l_absolute_re.is_match(operand) {

@@ -21,6 +21,10 @@ no_opping:
 
     jmp wrap_it_up      ; Forware reference
     nop
+
+    sta no_opping,x
+    sta no_opping,y
+    jmp (wrap_it_up)
     
 wrap_it_up:
     pha
