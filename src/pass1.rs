@@ -50,6 +50,8 @@ pub fn pass1(source: &SourceTable) -> Program {
         counter: 0x1000,      // Worry about zeropage a little later
     };
 
+    // TODO:
+    // - Handle the zeropage! Labels are funky here.
     // zeropage is addresses $00 through to $ff
     // We track whether we're in zeropage or not because it affects
     // how we handle labels (1 byte vs 2 bytes!)
