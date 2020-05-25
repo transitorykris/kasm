@@ -15,6 +15,12 @@ no_opping:
     nop
     nop
     nop
+
+    jmp start           ; Backward reference
+    nop
+
+    jmp wrap_it_up      ; Forware reference
+    nop
     
 wrap_it_up:
     pha
