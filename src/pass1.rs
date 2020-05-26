@@ -160,7 +160,7 @@ fn handle_directive(program: &mut Program, raw_line: &String) {
             program.counter += size;
         }
         "equ" => {
-            println!("Warning, .equ not yet implemented");
+            warning!("Warning, .equ not yet implemented");
         }
         _ => error!(Error::UnknownDirective, "Unknown directive: {}", raw_line),
     }
@@ -315,6 +315,6 @@ fn get_operand_type(operand: &str) -> (AddressMode, Value) {
         return (AddressMode::IndirectY, Value::String(label));
     }
 
-    println!("Warning! Unknown addressing mode");
+    warning!("Warning! Unknown addressing mode");
     (AddressMode::Unknown, Value::String(String::from(operand)))
 }

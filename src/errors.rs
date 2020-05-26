@@ -33,6 +33,12 @@ macro_rules! verboseln {
     ($fmt:expr, $($arg:tt)*) => (print!(concat!($fmt, "\n"), $($arg)*));
 }
 
+#[macro_export]
+macro_rules! warning {
+    ($fmt:expr) => (println!(concat!($fmt)));
+    ($fmt:expr, $($arg:tt)*) => (print!(concat!($fmt), $($arg)*));
+}
+
 pub enum Error {
     None = 0,
     Usage,
