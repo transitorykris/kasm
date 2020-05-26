@@ -1,10 +1,10 @@
 use std::env;
 use std::process;
 
-mod ascii;
-
 mod errors;
 pub use crate::errors::Error;
+
+mod ascii;
 
 mod files;
 pub use crate::files::read_source;

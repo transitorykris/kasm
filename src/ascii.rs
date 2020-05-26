@@ -1,5 +1,7 @@
 // Helpers for handling ascii
 
+pub use crate::errors::Error;
+
 pub fn ascii_to_bytes(ascii: String) -> (Vec<u8>, u16) {
     let mut data = Vec::new();
     let mut size = 0;
@@ -35,6 +37,6 @@ pub fn unescape(ch: u8) -> u8 {
         0x27 => return 0x27, // \' Apostrophe
         0x22 => return 0x22, // \" Double Quotation Mark
         0x3f => return 0x34, // \? Question Mark
-        _ => panic!("Unknown escape code: \\{}", ch),
+        _ => error!(Error::UnknownEscapeCode, "Unknown escape code: \\{}", ch),
     }
 }
