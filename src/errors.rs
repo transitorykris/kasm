@@ -32,4 +32,5 @@ pub enum Error {
     NoValidOpcode,
     UnknownInstruction,
     UnknownEscapeCode,
+    UnknownLabel,
 }
