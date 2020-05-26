@@ -33,4 +33,7 @@ pub enum Error {
     UnknownInstruction,
     UnknownEscapeCode,
     UnknownLabel,
+    UnknownSyntax,
+    DuplicateLabel,
+    UnknownDirective,
 }

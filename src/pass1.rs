@@ -4,6 +4,8 @@ use std::collections::HashMap;
 pub use crate::ascii::ascii_to_bytes;
 pub use crate::ascii::unescape;
 
+pub use crate::errors::Error;
+
 pub use crate::instructions::address_mode_length;
 pub use crate::instructions::address_mode_name;
 pub use crate::instructions::str_to_mnemonic;
@@ -97,7 +99,8 @@ pub fn pass1(source: &SourceTable) -> Program {
         } else if chars.next().unwrap().is_ascii_alphabetic() {
             handle_instruction(&mut program, &line.line);
         } else {
-            panic!(
+            error!(
+                Error::UnknownSyntax,
                 "Unknown syntax: {} at line: {}",
                 line.line, line.line_number
             );
