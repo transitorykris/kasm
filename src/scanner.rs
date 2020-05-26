@@ -7,10 +7,6 @@ pub struct SourceLine {
 
 pub type SourceTable = Vec<SourceLine>;
 
-// TODO:
-// - The scanner should process the directives
-// - Specifically, use .org to put the code in the correct order
-
 pub fn scanner(raw_source: String) -> SourceTable {
     let mut source = SourceTable::new();
     let mut line_number = 0;
