@@ -1,5 +1,7 @@
 use std::env;
 
+mod ascii;
+
 mod files;
 pub use crate::files::read_source;
 pub use crate::files::write_out;
@@ -7,14 +9,14 @@ pub use crate::files::write_out;
 mod instructions;
 pub use crate::instructions::generate_instruction_set;
 
-mod scanner;
-pub use crate::scanner::scanner;
-
 mod pass1;
 pub use crate::pass1::pass1;
 
 mod pass2;
 pub use crate::pass2::pass2;
+
+mod scanner;
+pub use crate::scanner::scanner;
 
 const OUTFILE: &str = "a.out"; // A typical default
 
@@ -46,7 +48,7 @@ fn main() {
             }
             out_file = temp_val.to_string();
             temp_val = String::from("");
-            continue
+            continue;
         }
         temp_val = val;
     }
