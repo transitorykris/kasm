@@ -161,6 +161,9 @@ fn handle_directive(program: &mut Program, raw_line: &String) {
             });
             program.counter += size;
         }
+        "equ" => {
+            println!("Warning, .equ not yet implemented");
+        }
         _ => error!(Error::UnknownDirective, "Unknown directive: {}", raw_line),
     }
 }
