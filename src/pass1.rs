@@ -101,8 +101,7 @@ pub fn pass1(source: &SourceTable) -> Program {
         } else {
             error!(
                 Error::UnknownSyntax,
-                "Unknown syntax: {} at line: {}",
-                line.line, line.line_number
+                "Unknown syntax: {} at line: {}", line.line, line.line_number
             );
         }
     }
@@ -117,7 +116,7 @@ fn handle_label(program: &mut Program, raw_label: String, line_number: Line) {
     let label = String::from(raw_label.trim_end_matches(":"));
 
     if program.symbol_table.contains_key(&label) {
-        panic!("Duplicate label found: {}", label);
+        error!(Error::DuplicateLabel, "Duplicate label found: {}", label);
     }
 
     program.symbol_table.insert(
@@ -162,7 +161,7 @@ fn handle_directive(program: &mut Program, raw_line: &String) {
             });
             program.counter += size;
         }
-        _ => panic!("Unknown directive: {}", raw_line),
+        _ => error!(Error::UnknownDirective, "Unknown directive: {}", raw_line),
     }
 }
 
