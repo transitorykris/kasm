@@ -1,6 +1,10 @@
 use std::env;
+use std::process;
 
 mod ascii;
+
+mod errors;
+pub use crate::errors::Error;
 
 mod files;
 pub use crate::files::read_source;
@@ -30,7 +34,7 @@ fn main() {
     let command = raw_args[0].to_string();
     if raw_args.len() < 2 {
         usage(&command);
-        return;
+        process::exit(Error::Usage as i32);
     }
 
     let mut args: Vec<String> = raw_args.drain(1..).collect(); // Remove first arg
@@ -44,7 +48,7 @@ fn main() {
             if temp_val == "" {
                 // We don't have a file name!
                 usage(&command);
-                return;
+                process::exit(Error::Usage as i32);
             }
             out_file = temp_val.to_string();
             temp_val = String::from("");
@@ -56,11 +60,14 @@ fn main() {
     // If there's a value in temp_val we're missing a flag!
     if temp_val != "" {
         usage(&command);
-        return;
+        process::exit(Error::Usage as i32);
     }
 
     if source_file == out_file {
-        panic!("You really don't want to overwrite your source file");
+        error!(
+            Error::OverwriteSource as i32,
+            "You really don't want to overwrite your source file"
+        );
     }
 
     // Read in the source file
