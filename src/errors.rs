@@ -21,6 +21,18 @@ macro_rules! error {
     };
 }
 
+#[macro_export]
+macro_rules! verbose {
+    ($fmt:expr) => (print!(concat!($fmt)));
+    ($fmt:expr, $($arg:tt)*) => (print!(concat!($fmt), $($arg)*));
+}
+
+#[macro_export]
+macro_rules! verboseln {
+    ($fmt:expr) => (print!(concat!($fmt, "\n")));
+    ($fmt:expr, $($arg:tt)*) => (print!(concat!($fmt, "\n"), $($arg)*));
+}
+
 pub enum Error {
     None = 0,
     Usage,

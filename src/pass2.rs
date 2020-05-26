@@ -11,16 +11,6 @@ pub use crate::pass1::Value::{Null, String, U16, U8};
 
 pub type MachineCode = Vec<u8>;
 
-macro_rules! verbose {
-    ($fmt:expr) => (print!(concat!($fmt)));
-    ($fmt:expr, $($arg:tt)*) => (print!(concat!($fmt), $($arg)*));
-}
-
-macro_rules! verboseln {
-    ($fmt:expr) => (print!(concat!($fmt, "\n")));
-    ($fmt:expr, $($arg:tt)*) => (print!(concat!($fmt, "\n"), $($arg)*));
-}
-
 pub fn pass2(instruction_set: InstructionMap, program: Program) -> MachineCode {
     let mut output = MachineCode::new();
 
