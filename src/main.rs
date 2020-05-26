@@ -89,4 +89,6 @@ fn main() {
     let output = pass2(instruction_set, pass1_code);
 
     write_out(&out_file.to_string(), output);
+
+    process::exit(Error::None as i32);
 }
