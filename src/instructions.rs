@@ -1,5 +1,7 @@
 use std::collections::HashMap;
 
+pub use crate::errors::Error;
+
 #[derive(PartialEq, Eq, Hash, Copy, Clone)]
 pub enum AddressMode {
     Absolute,
@@ -183,8 +185,9 @@ pub fn get_instruction(
         address_mode,
     }) {
         Some(opcode) => *opcode,
-        None => panic!("No valid opcode"),
-    }
+        None => error!(Error::NoValidOpcode, "No valid opcode"),
+    };
+    0
 }
 
 // Something will inevitably wrong in the below!
@@ -1693,6 +1696,9 @@ pub fn str_to_mnemonic(instruction: String) -> Mnemonic {
         "txs" => return Mnemonic::TXS,
         "tya" => return Mnemonic::TYA,
         "wai" => return Mnemonic::WAI,
-        _ => panic!("Unknown instruction: {}", instruction),
+        _ => error!(
+            Error::UnknownInstruction,
+            "Unknown instruction: {}", instruction
+        ),
     }
 }
