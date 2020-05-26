@@ -137,7 +137,6 @@ fn handle_directive(program: &mut Program, raw_line: &String) {
     let value = String::from(split[1]);
     match dir {
         "org" => {
-            // XXX this feels gross
             let value = value.trim_start_matches("$");
             let address = u16::from_str_radix(value, 16).unwrap();
             program.counter = address;
