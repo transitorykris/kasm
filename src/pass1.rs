@@ -105,8 +105,7 @@ pub fn pass1(source: &SourceTable) -> Program {
             );
         }
     }
-    // Store labels in a label table to have their addresses determined later
-    // Determine length in bytes the symbol requires
+
     program.code.sort();
     program
 }
