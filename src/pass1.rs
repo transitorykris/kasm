@@ -160,7 +160,19 @@ fn handle_directive(program: &mut Program, raw_line: &String) {
             program.counter += size;
         }
         "equ" => {
-            warning!("Warning, .equ not yet implemented");
+            let (label, value) = parse_equ(value);
+            println!("Found an EQU: {} {:04x}", label, value);
+            if program.symbol_table.contains_key(&label) {
+                error!(Error::DuplicateLabel, "Duplicate label found: {}", label);
+            }
+
+            program.symbol_table.insert(
+                label,
+                Label {
+                    address: value,
+                    line: program.counter,
+                },
+            );
         }
         _ => error!(Error::UnknownDirective, "Unknown directive: {}", raw_line),
     }
@@ -179,6 +191,18 @@ fn parse_bytes(bytes: String) -> (Data, u16) {
     }
 
     (data, size)
+}
+
+fn parse_equ(equ: String) -> (String, u16) {
+    // XXX this isn't great
+    // TODO:
+    // - handle multiple kinds of values
+    // - make it fail nicely
+    let mut parts = equ.split("=");
+    let label = parts.next().unwrap().trim().to_string();
+    let raw_value = parts.next().unwrap().trim().trim_start_matches("$");
+    let value = u16::from_str_radix(raw_value, 16).unwrap();
+    (label, value)
 }
 
 fn handle_instruction(program: &mut Program, line: &String) {

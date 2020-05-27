@@ -2,6 +2,8 @@
 
 .org $1000
 
+.equ myvalue = $acbd
+
 start:
     lda #$2b            ; Load 0x1a into the A register
     inc                 ; Add 1 to it
@@ -10,11 +12,14 @@ start:
     ; The assembler is hitting only a few addressing modes at the moment
     sta ($43,x)         ; to be implemented
     sta ($01),y
+    lda myvalue         ; backwards
+    lda another_value   ; forwards
 
 no_opping:
     nop
     nop
     nop
+    .equ another_value=$4321
 
     jmp start           ; Backward reference
     nop
