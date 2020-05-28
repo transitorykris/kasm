@@ -181,13 +181,11 @@ fn handle_directive(program: &mut Program, raw_line: &String) {
 fn parse_bytes(bytes: String) -> Data {
     let mut data = Vec::new();
     let parts = bytes.split_terminator(",");
-    let mut size = 0;
 
     for part in parts {
         let raw_value = part.trim().trim_start_matches("$");
         let value = u8::from_str_radix(raw_value, 16).unwrap();
         data.push(value);
-        size += 1;
     }
 
     data
