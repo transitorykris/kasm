@@ -18,13 +18,14 @@ pub fn pass2(instruction_set: InstructionMap, program: Program) -> MachineCode {
 
     for line in program.code {
         let mut address = line.address;
+
+        for _ in next_address..address {
+            output.push(0);
+        }
+        verbose!("${:04x}: ", address);
+
         match line.content {
             Code(code) => {
-                for _ in next_address..address {
-                    output.push(0);
-                }
-
-                verbose!("${:04x}: ", address);
                 let instruction_key = InstructionKey {
                     mnemonic: code.mnemonic,
                     address_mode: code.address_mode,
@@ -69,7 +70,6 @@ pub fn pass2(instruction_set: InstructionMap, program: Program) -> MachineCode {
                 };
             }
             Data(data) => {
-                verbose!("${:04x}: ", address);
                 for byte in data {
                     output.push(byte);
                     address += 1;

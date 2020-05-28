@@ -55,4 +55,7 @@ out_of_order:
     nop
     brk
 
+.org $4000
+    .ascii "This data exists far away from other code!"
+
     ; End
