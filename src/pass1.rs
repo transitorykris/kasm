@@ -142,12 +142,12 @@ fn handle_directive(program: &mut Program, raw_line: &String) {
             program.counter = address;
         }
         "byte" => {
-            let (data, size) = parse_bytes(value);
+            let data = parse_bytes(value);
+            program.counter += data.len() as u16;
             program.code.push(CodeTableEntry {
                 address: program.counter,
                 content: Content::Data(data),
             });
-            program.counter += size;
         }
         "ascii" => {
             let raw_string = String::from(value);
@@ -178,7 +178,7 @@ fn handle_directive(program: &mut Program, raw_line: &String) {
     }
 }
 
-fn parse_bytes(bytes: String) -> (Data, u16) {
+fn parse_bytes(bytes: String) -> Data {
     let mut data = Vec::new();
     let parts = bytes.split_terminator(",");
     let mut size = 0;
@@ -190,7 +190,7 @@ fn parse_bytes(bytes: String) -> (Data, u16) {
         size += 1;
     }
 
-    (data, size)
+    data
 }
 
 fn parse_equ(equ: String) -> (String, u16) {
