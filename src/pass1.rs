@@ -131,7 +131,6 @@ fn handle_label(program: &mut Program, raw_label: String, line_number: Line) {
 fn handle_directive(program: &mut Program, raw_line: &String) {
     let trimmed = raw_line.trim().trim_start_matches(".");
 
-    //let mut split = trimmed.split_ascii_whitespace();
     let split: Vec<&str> = trimmed.splitn(2, " ").collect(); // Get two parts, the directive and data
     let dir = split[0];
     let value = String::from(split[1]);
