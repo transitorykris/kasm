@@ -39,10 +39,12 @@ fn main() {
 
     let mut args: Vec<String> = raw_args.drain(1..).collect(); // Remove first arg
     let mut out_file = String::from(OUTFILE);
+    // XXX UNWRAP
     let source_file = args.pop().unwrap();
     let mut temp_val = String::new();
 
     while args.len() > 0 {
+        // XXX UNWRAP
         let val = args.pop().unwrap();
         if val == "-o" {
             if temp_val == "" {
