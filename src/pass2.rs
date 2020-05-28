@@ -48,8 +48,7 @@ pub fn pass2(instruction_set: InstructionMap, program: Program) -> MachineCode {
                     }
                     U16(val) => {
                         let bytes = val.to_be_bytes();
-                        output.push(bytes[1]); // Note: little endian!
-                        output.push(bytes[0]);
+                        output.append(&mut vec![bytes[1], bytes[0]]); // Note: little endian!
                         address += 2;
                         verbose!("{:02x} {:02x}", bytes[1], bytes[0]);
                     }
@@ -58,8 +57,7 @@ pub fn pass2(instruction_set: InstructionMap, program: Program) -> MachineCode {
                         match program.symbol_table.get(&label) {
                             Some(val) => {
                                 let bytes = val.address.to_be_bytes();
-                                output.push(bytes[1]); // Note: little endian!
-                                output.push(bytes[0]);
+                                output.append(&mut vec![bytes[1], bytes[0]]); // Note: little endian!
                                 address += 2;
                                 verbose!("{:02x} {:02x}", bytes[1], bytes[0]);
                             }
