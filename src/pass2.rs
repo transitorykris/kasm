@@ -72,7 +72,7 @@ pub fn pass2(
                                 verbose!("{:02x} {:02x}", bytes[1], bytes[0]);
                             }
                             // This should never happen
-                            None => panic!("Found an unknown label {}", label)
+                            None => panic!("Found an unknown label {}", label),
                         }
                     }
                 };

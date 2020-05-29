@@ -73,7 +73,13 @@ fn main() {
     }
 
     // Read in the source file
-    let source = read_source(&source_file);
+    let source = match read_source(&source_file) {
+        Ok(source) => source,
+        Err(err) => {
+            println!("{}", err.1);
+            process::exit(err.0 as i32);
+        }
+    };
 
     // Scan in and clean up the raw
     let scanned = scanner(source);
@@ -102,7 +108,13 @@ fn main() {
         }
     };
 
-    write_out(&out_file.to_string(), output);
+    match write_out(&out_file.to_string(), output) {
+        Ok(_) => {}
+        Err(err) => {
+            println!("{}", err.1);
+            process::exit(err.0 as i32);
+        }
+    };
 
     process::exit(Error::Good as i32);
 }

@@ -99,14 +99,23 @@ pub fn pass1(source: &SourceTable) -> Result<Program, (Error, ErrorMsg)> {
         //}
         let mut chars = line.line.chars();
         if line.line.ends_with(":") {
-            handle_label(&mut program, line.line.to_string(), line.line_number);
+            match handle_label(&mut program, line.line.to_string(), line.line_number) {
+                Ok(()) => (),
+                Err(err) => return Err(err),
+            }
         } else if chars.next().unwrap() == '.' {
             // XXX UNWRAP
-            handle_directive(&mut program, &line.line);
+            match handle_directive(&mut program, &line.line) {
+                Ok(()) => (),
+                Err(err) => return Err(err),
+            }
         } else if chars.next().unwrap().is_ascii_alphabetic() {
             // BUG: This ^ is looking at the second charcter not the first!!
             // XXX UNWRAP
-            handle_instruction(&mut program, &line.line);
+            match handle_instruction(&mut program, &line.line) {
+                Ok(()) => (),
+                Err(err) => return Err(err),
+            }
         } else {
             return Err(error(
                 Error::UnknownSyntax,
@@ -123,11 +132,18 @@ pub fn pass1(source: &SourceTable) -> Result<Program, (Error, ErrorMsg)> {
 }
 
 // TODO: finish implement labels!
-fn handle_label(program: &mut Program, raw_label: String, line_number: Line) {
+fn handle_label(
+    program: &mut Program,
+    raw_label: String,
+    line_number: Line,
+) -> Result<(), (Error, ErrorMsg)> {
     let label = String::from(raw_label.trim_end_matches(":"));
 
     if program.symbol_table.contains_key(&label) {
-        error!(Error::DuplicateLabel, "Duplicate label found: {}", label);
+        return Err(error(
+            Error::DuplicateLabel,
+            format!("Duplicate label found: {}", label),
+        ));
     }
 
     program.symbol_table.insert(
@@ -137,10 +153,12 @@ fn handle_label(program: &mut Program, raw_label: String, line_number: Line) {
             line: line_number,
         },
     );
+
+    Ok(())
 }
 
 // TODO: .equ directive
-fn handle_directive(program: &mut Program, raw_line: &String) {
+fn handle_directive(program: &mut Program, raw_line: &String) -> Result<(), (Error, ErrorMsg)> {
     let trimmed = raw_line.trim().trim_start_matches(".");
 
     let split: Vec<&str> = trimmed.splitn(2, " ").collect(); // Get two parts, the directive and data
@@ -175,7 +193,10 @@ fn handle_directive(program: &mut Program, raw_line: &String) {
             let (label, value) = parse_equ(value);
             println!("Found an EQU: {} {:04x}", label, value);
             if program.symbol_table.contains_key(&label) {
-                error!(Error::DuplicateLabel, "Duplicate label found: {}", label);
+                return Err(error(
+                    Error::DuplicateLabel,
+                    format!("Duplicate label found: {}", label),
+                ));
             }
 
             program.symbol_table.insert(
@@ -186,8 +207,14 @@ fn handle_directive(program: &mut Program, raw_line: &String) {
                 },
             );
         }
-        _ => error!(Error::UnknownDirective, "Unknown directive: {}", raw_line),
+        _ => {
+            return Err(error(
+                Error::UnknownDirective,
+                format!("Unknown directive: {}", raw_line),
+            ))
+        }
     }
+    Ok(())
 }
 
 fn parse_bytes(bytes: String) -> Data {
@@ -219,7 +246,7 @@ fn parse_equ(equ: String) -> (String, u16) {
     (label, value)
 }
 
-fn handle_instruction(program: &mut Program, line: &String) {
+fn handle_instruction(program: &mut Program, line: &String) -> Result<(), (Error, ErrorMsg)> {
     let mut parts = line.split_ascii_whitespace();
     // XXX UNWRAP
     let instruction = parts.next().unwrap().to_lowercase();
@@ -237,10 +264,14 @@ fn handle_instruction(program: &mut Program, line: &String) {
         value = value_tmp;
     }
 
+    let mnemonic = match str_to_mnemonic(instruction) {
+        Ok(string) => string,
+        Err(err) => return Err(err),
+    };
     let entry = CodeTableEntry {
         address: program.counter,
         content: Content::Code(Code {
-            mnemonic: str_to_mnemonic(instruction),
+            mnemonic: mnemonic,
             address_mode,
             value,
         }),
@@ -250,6 +281,8 @@ fn handle_instruction(program: &mut Program, line: &String) {
 
     // Move our program counter to the next free location
     program.counter += address_mode_length(address_mode);
+
+    Ok(())
 }
 
 fn get_operand_type(operand: &str) -> (AddressMode, Value) {
