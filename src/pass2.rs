@@ -11,7 +11,7 @@ pub use crate::pass1::Value::{Null, String, U16, U8};
 
 pub type MachineCode = Vec<u8>;
 
-pub fn pass2(instruction_set: InstructionMap, program: Program) -> MachineCode {
+pub fn pass2(instruction_set: InstructionMap, program: Program) -> Result<MachineCode, Error> {
     let mut output = MachineCode::new();
 
     let mut next_address = 0;
@@ -79,5 +79,5 @@ pub fn pass2(instruction_set: InstructionMap, program: Program) -> MachineCode {
         next_address = address;
     }
 
-    output
+    Ok(output)
 }

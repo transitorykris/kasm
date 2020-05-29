@@ -84,11 +84,17 @@ fn main() {
 
     // Create a data structure containing the instruction,
     // the addressing mode, and the value
-    let pass1_code = pass1(&scanned);
+    let pass1_code = match pass1(&scanned) {
+        Ok(pass1_code) => pass1_code,
+        Err(err) => error!(err, "xyz"),
+    };
 
     // Create a new data structure of instructions by resolving
     // all the labels
-    let output = pass2(instruction_set, pass1_code);
+    let output = match pass2(instruction_set, pass1_code) {
+        Ok(output) => output,
+        Err(err) => error!(err, "zyx"),
+    };
 
     write_out(&out_file.to_string(), output);
 

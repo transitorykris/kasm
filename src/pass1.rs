@@ -73,12 +73,23 @@ pub struct Program {
     counter: Address, // The current address as we go through pass1
 }
 
-pub fn pass1(source: &SourceTable) -> Program {
-    let mut program = Program {
-        symbol_table: LabelTable::new(),
-        code: CodeTable::new(),
-        counter: 0x1000, // Worry about zeropage a little later
-    };
+impl Program {
+    pub fn new() -> Program {
+        Program {
+            symbol_table: LabelTable::new(),
+            code: CodeTable::new(),
+            counter: 0x1000, // Worry about zeropage a little later
+        }
+    }
+}
+
+pub fn pass1(source: &SourceTable) -> Result<Program, Error> {
+    //let mut program = Program {
+    //    symbol_table: LabelTable::new(),
+    //    code: CodeTable::new(),
+    //    counter: 0x1000, // Worry about zeropage a little later
+    //};
+    let mut program = Program::new();
 
     // TODO:
     // - Handle the zeropage! Labels are funky here.
@@ -98,18 +109,20 @@ pub fn pass1(source: &SourceTable) -> Program {
             // XXX UNWRAP
             handle_directive(&mut program, &line.line);
         } else if chars.next().unwrap().is_ascii_alphabetic() {
+            // BUG: This ^ is looking at the second charcter not the first!!
             // XXX UNWRAP
             handle_instruction(&mut program, &line.line);
         } else {
-            error!(
-                Error::UnknownSyntax,
-                "Unknown syntax: {} at line: {}", line.line, line.line_number
-            );
+            return Err(Error::UnknownSyntax);
+            // error!(
+            //     Error::UnknownSyntax,
+            //     "Unknown syntax: {} at line: {}", line.line, line.line_number
+            // );
         }
     }
 
     program.code.sort();
-    program
+    Ok(program)
 }
 
 // TODO: finish implement labels!
