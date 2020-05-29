@@ -66,10 +66,8 @@ fn main() {
     }
 
     if source_file == out_file {
-        error!(
-            Error::OverwriteSource as i32,
-            "You really don't want to overwrite your source file"
-        );
+        println!("You really don't want to overwrite your source file");
+        process::exit(Error::OverwriteSource as i32);
     }
 
     // Read in the source file

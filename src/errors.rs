@@ -4,24 +4,6 @@
 // We don't have anything to clean up in this assembler
 // bailing anywhere in the code should be safe
 #[macro_export]
-macro_rules! error {
-    ($error:expr, $fmt:expr) => {
-        {
-            use std::process;
-            println!(concat!($fmt));
-            process::exit($error as i32);
-        }
-    };
-    ($error:expr, $fmt:expr, $($arg:tt)*) => {
-        {
-            use std::process;
-            println!(concat!($fmt), $($arg)*);
-            process::exit($error as i32);
-        }
-    };
-}
-
-#[macro_export]
 macro_rules! verbose {
     ($fmt:expr) => (print!(concat!($fmt)));
     ($fmt:expr, $($arg:tt)*) => (print!(concat!($fmt), $($arg)*));
@@ -49,7 +31,6 @@ pub enum Error {
     FileWrite,
     NoValidOpcode,
     UnknownInstruction,
-    UnknownEscapeCode,
     UnknownLabel,
     UnknownSyntax,
     DuplicateLabel,
