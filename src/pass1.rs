@@ -84,11 +84,6 @@ impl Program {
 }
 
 pub fn pass1(source: &SourceTable) -> Result<Program, (Error, ErrorMsg)> {
-    //let mut program = Program {
-    //    symbol_table: LabelTable::new(),
-    //    code: CodeTable::new(),
-    //    counter: 0x1000, // Worry about zeropage a little later
-    //};
     let mut program = Program::new();
 
     // TODO:
@@ -120,10 +115,6 @@ pub fn pass1(source: &SourceTable) -> Result<Program, (Error, ErrorMsg)> {
                     line.line, line.line_number
                 ),
             ));
-            // error!(
-            //     Error::UnknownSyntax,
-            //     "Unknown syntax: {} at line: {}", line.line, line.line_number
-            // );
         }
     }
 
