@@ -5,7 +5,6 @@
 .equ myvalue = $acbd
 
 start:
-    !@#$Breakme
     lda #$2b            ; Load 0x1a into the A register
     inc                 ; Add 1 to it
     sta $a45f           ; Store it at the absolute location $a45f

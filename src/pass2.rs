@@ -1,3 +1,4 @@
+pub use crate::errors::error;
 pub use crate::errors::Error;
 pub use crate::errors::ErrorMsg;
 pub use crate::instructions::AddressMode;
@@ -41,7 +42,12 @@ pub fn pass2(
                         output.push(*machine_code);
                         address += 1;
                     }
-                    None => error!(Error::UnknownInstruction, "Invalid instruction found"),
+                    None => {
+                        return Err(error(
+                            Error::UnknownInstruction,
+                            "Invalid instruction found".to_string(),
+                        ))
+                    }
                 }
 
                 match code.value {
@@ -66,7 +72,7 @@ pub fn pass2(
                                 verbose!("{:02x} {:02x}", bytes[1], bytes[0]);
                             }
                             // This should never happen
-                            None => error!(Error::UnknownLabel, "Unknown label: {}", label),
+                            None => panic!("Found an unknown label {}", label)
                         }
                     }
                 };
