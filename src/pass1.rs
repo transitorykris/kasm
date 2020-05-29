@@ -5,6 +5,7 @@ pub use crate::ascii::ascii_to_bytes;
 pub use crate::ascii::unescape;
 
 pub use crate::errors::Error;
+pub use crate::errors::Msg;
 
 pub use crate::instructions::address_mode_length;
 pub use crate::instructions::address_mode_name;
@@ -83,7 +84,7 @@ impl Program {
     }
 }
 
-pub fn pass1(source: &SourceTable) -> Result<Program, Error> {
+pub fn pass1(source: &SourceTable) -> Result<Program, (Error, Msg)> {
     //let mut program = Program {
     //    symbol_table: LabelTable::new(),
     //    code: CodeTable::new(),
@@ -113,7 +114,7 @@ pub fn pass1(source: &SourceTable) -> Result<Program, Error> {
             // XXX UNWRAP
             handle_instruction(&mut program, &line.line);
         } else {
-            return Err(Error::UnknownSyntax);
+            return Err((Error::UnknownSyntax, String::from("fucking fuck")));
             // error!(
             //     Error::UnknownSyntax,
             //     "Unknown syntax: {} at line: {}", line.line, line.line_number

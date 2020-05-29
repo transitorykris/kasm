@@ -2,7 +2,6 @@ use std::env;
 use std::process;
 
 mod errors;
-pub use crate::errors::error_string;
 pub use crate::errors::Error;
 
 mod ascii;
@@ -88,8 +87,8 @@ fn main() {
     let pass1_code = match pass1(&scanned) {
         Ok(pass1_code) => pass1_code,
         Err(err) => {
-            println!("{}", error_string());
-            process::exit(err as i32);
+            println!("{}", err.1);
+            process::exit(err.0 as i32);
         }
     };
 
@@ -98,12 +97,12 @@ fn main() {
     let output = match pass2(instruction_set, pass1_code) {
         Ok(output) => output,
         Err(err) => {
-            println!("{}", error_string());
+            println!("{}", err.to_string());
             process::exit(err as i32);
         }
     };
 
     write_out(&out_file.to_string(), output);
 
-    process::exit(Error::None as i32);
+    process::exit(Error::Good as i32);
 }
