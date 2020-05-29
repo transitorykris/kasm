@@ -3,10 +3,9 @@ use std::collections::HashMap;
 
 pub use crate::ascii::ascii_to_bytes;
 pub use crate::ascii::unescape;
-
+pub use crate::errors::error;
 pub use crate::errors::Error;
-pub use crate::errors::Msg;
-
+pub use crate::errors::ErrorMsg;
 pub use crate::instructions::address_mode_length;
 pub use crate::instructions::address_mode_name;
 pub use crate::instructions::str_to_mnemonic;
@@ -84,7 +83,7 @@ impl Program {
     }
 }
 
-pub fn pass1(source: &SourceTable) -> Result<Program, (Error, Msg)> {
+pub fn pass1(source: &SourceTable) -> Result<Program, (Error, ErrorMsg)> {
     //let mut program = Program {
     //    symbol_table: LabelTable::new(),
     //    code: CodeTable::new(),
@@ -114,7 +113,13 @@ pub fn pass1(source: &SourceTable) -> Result<Program, (Error, Msg)> {
             // XXX UNWRAP
             handle_instruction(&mut program, &line.line);
         } else {
-            return Err((Error::UnknownSyntax, String::from("fucking fuck")));
+            return Err(error(
+                Error::UnknownSyntax,
+                format!(
+                    "Unknown syntax: {} at line: {}",
+                    line.line, line.line_number
+                ),
+            ));
             // error!(
             //     Error::UnknownSyntax,
             //     "Unknown syntax: {} at line: {}", line.line, line.line_number

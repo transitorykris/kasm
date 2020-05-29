@@ -1,8 +1,6 @@
 // Stuff for hanlding errors encountered in the assembler
 #![macro_use]
 
-use std::fmt;
-
 // We don't have anything to clean up in this assembler
 // bailing anywhere in the code should be safe
 #[macro_export]
@@ -58,29 +56,8 @@ pub enum Error {
     UnknownDirective,
 }
 
-pub type Msg = String;
+pub type ErrorMsg = String;
 
-impl fmt::Display for Error {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "This is my string")
-    }
-}
-
-fn error_to_string(code: Error) -> String {
-    match code {
-        Good => String::from(""),
-        Usage => String::from(""),
-        OverwriteSource => String::from(""),
-        FileOpen => String::from(""),
-        FileRead => String::from(""),
-        FileCreate => String::from(""),
-        FileWrite => String::from(""),
-        NoValidOpcode => String::from(""),
-        UnknownInstruction => String::from(""),
-        UnknownEscapeCode => String::from(""),
-        UnknownLabel => String::from(""),
-        UnknownSyntax => String::from(""),
-        DuplicateLabel => String::from(""),
-        UnknownDirective => String::from(""),
-    }
+pub fn error(code: Error, msg: String) -> (Error, ErrorMsg) {
+    (code, msg)
 }

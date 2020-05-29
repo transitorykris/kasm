@@ -97,8 +97,8 @@ fn main() {
     let output = match pass2(instruction_set, pass1_code) {
         Ok(output) => output,
         Err(err) => {
-            println!("{}", err.to_string());
-            process::exit(err as i32);
+            println!("{}", err.1);
+            process::exit(err.0 as i32);
         }
     };
 
