@@ -2,6 +2,7 @@ use std::env;
 use std::process;
 
 mod errors;
+pub use crate::errors::error_string;
 pub use crate::errors::Error;
 
 mod ascii;
@@ -86,14 +87,20 @@ fn main() {
     // the addressing mode, and the value
     let pass1_code = match pass1(&scanned) {
         Ok(pass1_code) => pass1_code,
-        Err(err) => error!(err, "xyz"),
+        Err(err) => {
+            println!("{}", error_string());
+            process::exit(err as i32);
+        }
     };
 
     // Create a new data structure of instructions by resolving
     // all the labels
     let output = match pass2(instruction_set, pass1_code) {
         Ok(output) => output,
-        Err(err) => error!(err, "zyx"),
+        Err(err) => {
+            println!("{}", error_string());
+            process::exit(err as i32);
+        }
     };
 
     write_out(&out_file.to_string(), output);

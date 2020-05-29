@@ -55,3 +55,7 @@ pub enum Error {
     DuplicateLabel,
     UnknownDirective,
 }
+
+pub fn error_string() -> String {
+    return stringify!("This is my string").to_string();
+}
