@@ -12,7 +12,6 @@ pub use crate::instructions::str_to_mnemonic;
 pub use crate::instructions::AddressMode;
 pub use crate::instructions::Mnemonic;
 pub use crate::instructions::Value;
-
 pub use crate::scanner::SourceTable;
 
 use regex::Regex;
