@@ -36,6 +36,7 @@ pub enum Error {
     DuplicateLabel,
     UnknownDirective,
     AddressExpected,
+    HexExpected,
 }
 
 pub type ErrorMsg = String;

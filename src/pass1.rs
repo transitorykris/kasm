@@ -104,14 +104,14 @@ pub fn pass1(source: &SourceTable) -> Result<Program, (Error, ErrorMsg)> {
                 Err(err) => return Err(err),
             }
         } else if chars.next().unwrap() == '.' {
-            // XXX UNWRAP
+            // XXX UNWRAP OPTION
             match handle_directive(&mut program, &line.line) {
                 Ok(()) => (),
                 Err(err) => return Err(err),
             }
         } else if chars.next().unwrap().is_ascii_alphabetic() {
             // BUG: This ^ is looking at the second charcter not the first!!
-            // XXX UNWRAP
+            // XXX UNWRAP OPTION
             match handle_instruction(&mut program, &line.line) {
                 Ok(()) => (),
                 Err(err) => return Err(err),
@@ -167,7 +167,6 @@ fn handle_directive(program: &mut Program, raw_line: &String) -> Result<(), (Err
     match dir {
         "org" => {
             let value = value.trim_start_matches("$");
-            // XXX UNWRAP
             let address = match u16::from_str_radix(value, 16) {
                 Ok(address) => address,
                 Err(_) => {
@@ -180,7 +179,10 @@ fn handle_directive(program: &mut Program, raw_line: &String) -> Result<(), (Err
             program.counter = address;
         }
         "byte" => {
-            let data = parse_bytes(value);
+            let data = match parse_bytes(value) {
+                Ok(data) => data,
+                Err(err) => return Err(err),
+            };
             program.counter += data.len() as u16;
             program.code.push(CodeTableEntry {
                 address: program.counter,
@@ -225,18 +227,25 @@ fn handle_directive(program: &mut Program, raw_line: &String) -> Result<(), (Err
     Ok(())
 }
 
-fn parse_bytes(bytes: String) -> Data {
+fn parse_bytes(bytes: String) -> Result<Data, (Error, ErrorMsg)> {
     let mut data = Vec::new();
     let parts = bytes.split_terminator(",");
 
     for part in parts {
         let raw_value = part.trim().trim_start_matches("$");
-        // XXX UNWRAP
-        let value = u8::from_str_radix(raw_value, 16).unwrap();
+        let value = match u8::from_str_radix(raw_value, 16) {
+            Ok(value) => value,
+            Err(_) => {
+                return Err(error(
+                    Error::HexExpected,
+                    format!("Expected hexadecimal but found {}", raw_value),
+                ))
+            }
+        };
         data.push(value);
     }
 
-    data
+    Ok(data)
 }
 
 fn parse_equ(equ: String) -> (String, u16) {
