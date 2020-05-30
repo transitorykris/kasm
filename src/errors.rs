@@ -35,6 +35,7 @@ pub enum Error {
     UnknownSyntax,
     DuplicateLabel,
     UnknownDirective,
+    AddressExpected,
 }
 
 pub type ErrorMsg = String;

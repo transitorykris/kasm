@@ -168,7 +168,15 @@ fn handle_directive(program: &mut Program, raw_line: &String) -> Result<(), (Err
         "org" => {
             let value = value.trim_start_matches("$");
             // XXX UNWRAP
-            let address = u16::from_str_radix(value, 16).unwrap();
+            let address = match u16::from_str_radix(value, 16) {
+                Ok(address) => address,
+                Err(_) => {
+                    return Err(error(
+                        Error::AddressExpected,
+                        format!("Expected address for label, found {}", value),
+                    ))
+                }
+            };
             program.counter = address;
         }
         "byte" => {
