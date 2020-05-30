@@ -3,8 +3,8 @@ use std::collections::HashMap;
 
 use crate::ascii::ascii_to_bytes;
 use crate::errors::error;
+use crate::errors::Error;
 use crate::errors::ErrorCode;
-use crate::errors::ErrorMsg;
 use crate::instructions::address_mode_length;
 use crate::instructions::str_to_mnemonic;
 use crate::instructions::AddressMode;
@@ -80,7 +80,7 @@ impl Program {
     }
 }
 
-pub fn pass1(source: &SourceTable) -> Result<Program, (ErrorCode, ErrorMsg)> {
+pub fn pass1(source: &SourceTable) -> Result<Program, Error> {
     let mut program = Program::new();
 
     // TODO:
@@ -123,11 +123,7 @@ pub fn pass1(source: &SourceTable) -> Result<Program, (ErrorCode, ErrorMsg)> {
 }
 
 // TODO: finish implement labels!
-fn handle_label(
-    program: &mut Program,
-    raw_label: String,
-    line_number: Line,
-) -> Result<(), (ErrorCode, ErrorMsg)> {
+fn handle_label(program: &mut Program, raw_label: String, line_number: Line) -> Result<(), Error> {
     let label = String::from(raw_label.trim_end_matches(":"));
 
     if program.symbol_table.contains_key(&label) {
@@ -149,7 +145,7 @@ fn handle_label(
 }
 
 // TODO: .equ directive
-fn handle_directive(program: &mut Program, raw_line: &String) -> Result<(), (ErrorCode, ErrorMsg)> {
+fn handle_directive(program: &mut Program, raw_line: &String) -> Result<(), Error> {
     let trimmed = raw_line.trim().trim_start_matches(".");
 
     let split: Vec<&str> = trimmed.splitn(2, " ").collect(); // Get two parts, the directive and data
@@ -221,7 +217,7 @@ fn handle_directive(program: &mut Program, raw_line: &String) -> Result<(), (Err
     Ok(())
 }
 
-fn parse_bytes(bytes: String) -> Result<Data, (ErrorCode, ErrorMsg)> {
+fn parse_bytes(bytes: String) -> Result<Data, Error> {
     let mut data = Vec::new();
     let parts = bytes.split_terminator(",");
 
@@ -242,7 +238,7 @@ fn parse_bytes(bytes: String) -> Result<Data, (ErrorCode, ErrorMsg)> {
     Ok(data)
 }
 
-fn parse_equ(equ: String) -> Result<(String, u16), (ErrorCode, ErrorMsg)> {
+fn parse_equ(equ: String) -> Result<(String, u16), Error> {
     // TODO:
     // - handle multiple kinds of values
     let mut parts = equ.split("=");
@@ -278,7 +274,7 @@ fn parse_equ(equ: String) -> Result<(String, u16), (ErrorCode, ErrorMsg)> {
     Ok((label, value))
 }
 
-fn handle_instruction(program: &mut Program, line: &String) -> Result<(), (ErrorCode, ErrorMsg)> {
+fn handle_instruction(program: &mut Program, line: &String) -> Result<(), Error> {
     let mut parts = line.split_ascii_whitespace();
 
     let instruction = match parts.next() {

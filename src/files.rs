@@ -4,11 +4,11 @@ use std::path::Path;
 use std::string::String;
 
 use crate::errors::error;
+use crate::errors::Error;
 use crate::errors::ErrorCode;
-use crate::errors::ErrorMsg;
 use crate::pass2::MachineCode;
 
-pub fn read_source(file: &str) -> Result<String, (ErrorCode, ErrorMsg)> {
+pub fn read_source(file: &str) -> Result<String, Error> {
     let path = Path::new(file);
     let display = path.display();
     let mut f = match File::open(path) {
@@ -35,7 +35,7 @@ pub fn read_source(file: &str) -> Result<String, (ErrorCode, ErrorMsg)> {
     Ok(raw_source)
 }
 
-pub fn write_out(filename: &str, output: MachineCode) -> Result<(), (ErrorCode, ErrorMsg)> {
+pub fn write_out(filename: &str, output: MachineCode) -> Result<(), Error> {
     let path = Path::new(filename);
     let display = path.display();
     let mut f = match File::create(&path) {

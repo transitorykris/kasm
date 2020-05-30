@@ -1,6 +1,6 @@
 pub mod errors;
+use errors::Error;
 use errors::ErrorCode;
-use errors::ErrorMsg;
 
 mod ascii;
 
@@ -75,7 +75,7 @@ impl Config {
     }
 }
 
-pub fn run(config: &Config) -> Result<(), (ErrorCode, ErrorMsg)> {
+pub fn run(config: &Config) -> Result<(), Error> {
     // Read in the source file
     let source = match read_source(&config.source_file) {
         Ok(source) => source,

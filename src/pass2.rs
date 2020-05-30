@@ -1,6 +1,6 @@
 use crate::errors::error;
+use crate::errors::Error;
 use crate::errors::ErrorCode;
-use crate::errors::ErrorMsg;
 use crate::instructions::InstructionKey;
 use crate::instructions::InstructionMap;
 use crate::instructions::Value::{Null, String, U16, U8};
@@ -9,10 +9,7 @@ use crate::pass1::Program;
 
 pub type MachineCode = Vec<u8>;
 
-pub fn pass2(
-    instruction_set: InstructionMap,
-    program: Program,
-) -> Result<MachineCode, (ErrorCode, ErrorMsg)> {
+pub fn pass2(instruction_set: InstructionMap, program: Program) -> Result<MachineCode, Error> {
     let mut output = MachineCode::new();
 
     let mut next_address = 0;

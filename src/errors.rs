@@ -21,6 +21,8 @@ macro_rules! warning {
     ($fmt:expr, $($arg:tt)*) => (print!(concat!($fmt), $($arg)*));
 }
 
+pub type Error = (ErrorCode, ErrorMsg);
+
 pub enum ErrorCode {
     NoError = 0,
     Usage,
@@ -42,6 +44,6 @@ pub enum ErrorCode {
 
 pub type ErrorMsg = String;
 
-pub fn error(code: ErrorCode, msg: String) -> (ErrorCode, ErrorMsg) {
+pub fn error(code: ErrorCode, msg: String) -> Error {
     (code, msg)
 }

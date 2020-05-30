@@ -1,8 +1,8 @@
 use std::collections::HashMap;
 
 use crate::errors::error;
+use crate::errors::Error;
 use crate::errors::ErrorCode;
-use crate::errors::ErrorMsg;
 
 #[derive(PartialEq, Eq, Hash, Copy, Clone)]
 pub enum AddressMode {
@@ -183,7 +183,7 @@ pub fn get_instruction(
     instruction_set: &InstructionMap,
     mnemonic: Mnemonic,
     address_mode: AddressMode,
-) -> Result<u8, (ErrorCode, ErrorMsg)> {
+) -> Result<u8, Error> {
     match instruction_set.get(&InstructionKey {
         mnemonic,
         address_mode,
@@ -1606,7 +1606,7 @@ pub enum Value {
     Null,
 }
 
-pub fn str_to_mnemonic(instruction: String) -> Result<Mnemonic, (ErrorCode, ErrorMsg)> {
+pub fn str_to_mnemonic(instruction: String) -> Result<Mnemonic, Error> {
     match instruction.as_str() {
         "adc" => return Ok(Mnemonic::ADC),
         "and" => return Ok(Mnemonic::AND),
