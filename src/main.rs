@@ -32,7 +32,14 @@ struct Config {
 fn main() {
     // Get our configuration
     let mut args: Vec<String> = env::args().collect();
-    let config = Config::new(&mut args);
+    let config = match Config::new(&mut args) {
+        Ok(config) => config,
+        Err(err) => {
+            println!("{}", err.1);
+            usage(&args[0]);
+            process::exit(err.0 as i32);
+        }
+    };
 
     // Read in the source file
     let source = match read_source(&config.source_file) {
@@ -81,13 +88,15 @@ fn main() {
     process::exit(Error::Good as i32);
 }
 
+fn usage(cmd: &String) {
+    println!("usage: {} [-o <outfile>] <source>", cmd);
+}
+
 impl Config {
-    fn new(args: &mut Vec<String>) -> Config {
+    fn new(args: &mut Vec<String>) -> Result<Config, (Error, &'static str)> {
         // Process command line options
-        let command = args[0].to_string();
         if args.len() < 2 {
-            usage(&command);
-            process::exit(Error::Usage as i32);
+            return Err((Error::Usage, "Missing arguments"));
         }
 
         let mut args: Vec<String> = args.drain(1..).collect(); // Remove first arg
@@ -101,9 +110,7 @@ impl Config {
             let val = args.pop().unwrap();
             if val == "-o" {
                 if temp_val == "" {
-                    // We don't have a file name!
-                    usage(&command);
-                    process::exit(Error::Usage as i32);
+                    return Err((Error::Usage, "No output filename provided"));
                 }
                 out_file = temp_val.to_string();
                 temp_val = String::from("");
@@ -114,22 +121,19 @@ impl Config {
 
         // If there's a value in temp_val we're missing a flag!
         if temp_val != "" {
-            usage(&command);
-            process::exit(Error::Usage as i32);
+            return Err((Error::Usage, "Missing arguments"));
         }
 
         if source_file == out_file {
-            println!("You really don't want to overwrite your source file");
-            process::exit(Error::OverwriteSource as i32);
+            return Err((
+                Error::OverwriteSource,
+                "You really don't want to overwrite your source file",
+            ));
         }
 
-        Config {
+        Ok(Config {
             source_file,
             out_file,
-        }
+        })
     }
-}
-
-fn usage(cmd: &str) {
-    println!("usage: {} [-o <outfile>] <source>", cmd);
 }
