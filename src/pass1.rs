@@ -200,7 +200,10 @@ fn handle_directive(program: &mut Program, raw_line: &String) -> Result<(), (Err
             program.counter += size;
         }
         "equ" => {
-            let (label, value) = parse_equ(value);
+            let (label, value) = match parse_equ(value) {
+                Ok((label, value)) => (label, value),
+                Err(err) => return Err(err),
+            };
             println!("Found an EQU: {} {:04x}", label, value);
             if program.symbol_table.contains_key(&label) {
                 return Err(error(
@@ -248,19 +251,21 @@ fn parse_bytes(bytes: String) -> Result<Data, (Error, ErrorMsg)> {
     Ok(data)
 }
 
-fn parse_equ(equ: String) -> (String, u16) {
+fn parse_equ(equ: String) -> Result<(String, u16), (Error, ErrorMsg)> {
     // XXX this isn't great
     // TODO:
     // - handle multiple kinds of values
     // - make it fail nicely
     let mut parts = equ.split("=");
-    // XXX UNWRAP
+    // XXX UNWRAP OPTION
     let label = parts.next().unwrap().trim().to_string();
-    // XXX UNWRAP
+    // XXX UNWRAP OPTION
     let raw_value = parts.next().unwrap().trim().trim_start_matches("$");
-    // XXX UNWRAP
-    let value = u16::from_str_radix(raw_value, 16).unwrap();
-    (label, value)
+    let value = match u16::from_str_radix(raw_value, 16) {
+        Ok(value) => value,
+        Err(_) => return Err(error(Error::HexExpected, format!("Expected hex but found {}", raw_value))),
+    };
+    Ok((label, value))
 }
 
 fn handle_instruction(program: &mut Program, line: &String) -> Result<(), (Error, ErrorMsg)> {
