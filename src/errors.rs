@@ -21,7 +21,7 @@ macro_rules! warning {
     ($fmt:expr, $($arg:tt)*) => (print!(concat!($fmt), $($arg)*));
 }
 
-pub enum Error {
+pub enum ErrorCode {
     NoError = 0,
     Usage,
     OverwriteSource,
@@ -42,6 +42,6 @@ pub enum Error {
 
 pub type ErrorMsg = String;
 
-pub fn error(code: Error, msg: String) -> (Error, ErrorMsg) {
+pub fn error(code: ErrorCode, msg: String) -> (ErrorCode, ErrorMsg) {
     (code, msg)
 }

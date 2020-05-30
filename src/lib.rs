@@ -1,5 +1,5 @@
 pub mod errors;
-use errors::Error;
+use errors::ErrorCode;
 use errors::ErrorMsg;
 
 mod ascii;
@@ -32,10 +32,10 @@ pub fn usage(cmd: &String) {
 }
 
 impl Config {
-    pub fn new(args: &mut Vec<String>) -> Result<Config, (Error, &'static str)> {
+    pub fn new(args: &mut Vec<String>) -> Result<Config, (ErrorCode, &'static str)> {
         // Process command line options
         if args.len() < 2 {
-            return Err((Error::Usage, "Missing arguments"));
+            return Err((ErrorCode::Usage, "Missing arguments"));
         }
 
         let mut args: Vec<String> = args.drain(1..).collect(); // Remove first arg
@@ -47,7 +47,7 @@ impl Config {
             let val = args.pop().unwrap();
             if val == "-o" {
                 if temp_val == "" {
-                    return Err((Error::Usage, "No output filename provided"));
+                    return Err((ErrorCode::Usage, "No output filename provided"));
                 }
                 out_file = temp_val.to_string();
                 temp_val = String::from("");
@@ -58,12 +58,12 @@ impl Config {
 
         // If there's a value in temp_val we're missing a flag!
         if temp_val != "" {
-            return Err((Error::Usage, "Missing arguments"));
+            return Err((ErrorCode::Usage, "Missing arguments"));
         }
 
         if source_file == out_file {
             return Err((
-                Error::OverwriteSource,
+                ErrorCode::OverwriteSource,
                 "You really don't want to overwrite your source file",
             ));
         }
@@ -75,7 +75,7 @@ impl Config {
     }
 }
 
-pub fn run(config: &Config) -> Result<(), (Error, ErrorMsg)> {
+pub fn run(config: &Config) -> Result<(), (ErrorCode, ErrorMsg)> {
     // Read in the source file
     let source = match read_source(&config.source_file) {
         Ok(source) => source,

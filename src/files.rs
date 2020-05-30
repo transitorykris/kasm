@@ -4,17 +4,17 @@ use std::path::Path;
 use std::string::String;
 
 use crate::errors::error;
-use crate::errors::Error;
+use crate::errors::ErrorCode;
 use crate::errors::ErrorMsg;
 use crate::pass2::MachineCode;
 
-pub fn read_source(file: &str) -> Result<String, (Error, ErrorMsg)> {
+pub fn read_source(file: &str) -> Result<String, (ErrorCode, ErrorMsg)> {
     let path = Path::new(file);
     let display = path.display();
     let mut f = match File::open(path) {
         Err(err) => {
             return Err(error(
-                Error::FileOpen,
+                ErrorCode::FileOpen,
                 format!("Couldn't open {}: {}", display, err.to_string()),
             ))
         }
@@ -25,7 +25,7 @@ pub fn read_source(file: &str) -> Result<String, (Error, ErrorMsg)> {
     match f.read_to_string(&mut raw_source) {
         Err(why) => {
             return Err(error(
-                Error::FileRead,
+                ErrorCode::FileRead,
                 format!("Couldn't read {}: {}", display, why.to_string()),
             ))
         }
@@ -35,13 +35,13 @@ pub fn read_source(file: &str) -> Result<String, (Error, ErrorMsg)> {
     Ok(raw_source)
 }
 
-pub fn write_out(filename: &str, output: MachineCode) -> Result<(), (Error, ErrorMsg)> {
+pub fn write_out(filename: &str, output: MachineCode) -> Result<(), (ErrorCode, ErrorMsg)> {
     let path = Path::new(filename);
     let display = path.display();
     let mut f = match File::create(&path) {
         Err(why) => {
             return Err(error(
-                Error::FileCreate,
+                ErrorCode::FileCreate,
                 format!("Couldn't create {}: {}", display, why.to_string()),
             ))
         }
@@ -51,7 +51,7 @@ pub fn write_out(filename: &str, output: MachineCode) -> Result<(), (Error, Erro
     match f.write_all(&output) {
         Err(why) => {
             return Err(error(
-                Error::FileWrite,
+                ErrorCode::FileWrite,
                 format!("Couldn't write {}: {}", display, why.to_string()),
             ))
         }

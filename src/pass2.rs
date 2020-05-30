@@ -1,5 +1,5 @@
 use crate::errors::error;
-use crate::errors::Error;
+use crate::errors::ErrorCode;
 use crate::errors::ErrorMsg;
 use crate::instructions::InstructionKey;
 use crate::instructions::InstructionMap;
@@ -12,7 +12,7 @@ pub type MachineCode = Vec<u8>;
 pub fn pass2(
     instruction_set: InstructionMap,
     program: Program,
-) -> Result<MachineCode, (Error, ErrorMsg)> {
+) -> Result<MachineCode, (ErrorCode, ErrorMsg)> {
     let mut output = MachineCode::new();
 
     let mut next_address = 0;
@@ -40,7 +40,7 @@ pub fn pass2(
                     }
                     None => {
                         return Err(error(
-                            Error::UnknownInstruction,
+                            ErrorCode::UnknownInstruction,
                             "Invalid instruction found".to_string(),
                         ))
                     }

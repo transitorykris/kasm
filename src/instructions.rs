@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
 use crate::errors::error;
-use crate::errors::Error;
+use crate::errors::ErrorCode;
 use crate::errors::ErrorMsg;
 
 #[derive(PartialEq, Eq, Hash, Copy, Clone)]
@@ -183,13 +183,18 @@ pub fn get_instruction(
     instruction_set: &InstructionMap,
     mnemonic: Mnemonic,
     address_mode: AddressMode,
-) -> Result<u8, (Error, ErrorMsg)> {
+) -> Result<u8, (ErrorCode, ErrorMsg)> {
     match instruction_set.get(&InstructionKey {
         mnemonic,
         address_mode,
     }) {
         Some(opcode) => *opcode,
-        None => return Err(error(Error::NoValidOpcode, "No valid opcode".to_string())),
+        None => {
+            return Err(error(
+                ErrorCode::NoValidOpcode,
+                "No valid opcode".to_string(),
+            ))
+        }
     };
     Ok(0)
 }
@@ -1601,7 +1606,7 @@ pub enum Value {
     Null,
 }
 
-pub fn str_to_mnemonic(instruction: String) -> Result<Mnemonic, (Error, ErrorMsg)> {
+pub fn str_to_mnemonic(instruction: String) -> Result<Mnemonic, (ErrorCode, ErrorMsg)> {
     match instruction.as_str() {
         "adc" => return Ok(Mnemonic::ADC),
         "and" => return Ok(Mnemonic::AND),
@@ -1702,7 +1707,7 @@ pub fn str_to_mnemonic(instruction: String) -> Result<Mnemonic, (Error, ErrorMsg
         "wai" => return Ok(Mnemonic::WAI),
         _ => {
             return Err(error(
-                Error::UnknownInstruction,
+                ErrorCode::UnknownInstruction,
                 format!("Unknown instruction: {}", instruction),
             ))
         }

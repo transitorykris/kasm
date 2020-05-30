@@ -3,7 +3,7 @@ use std::collections::HashMap;
 
 use crate::ascii::ascii_to_bytes;
 use crate::errors::error;
-use crate::errors::Error;
+use crate::errors::ErrorCode;
 use crate::errors::ErrorMsg;
 use crate::instructions::address_mode_length;
 use crate::instructions::str_to_mnemonic;
@@ -80,7 +80,7 @@ impl Program {
     }
 }
 
-pub fn pass1(source: &SourceTable) -> Result<Program, (Error, ErrorMsg)> {
+pub fn pass1(source: &SourceTable) -> Result<Program, (ErrorCode, ErrorMsg)> {
     let mut program = Program::new();
 
     // TODO:
@@ -109,7 +109,7 @@ pub fn pass1(source: &SourceTable) -> Result<Program, (Error, ErrorMsg)> {
             }
         } else {
             return Err(error(
-                Error::UnknownSyntax,
+                ErrorCode::UnknownSyntax,
                 format!(
                     "Unknown syntax: {} at line: {}",
                     line.line, line.line_number
@@ -127,12 +127,12 @@ fn handle_label(
     program: &mut Program,
     raw_label: String,
     line_number: Line,
-) -> Result<(), (Error, ErrorMsg)> {
+) -> Result<(), (ErrorCode, ErrorMsg)> {
     let label = String::from(raw_label.trim_end_matches(":"));
 
     if program.symbol_table.contains_key(&label) {
         return Err(error(
-            Error::DuplicateLabel,
+            ErrorCode::DuplicateLabel,
             format!("Duplicate label found: {}", label),
         ));
     }
@@ -149,7 +149,7 @@ fn handle_label(
 }
 
 // TODO: .equ directive
-fn handle_directive(program: &mut Program, raw_line: &String) -> Result<(), (Error, ErrorMsg)> {
+fn handle_directive(program: &mut Program, raw_line: &String) -> Result<(), (ErrorCode, ErrorMsg)> {
     let trimmed = raw_line.trim().trim_start_matches(".");
 
     let split: Vec<&str> = trimmed.splitn(2, " ").collect(); // Get two parts, the directive and data
@@ -162,7 +162,7 @@ fn handle_directive(program: &mut Program, raw_line: &String) -> Result<(), (Err
                 Ok(address) => address,
                 Err(_) => {
                     return Err(error(
-                        Error::AddressExpected,
+                        ErrorCode::AddressExpected,
                         format!("Expected address for label, found {}", value),
                     ))
                 }
@@ -198,7 +198,7 @@ fn handle_directive(program: &mut Program, raw_line: &String) -> Result<(), (Err
             println!("Found an EQU: {} {:04x}", label, value);
             if program.symbol_table.contains_key(&label) {
                 return Err(error(
-                    Error::DuplicateLabel,
+                    ErrorCode::DuplicateLabel,
                     format!("Duplicate label found: {}", label),
                 ));
             }
@@ -213,7 +213,7 @@ fn handle_directive(program: &mut Program, raw_line: &String) -> Result<(), (Err
         }
         _ => {
             return Err(error(
-                Error::UnknownDirective,
+                ErrorCode::UnknownDirective,
                 format!("Unknown directive: {}", raw_line),
             ))
         }
@@ -221,7 +221,7 @@ fn handle_directive(program: &mut Program, raw_line: &String) -> Result<(), (Err
     Ok(())
 }
 
-fn parse_bytes(bytes: String) -> Result<Data, (Error, ErrorMsg)> {
+fn parse_bytes(bytes: String) -> Result<Data, (ErrorCode, ErrorMsg)> {
     let mut data = Vec::new();
     let parts = bytes.split_terminator(",");
 
@@ -231,7 +231,7 @@ fn parse_bytes(bytes: String) -> Result<Data, (Error, ErrorMsg)> {
             Ok(value) => value,
             Err(_) => {
                 return Err(error(
-                    Error::HexExpected,
+                    ErrorCode::HexExpected,
                     format!("Expected hexadecimal but found {}", raw_value),
                 ))
             }
@@ -242,7 +242,7 @@ fn parse_bytes(bytes: String) -> Result<Data, (Error, ErrorMsg)> {
     Ok(data)
 }
 
-fn parse_equ(equ: String) -> Result<(String, u16), (Error, ErrorMsg)> {
+fn parse_equ(equ: String) -> Result<(String, u16), (ErrorCode, ErrorMsg)> {
     // TODO:
     // - handle multiple kinds of values
     let mut parts = equ.split("=");
@@ -250,7 +250,7 @@ fn parse_equ(equ: String) -> Result<(String, u16), (Error, ErrorMsg)> {
         Some(label) => label.trim().to_string(),
         None => {
             return Err(error(
-                Error::MalformedEqu,
+                ErrorCode::MalformedEqu,
                 format!(".equ is not properly formatted {}", equ),
             ))
         }
@@ -260,7 +260,7 @@ fn parse_equ(equ: String) -> Result<(String, u16), (Error, ErrorMsg)> {
         Some(raw_value) => raw_value.trim().trim_start_matches("$"),
         None => {
             return Err(error(
-                Error::MalformedEqu,
+                ErrorCode::MalformedEqu,
                 format!(".equ is not properly formatted {}", equ),
             ))
         }
@@ -270,7 +270,7 @@ fn parse_equ(equ: String) -> Result<(String, u16), (Error, ErrorMsg)> {
         Ok(value) => value,
         Err(_) => {
             return Err(error(
-                Error::HexExpected,
+                ErrorCode::HexExpected,
                 format!("Expected hex but found {}", raw_value),
             ))
         }
@@ -278,7 +278,7 @@ fn parse_equ(equ: String) -> Result<(String, u16), (Error, ErrorMsg)> {
     Ok((label, value))
 }
 
-fn handle_instruction(program: &mut Program, line: &String) -> Result<(), (Error, ErrorMsg)> {
+fn handle_instruction(program: &mut Program, line: &String) -> Result<(), (ErrorCode, ErrorMsg)> {
     let mut parts = line.split_ascii_whitespace();
 
     let instruction = match parts.next() {
