@@ -1,7 +1,6 @@
 use std::env;
 use std::process;
 
-use kasm::errors::Error;
 use kasm::run;
 use kasm::usage;
 use kasm::Config;
@@ -18,9 +17,7 @@ fn main() {
     };
 
     match run(&config) {
-        Ok(_) => {
-            process::exit(Error::NoError as i32);
-        }
+        Ok(_) => {}
         Err(err) => {
             println!("{}", err.1);
             process::exit(err.0 as i32);
