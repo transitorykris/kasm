@@ -1,8 +1,8 @@
 use std::collections::HashMap;
 
-pub use crate::errors::error;
-pub use crate::errors::Error;
-pub use crate::errors::ErrorMsg;
+use crate::errors::error;
+use crate::errors::Error;
+use crate::errors::ErrorMsg;
 
 #[derive(PartialEq, Eq, Hash, Copy, Clone)]
 pub enum AddressMode {

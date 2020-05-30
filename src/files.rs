@@ -3,10 +3,10 @@ use std::io::prelude::*;
 use std::path::Path;
 use std::string::String;
 
-pub use crate::errors::error;
-pub use crate::errors::Error;
-pub use crate::errors::ErrorMsg;
-pub use crate::pass2::MachineCode;
+use crate::errors::error;
+use crate::errors::Error;
+use crate::errors::ErrorMsg;
+use crate::pass2::MachineCode;
 
 pub fn read_source(file: &str) -> Result<String, (Error, ErrorMsg)> {
     let path = Path::new(file);

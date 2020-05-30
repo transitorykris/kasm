@@ -1,18 +1,16 @@
 use std::cmp::Ordering;
 use std::collections::HashMap;
 
-pub use crate::ascii::ascii_to_bytes;
-pub use crate::ascii::unescape;
-pub use crate::errors::error;
-pub use crate::errors::Error;
-pub use crate::errors::ErrorMsg;
-pub use crate::instructions::address_mode_length;
-pub use crate::instructions::address_mode_name;
-pub use crate::instructions::str_to_mnemonic;
-pub use crate::instructions::AddressMode;
-pub use crate::instructions::Mnemonic;
+use crate::ascii::ascii_to_bytes;
+use crate::errors::error;
+use crate::errors::Error;
+use crate::errors::ErrorMsg;
+use crate::instructions::address_mode_length;
+use crate::instructions::str_to_mnemonic;
+use crate::instructions::AddressMode;
+use crate::instructions::Mnemonic;
 pub use crate::instructions::Value;
-pub use crate::scanner::SourceTable;
+use crate::scanner::SourceTable;
 
 use regex::Regex;
 
