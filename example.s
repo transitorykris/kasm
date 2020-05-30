@@ -1,5 +1,12 @@
 ; This is my simple program
 
+.org $5000
+
+.ascii "this does not ; have a comment"
+.ascii "this one is also ; comment free"    ; hello comment!
+.ascii "check this ->"  ; this is just one ; comment
+.ascii "oh no, \" double quotes"
+
 .org $1000
 
 .equ myvalue = $acbd
