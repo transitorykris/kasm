@@ -270,7 +270,7 @@ fn parse_equ(equ: String) -> Result<(String, u16), (Error, ErrorMsg)> {
 
 fn handle_instruction(program: &mut Program, line: &String) -> Result<(), (Error, ErrorMsg)> {
     let mut parts = line.split_ascii_whitespace();
-    // XXX UNWRAP
+    // XXX UNWRAP OPTION
     let instruction = parts.next().unwrap().to_lowercase();
     let operand_part = parts.next();
     let value: Value;
@@ -280,7 +280,7 @@ fn handle_instruction(program: &mut Program, line: &String) -> Result<(), (Error
         address_mode = AddressMode::Implied;
         value = Value::Null;
     } else {
-        // XXX UNWRAP
+        // XXX UNWRAP OPTION
         let (address_mode_tmp, value_tmp) = get_operand_type(operand_part.unwrap());
         address_mode = address_mode_tmp;
         value = value_tmp;
@@ -309,7 +309,7 @@ fn handle_instruction(program: &mut Program, line: &String) -> Result<(), (Error
 
 fn get_operand_type(operand: &str) -> (AddressMode, Value) {
     // TODO: use lazy_static somehow!
-    // XXX UNWRAP
+    // We use unwrap here and know we're good because we tested the code :)
     let implied_re = Regex::new(r"^$").unwrap();
     let zeropage_re = Regex::new(r"^\$([0-9a-f]{2})$").unwrap();
     let zeropagex_re = Regex::new(r"^\$([0-9a-f]{2})\s*,\s*x$").unwrap();
@@ -324,7 +324,7 @@ fn get_operand_type(operand: &str) -> (AddressMode, Value) {
     // oh no... forgot about opcode $ab relative address mode...
     // for branch targets...
 
-    // XXX UNWRAP
+    // XXX UNWRAP OPTION
     if implied_re.is_match(operand) {
         return (AddressMode::Implied, Value::Null);
     } else if zeropage_re.is_match(operand) {
@@ -373,7 +373,7 @@ fn get_operand_type(operand: &str) -> (AddressMode, Value) {
     // Note: we don't quite know where the labels are in memory right now
     // TODO: Add #< and #> for lo byte and hi byte
     // XXX we have no real limit on the length of a label right now
-    // XXX UNWRAP
+    // We use unwrap here and know we're good because we tested the code :)
     let l_absolute_re = Regex::new(r"^([a-z_][0-9a-z_]*)$").unwrap();
     let l_absolutex_re = Regex::new(r"^([a-z_][0-9a-z_]*)\s*,\s*x$").unwrap();
     let l_absolutey_re = Regex::new(r"^([a-z_][0-9a-z_]*)\s*,\s*y$").unwrap();
@@ -383,7 +383,7 @@ fn get_operand_type(operand: &str) -> (AddressMode, Value) {
     let l_yindexed_re = Regex::new(r"^\(([a-z_][0-9a-z_]*)\)\s*,\s*y$").unwrap();
     // also missing relative mode
 
-    // XXX UNWRAP
+    // XXX UNWRAP OPTION
     if l_absolute_re.is_match(operand) {
         let caps = l_absolute_re.captures(operand).unwrap();
         let label = String::from(&caps[1]);
