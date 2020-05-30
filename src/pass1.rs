@@ -342,7 +342,7 @@ fn get_operand_type(operand: &str) -> (AddressMode, Value) {
     // oh no... forgot about opcode $ab relative address mode...
     // for branch targets...
 
-    // XXX UNWRAP OPTION
+    // We use unwrap below but the regexes guarantee we got something sane
     if implied_re.is_match(operand) {
         return (AddressMode::Implied, Value::Null);
     } else if zeropage_re.is_match(operand) {
@@ -401,7 +401,7 @@ fn get_operand_type(operand: &str) -> (AddressMode, Value) {
     let l_yindexed_re = Regex::new(r"^\(([a-z_][0-9a-z_]*)\)\s*,\s*y$").unwrap();
     // also missing relative mode
 
-    // XXX UNWRAP OPTION
+    // We use unwrap below but the regexes guarantee we got something sane
     if l_absolute_re.is_match(operand) {
         let caps = l_absolute_re.captures(operand).unwrap();
         let label = String::from(&caps[1]);
