@@ -22,56 +22,20 @@ pub use crate::pass2::pass2;
 mod scanner;
 pub use crate::scanner::scanner;
 
-const OUTFILE: &str = "a.out"; // A typical default
+const OUTFILE_DEFAULT: &str = "a.out"; // A typical default
 
-fn usage(cmd: &str) {
-    println!("usage: {} [-o <outfile>] <source>", cmd);
+struct Config {
+    source_file: String,
+    out_file: String,
 }
 
 fn main() {
-    // Process command line options
-    let mut raw_args: Vec<String> = env::args().collect();
-    let command = raw_args[0].to_string();
-    if raw_args.len() < 2 {
-        usage(&command);
-        process::exit(Error::Usage as i32);
-    }
-
-    let mut args: Vec<String> = raw_args.drain(1..).collect(); // Remove first arg
-    let mut out_file = String::from(OUTFILE);
-    // XXX UNWRAP
-    let source_file = args.pop().unwrap();
-    let mut temp_val = String::new();
-
-    while args.len() > 0 {
-        // XXX UNWRAP
-        let val = args.pop().unwrap();
-        if val == "-o" {
-            if temp_val == "" {
-                // We don't have a file name!
-                usage(&command);
-                process::exit(Error::Usage as i32);
-            }
-            out_file = temp_val.to_string();
-            temp_val = String::from("");
-            continue;
-        }
-        temp_val = val;
-    }
-
-    // If there's a value in temp_val we're missing a flag!
-    if temp_val != "" {
-        usage(&command);
-        process::exit(Error::Usage as i32);
-    }
-
-    if source_file == out_file {
-        println!("You really don't want to overwrite your source file");
-        process::exit(Error::OverwriteSource as i32);
-    }
+    // Get our configuration
+    let mut args: Vec<String> = env::args().collect();
+    let config = Config::new(&mut args);
 
     // Read in the source file
-    let source = match read_source(&source_file) {
+    let source = match read_source(&config.source_file) {
         Ok(source) => source,
         Err(err) => {
             println!("{}", err.1);
@@ -106,7 +70,7 @@ fn main() {
         }
     };
 
-    match write_out(&out_file.to_string(), output) {
+    match write_out(&config.out_file.to_string(), output) {
         Ok(_) => {}
         Err(err) => {
             println!("{}", err.1);
@@ -115,4 +79,57 @@ fn main() {
     };
 
     process::exit(Error::Good as i32);
+}
+
+impl Config {
+    fn new(args: &mut Vec<String>) -> Config {
+        // Process command line options
+        let command = args[0].to_string();
+        if args.len() < 2 {
+            usage(&command);
+            process::exit(Error::Usage as i32);
+        }
+
+        let mut args: Vec<String> = args.drain(1..).collect(); // Remove first arg
+        let mut out_file = String::from(OUTFILE_DEFAULT);
+        // XXX UNWRAP
+        let source_file = args.pop().unwrap();
+        let mut temp_val = String::new();
+
+        while args.len() > 0 {
+            // XXX UNWRAP
+            let val = args.pop().unwrap();
+            if val == "-o" {
+                if temp_val == "" {
+                    // We don't have a file name!
+                    usage(&command);
+                    process::exit(Error::Usage as i32);
+                }
+                out_file = temp_val.to_string();
+                temp_val = String::from("");
+                continue;
+            }
+            temp_val = val;
+        }
+
+        // If there's a value in temp_val we're missing a flag!
+        if temp_val != "" {
+            usage(&command);
+            process::exit(Error::Usage as i32);
+        }
+
+        if source_file == out_file {
+            println!("You really don't want to overwrite your source file");
+            process::exit(Error::OverwriteSource as i32);
+        }
+
+        Config {
+            source_file,
+            out_file,
+        }
+    }
+}
+
+fn usage(cmd: &str) {
+    println!("usage: {} [-o <outfile>] <source>", cmd);
 }
