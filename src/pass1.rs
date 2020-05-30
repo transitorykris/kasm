@@ -89,29 +89,23 @@ pub fn pass1(source: &SourceTable) -> Result<Program, (Error, ErrorMsg)> {
     // TODO:
     // - Handle the zeropage! Labels are funky here.
     // zeropage is addresses $00 through to $ff
-    // We track whether we're in zeropage or not because it affects
-    // how we handle labels (1 byte vs 2 bytes!)
-    //let mut zeropage = true;
 
     for line in source {
-        //if program.counter > 0xff {
-        //    zeropage = false;
-        //}
-        let mut chars = line.line.chars();
+        let first_char = match line.line.chars().next() {
+            Some(first_char) => first_char,
+            None => panic!("Got a line of source with not characters!"),
+        };
         if line.line.ends_with(":") {
             match handle_label(&mut program, line.line.to_string(), line.line_number) {
                 Ok(()) => (),
                 Err(err) => return Err(err),
             }
-        } else if chars.next().unwrap() == '.' {
-            // XXX UNWRAP OPTION
+        } else if first_char == '.' {
             match handle_directive(&mut program, &line.line) {
                 Ok(()) => (),
                 Err(err) => return Err(err),
             }
-        } else if chars.next().unwrap().is_ascii_alphabetic() {
-            // BUG: This ^ is looking at the second charcter not the first!!
-            // XXX UNWRAP OPTION
+        } else if first_char.is_ascii_alphabetic() {
             match handle_instruction(&mut program, &line.line) {
                 Ok(()) => (),
                 Err(err) => return Err(err),
@@ -263,7 +257,12 @@ fn parse_equ(equ: String) -> Result<(String, u16), (Error, ErrorMsg)> {
     let raw_value = parts.next().unwrap().trim().trim_start_matches("$");
     let value = match u16::from_str_radix(raw_value, 16) {
         Ok(value) => value,
-        Err(_) => return Err(error(Error::HexExpected, format!("Expected hex but found {}", raw_value))),
+        Err(_) => {
+            return Err(error(
+                Error::HexExpected,
+                format!("Expected hex but found {}", raw_value),
+            ))
+        }
     };
     Ok((label, value))
 }
