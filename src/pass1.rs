@@ -340,19 +340,19 @@ fn get_operand_type(operand: &str) -> (AddressMode, Value) {
         return (AddressMode::Implied, Value::Null);
     } else if zeropage_re.is_match(operand) {
         let caps = zeropage_re.captures(operand).unwrap();
-        let val = str_to_u16!(&caps[1]).unwrap();
+        let val = str_to_u8!(&caps[1]).unwrap();
         return (AddressMode::Zeropage, Value::U8(val));
     } else if zeropagex_re.is_match(operand) {
         let caps = zeropagex_re.captures(operand).unwrap();
-        let val = str_to_u16!(&caps[1]).unwrap();
+        let val = str_to_u8!(&caps[1]).unwrap();
         return (AddressMode::ZeropageX, Value::U8(val));
     } else if zeropagey_re.is_match(operand) {
         let caps = zeropagey_re.captures(operand).unwrap();
-        let val = str_to_u16!(&caps[1]).unwrap();
+        let val = str_to_u8!(&caps[1]).unwrap();
         return (AddressMode::ZeropageY, Value::U8(val));
     } else if immediate_re.is_match(operand) {
         let caps = immediate_re.captures(operand).unwrap();
-        let val = str_to_u16!(&caps[1]).unwrap();
+        let val = str_to_u8!(&caps[1]).unwrap();
         return (AddressMode::Immediate, Value::U8(val));
     } else if absolute_re.is_match(operand) {
         let caps = absolute_re.captures(operand).unwrap();
