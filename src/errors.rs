@@ -1,8 +1,6 @@
 // Stuff for hanlding errors encountered in the assembler
 #![macro_use]
 
-// We don't have anything to clean up in this assembler
-// bailing anywhere in the code should be safe
 #[macro_export]
 macro_rules! verbose {
     ($fmt:expr) => (print!(concat!($fmt)));
