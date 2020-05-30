@@ -9,7 +9,7 @@ use crate::instructions::address_mode_length;
 use crate::instructions::str_to_mnemonic;
 use crate::instructions::AddressMode;
 use crate::instructions::Mnemonic;
-pub use crate::instructions::Value;
+use crate::instructions::Value;
 use crate::scanner::SourceTable;
 
 use regex::Regex;

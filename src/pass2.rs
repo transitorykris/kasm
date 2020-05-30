@@ -3,9 +3,9 @@ use crate::errors::Error;
 use crate::errors::ErrorMsg;
 use crate::instructions::InstructionKey;
 use crate::instructions::InstructionMap;
+use crate::instructions::Value::{Null, String, U16, U8};
 use crate::pass1::Content::{Code, Data};
 use crate::pass1::Program;
-use crate::pass1::Value::{Null, String, U16, U8};
 
 pub type MachineCode = Vec<u8>;
 
