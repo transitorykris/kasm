@@ -2,6 +2,9 @@ pub mod errors;
 use errors::Error;
 use errors::ErrorCode;
 
+#[macro_use]
+mod strings;
+
 mod ascii;
 
 mod files;

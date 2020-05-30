@@ -154,7 +154,7 @@ fn handle_directive(program: &mut Program, raw_line: &String) -> Result<(), Erro
     match dir {
         "org" => {
             let value = value.trim_start_matches("$");
-            let address = match u16::from_str_radix(value, 16) {
+            let address = match str_to_u16!(value) {
                 Ok(address) => address,
                 Err(_) => {
                     return Err(error(
@@ -223,7 +223,7 @@ fn parse_bytes(bytes: String) -> Result<Data, Error> {
 
     for part in parts {
         let raw_value = part.trim().trim_start_matches("$");
-        let value = match u8::from_str_radix(raw_value, 16) {
+        let value = match str_to_u8!(raw_value) {
             Ok(value) => value,
             Err(_) => {
                 return Err(error(
@@ -262,7 +262,7 @@ fn parse_equ(equ: String) -> Result<(String, u16), Error> {
         }
     };
 
-    let value = match u16::from_str_radix(raw_value, 16) {
+    let value = match str_to_u16!(raw_value) {
         Ok(value) => value,
         Err(_) => {
             return Err(error(
@@ -340,43 +340,43 @@ fn get_operand_type(operand: &str) -> (AddressMode, Value) {
         return (AddressMode::Implied, Value::Null);
     } else if zeropage_re.is_match(operand) {
         let caps = zeropage_re.captures(operand).unwrap();
-        let val = u8::from_str_radix(&caps[1], 16).unwrap();
+        let val = str_to_u16!(&caps[1]).unwrap();
         return (AddressMode::Zeropage, Value::U8(val));
     } else if zeropagex_re.is_match(operand) {
         let caps = zeropagex_re.captures(operand).unwrap();
-        let val = u8::from_str_radix(&caps[1], 16).unwrap();
+        let val = str_to_u16!(&caps[1]).unwrap();
         return (AddressMode::ZeropageX, Value::U8(val));
     } else if zeropagey_re.is_match(operand) {
         let caps = zeropagey_re.captures(operand).unwrap();
-        let val = u8::from_str_radix(&caps[1], 16).unwrap();
+        let val = str_to_u16!(&caps[1]).unwrap();
         return (AddressMode::ZeropageY, Value::U8(val));
     } else if immediate_re.is_match(operand) {
         let caps = immediate_re.captures(operand).unwrap();
-        let val = u8::from_str_radix(&caps[1], 16).unwrap();
+        let val = str_to_u16!(&caps[1]).unwrap();
         return (AddressMode::Immediate, Value::U8(val));
     } else if absolute_re.is_match(operand) {
         let caps = absolute_re.captures(operand).unwrap();
-        let val = u16::from_str_radix(&caps[1], 16).unwrap();
+        let val = str_to_u16!(&caps[1]).unwrap();
         return (AddressMode::Absolute, Value::U16(val));
     } else if absolutex_re.is_match(operand) {
         let caps = absolutex_re.captures(operand).unwrap();
-        let val = u16::from_str_radix(&caps[1], 16).unwrap();
+        let val = str_to_u16!(&caps[1]).unwrap();
         return (AddressMode::AbsoluteX, Value::U16(val));
     } else if absolutey_re.is_match(operand) {
         let caps = absolutey_re.captures(operand).unwrap();
-        let val = u16::from_str_radix(&caps[1], 16).unwrap();
+        let val = str_to_u16!(&caps[1]).unwrap();
         return (AddressMode::AbsoluteY, Value::U16(val));
     } else if indirect_re.is_match(operand) {
         let caps = indirect_re.captures(operand).unwrap();
-        let val = u16::from_str_radix(&caps[1], 16).unwrap();
+        let val = str_to_u16!(&caps[1]).unwrap();
         return (AddressMode::Indirect, Value::U16(val));
     } else if xindexed_re.is_match(operand) {
         let caps = xindexed_re.captures(operand).unwrap();
-        let val = u8::from_str_radix(&caps[1], 16).unwrap();
+        let val = str_to_u8!(&caps[1]).unwrap();
         return (AddressMode::IndirectX, Value::U8(val));
     } else if yindexed_re.is_match(operand) {
         let caps = yindexed_re.captures(operand).unwrap();
-        let val = u8::from_str_radix(&caps[1], 16).unwrap();
+        let val = str_to_u8!(&caps[1]).unwrap();
         return (AddressMode::IndirectY, Value::U8(val));
     }
 
