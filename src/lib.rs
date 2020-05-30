@@ -1,63 +1,38 @@
-use std::env;
-use std::process;
-
-mod errors;
-pub use crate::errors::Error;
-pub use crate::errors::ErrorMsg;
+pub mod errors;
+use errors::Error;
+use errors::ErrorMsg;
 
 mod ascii;
 
 mod files;
-pub use crate::files::read_source;
-pub use crate::files::write_out;
+use files::read_source;
+use files::write_out;
 
 mod instructions;
-pub use crate::instructions::generate_instruction_set;
+use instructions::generate_instruction_set;
 
 mod pass1;
-pub use crate::pass1::pass1;
+use pass1::pass1;
 
 mod pass2;
-pub use crate::pass2::pass2;
+use pass2::pass2;
 
 mod scanner;
-pub use crate::scanner::scanner;
+use scanner::scanner;
 
 const OUTFILE_DEFAULT: &str = "a.out"; // A typical default
 
-struct Config {
+pub struct Config {
     source_file: String,
     out_file: String,
 }
 
-fn main() {
-    let mut args: Vec<String> = env::args().collect();
-    let config = match Config::new(&mut args) {
-        Ok(config) => config,
-        Err(err) => {
-            println!("{}", err.1);
-            usage(&args[0]);
-            process::exit(err.0 as i32);
-        }
-    };
-
-    match run(&config) {
-        Ok(_) => {
-            process::exit(Error::NoError as i32);
-        }
-        Err(err) => {
-            println!("{}", err.1);
-            process::exit(err.0 as i32);
-        }
-    }
-}
-
-fn usage(cmd: &String) {
+pub fn usage(cmd: &String) {
     println!("usage: {} [-o <outfile>] <source>", cmd);
 }
 
 impl Config {
-    fn new(args: &mut Vec<String>) -> Result<Config, (Error, &'static str)> {
+    pub fn new(args: &mut Vec<String>) -> Result<Config, (Error, &'static str)> {
         // Process command line options
         if args.len() < 2 {
             return Err((Error::Usage, "Missing arguments"));
@@ -100,7 +75,7 @@ impl Config {
     }
 }
 
-fn run(config: &Config) -> Result<(), (Error, ErrorMsg)> {
+pub fn run(config: &Config) -> Result<(), (Error, ErrorMsg)> {
     // Read in the source file
     let source = match read_source(&config.source_file) {
         Ok(source) => source,

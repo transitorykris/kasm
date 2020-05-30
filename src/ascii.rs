@@ -37,6 +37,6 @@ pub fn unescape(ch: u8) -> u8 {
         0x3f => return 0x34, // \? Question Mark
         _ => {}
     }
-    warning!("Unknown escape code: \\{}", ch);
+    //warning!("Unknown escape code: \\{}", ch);
     ch
 }

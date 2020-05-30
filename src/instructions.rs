@@ -19,7 +19,9 @@ pub enum AddressMode {
     ZeropageX,
     ZeropageY,
     Unknown, // Used in the first pass
+    #[allow(dead_code)]
     UnknownX,
+    #[allow(dead_code)]
     UnknownY,
 }
 
