@@ -283,21 +283,26 @@ fn parse_equ(equ: String) -> Result<(String, u16), (Error, ErrorMsg)> {
 
 fn handle_instruction(program: &mut Program, line: &String) -> Result<(), (Error, ErrorMsg)> {
     let mut parts = line.split_ascii_whitespace();
-    // XXX UNWRAP OPTION
-    let instruction = parts.next().unwrap().to_lowercase();
-    let operand_part = parts.next();
+
+    let instruction = match parts.next() {
+        Some(instruction) => instruction.to_lowercase(),
+        None => panic!("Did not receive an instruction!"),
+    };
+
     let value: Value;
     let address_mode: AddressMode;
 
-    if operand_part.is_none() {
-        address_mode = AddressMode::Implied;
-        value = Value::Null;
-    } else {
-        // XXX UNWRAP OPTION
-        let (address_mode_tmp, value_tmp) = get_operand_type(operand_part.unwrap());
-        address_mode = address_mode_tmp;
-        value = value_tmp;
-    }
+    match parts.next() {
+        Some(operand_part) => {
+            let (address_mode_tmp, value_tmp) = get_operand_type(operand_part);
+            address_mode = address_mode_tmp;
+            value = value_tmp;
+        }
+        None => {
+            address_mode = AddressMode::Implied;
+            value = Value::Null;
+        }
+    };
 
     let mnemonic = match str_to_mnemonic(instruction) {
         Ok(string) => string,
