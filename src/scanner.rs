@@ -23,7 +23,7 @@ pub fn scanner(raw_source: String) -> SourceTable {
         // TODO: take care to handle semicolons in strings
         let comment_find = line.find(';');
         if comment_find.is_some() {
-            // XXX UNWRAP
+            // XXX UNWRAP OPTION
             let (code, _) = line.split_at(comment_find.unwrap());
             line = String::from(code).trim().to_string();
         }
