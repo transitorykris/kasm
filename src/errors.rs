@@ -22,7 +22,7 @@ macro_rules! warning {
 }
 
 pub enum Error {
-    Good = 0,
+    NoError = 0,
     Usage,
     OverwriteSource,
     FileOpen,

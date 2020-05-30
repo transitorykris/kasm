@@ -3,6 +3,7 @@ use std::process;
 
 mod errors;
 pub use crate::errors::Error;
+pub use crate::errors::ErrorMsg;
 
 mod ascii;
 
@@ -30,7 +31,6 @@ struct Config {
 }
 
 fn main() {
-    // Get our configuration
     let mut args: Vec<String> = env::args().collect();
     let config = match Config::new(&mut args) {
         Ok(config) => config,
@@ -41,51 +41,15 @@ fn main() {
         }
     };
 
-    // Read in the source file
-    let source = match read_source(&config.source_file) {
-        Ok(source) => source,
+    match run(&config) {
+        Ok(_) => {
+            process::exit(Error::NoError as i32);
+        }
         Err(err) => {
             println!("{}", err.1);
             process::exit(err.0 as i32);
         }
-    };
-
-    // Scan in and clean up the raw
-    let scanned = scanner(source);
-
-    // Create a data structure containing details of our
-    // instruction set
-    let instruction_set = generate_instruction_set();
-
-    // Create a data structure containing the instruction,
-    // the addressing mode, and the value
-    let pass1_code = match pass1(&scanned) {
-        Ok(pass1_code) => pass1_code,
-        Err(err) => {
-            println!("{}", err.1);
-            process::exit(err.0 as i32);
-        }
-    };
-
-    // Create a new data structure of instructions by resolving
-    // all the labels
-    let output = match pass2(instruction_set, pass1_code) {
-        Ok(output) => output,
-        Err(err) => {
-            println!("{}", err.1);
-            process::exit(err.0 as i32);
-        }
-    };
-
-    match write_out(&config.out_file.to_string(), output) {
-        Ok(_) => {}
-        Err(err) => {
-            println!("{}", err.1);
-            process::exit(err.0 as i32);
-        }
-    };
-
-    process::exit(Error::Good as i32);
+    }
 }
 
 fn usage(cmd: &String) {
@@ -134,4 +98,40 @@ impl Config {
             out_file,
         })
     }
+}
+
+fn run(config: &Config) -> Result<(), (Error, ErrorMsg)> {
+    // Read in the source file
+    let source = match read_source(&config.source_file) {
+        Ok(source) => source,
+        Err(err) => return Err(err),
+    };
+
+    // Scan in and clean up the raw
+    let scanned = scanner(source);
+
+    // Create a data structure containing details of our
+    // instruction set
+    let instruction_set = generate_instruction_set();
+
+    // Create a data structure containing the instruction,
+    // the addressing mode, and the value
+    let pass1_code = match pass1(&scanned) {
+        Ok(pass1_code) => pass1_code,
+        Err(err) => return Err(err),
+    };
+
+    // Create a new data structure of instructions by resolving
+    // all the labels
+    let output = match pass2(instruction_set, pass1_code) {
+        Ok(output) => output,
+        Err(err) => return Err(err),
+    };
+
+    match write_out(&config.out_file.to_string(), output) {
+        Ok(_) => {}
+        Err(err) => return Err(err),
+    };
+
+    Ok(())
 }
