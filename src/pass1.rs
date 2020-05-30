@@ -246,15 +246,29 @@ fn parse_bytes(bytes: String) -> Result<Data, (Error, ErrorMsg)> {
 }
 
 fn parse_equ(equ: String) -> Result<(String, u16), (Error, ErrorMsg)> {
-    // XXX this isn't great
     // TODO:
     // - handle multiple kinds of values
-    // - make it fail nicely
     let mut parts = equ.split("=");
-    // XXX UNWRAP OPTION
-    let label = parts.next().unwrap().trim().to_string();
-    // XXX UNWRAP OPTION
-    let raw_value = parts.next().unwrap().trim().trim_start_matches("$");
+    let label = match parts.next() {
+        Some(label) => label.trim().to_string(),
+        None => {
+            return Err(error(
+                Error::MalformedEqu,
+                format!(".equ is not properly formatted {}", equ),
+            ))
+        }
+    };
+
+    let raw_value = match parts.next() {
+        Some(raw_value) => raw_value.trim().trim_start_matches("$"),
+        None => {
+            return Err(error(
+                Error::MalformedEqu,
+                format!(".equ is not properly formatted {}", equ),
+            ))
+        }
+    };
+
     let value = match u16::from_str_radix(raw_value, 16) {
         Ok(value) => value,
         Err(_) => {

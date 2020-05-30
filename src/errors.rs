@@ -37,6 +37,7 @@ pub enum Error {
     UnknownDirective,
     AddressExpected,
     HexExpected,
+    MalformedEqu,
 }
 
 pub type ErrorMsg = String;
