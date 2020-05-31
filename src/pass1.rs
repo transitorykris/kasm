@@ -145,7 +145,7 @@ fn handle_label(program: &mut Program, raw_label: String, line_number: Line) -> 
 }
 
 // TODO: .equ directive
-fn handle_directive(program: &mut Program, raw_line: &String) -> Result<(), Error> {
+fn handle_directive(program: &mut Program, raw_line: &str) -> Result<(), Error> {
     let trimmed = raw_line.trim().trim_start_matches('.');
 
     let split: Vec<&str> = trimmed.splitn(2, ' ').collect(); // Get two parts, the directive and data
@@ -274,7 +274,7 @@ fn parse_equ(equ: String) -> Result<(String, u16), Error> {
     Ok((label, value))
 }
 
-fn handle_instruction(program: &mut Program, line: &String) -> Result<(), Error> {
+fn handle_instruction(program: &mut Program, line: &str) -> Result<(), Error> {
     let mut parts = line.split_ascii_whitespace();
 
     let instruction = match parts.next() {

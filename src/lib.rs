@@ -30,7 +30,7 @@ pub struct Config {
     out_file: String,
 }
 
-pub fn usage(cmd: &String) {
+pub fn usage(cmd: &str) {
     println!("usage: {} [-o <outfile>] <source>", cmd);
 }
 
