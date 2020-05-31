@@ -21,12 +21,9 @@ pub fn scanner(raw_source: String) -> SourceTable {
 
         // Strip out comments
         // TODO: take care to handle semicolons in strings
-        match line.find(';') {
-            Some(comment_find) => {
-                let (code, _) = line.split_at(comment_find);
-                line = String::from(code).trim().to_string();
-            }
-            None => {}
+        if let Some(comment_find) = line.find(';') {
+            let (code, _) = line.split_at(comment_find);
+            line = String::from(code).trim().to_string();
         }
 
         if line.is_empty() {

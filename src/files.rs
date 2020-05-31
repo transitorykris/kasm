@@ -22,14 +22,11 @@ pub fn read_source(file: &str) -> Result<String, Error> {
     };
 
     let mut raw_source = String::new();
-    match f.read_to_string(&mut raw_source) {
-        Err(why) => {
-            return Err(error(
-                ErrorCode::FileRead,
-                format!("Couldn't read {}: {}", display, why.to_string()),
-            ))
-        }
-        Ok(_) => {}
+    if let Err(why) = f.read_to_string(&mut raw_source) {
+        return Err(error(
+            ErrorCode::FileRead,
+            format!("Couldn't read {}: {}", display, why.to_string()),
+        ));
     };
 
     Ok(raw_source)
@@ -48,14 +45,11 @@ pub fn write_out(filename: &str, output: MachineCode) -> Result<(), Error> {
         Ok(f) => f,
     };
 
-    match f.write_all(&output) {
-        Err(why) => {
-            return Err(error(
-                ErrorCode::FileWrite,
-                format!("Couldn't write {}: {}", display, why.to_string()),
-            ))
-        }
-        Ok(_) => {}
+    if let Err(why) = f.write_all(&output) {
+        return Err(error(
+            ErrorCode::FileWrite,
+            format!("Couldn't write {}: {}", display, why.to_string()),
+        ));
     };
 
     Ok(())
