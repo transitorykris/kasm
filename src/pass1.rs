@@ -177,8 +177,7 @@ fn handle_directive(program: &mut Program, raw_line: &str) -> Result<(), Error> 
             });
         }
         "ascii" => {
-            let raw_string = String::from(value);
-            let trimmed = String::from(raw_string.trim_start_matches('\"').trim_end_matches('\"'));
+            let trimmed = String::from(value.trim_start_matches('\"').trim_end_matches('\"'));
             let (data, size) = ascii_to_bytes(trimmed);
             program.code.push(CodeTableEntry {
                 address: program.counter,
