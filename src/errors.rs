@@ -19,6 +19,7 @@ macro_rules! warning {
     ($fmt:expr, $($arg:tt)*) => (print!(concat!($fmt), $($arg)*));
 }
 
+// TODO: Should this be a struct so we can derive(Debug)?
 pub type Error = (ErrorCode, ErrorMsg);
 
 pub enum ErrorCode {

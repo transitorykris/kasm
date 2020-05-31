@@ -11,19 +11,17 @@ mod files;
 use files::read_source;
 use files::write_out;
 
-mod instructions;
+pub mod instructions;
 use instructions::generate_instruction_set;
 
-mod pass1;
+pub mod pass1;
 use pass1::pass1;
 
-mod pass2;
+pub mod pass2;
 use pass2::pass2;
 
 mod scanner;
 use scanner::scanner;
-
-mod tests;
 
 const OUTFILE_DEFAULT: &str = "a.out"; // A typical default
 
