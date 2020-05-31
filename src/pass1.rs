@@ -514,14 +514,14 @@ mod tests {
     #[test]
     fn test_zeropage_x() {
         let (am, v) = get_operand_type("$cd,x");
-        assert_eq!(am, AddressMode::Zeropage);
+        assert_eq!(am, AddressMode::ZeropageX);
         assert_eq!(v, U8(0xcd));
     }
 
     #[test]
     fn test_zeropage_y() {
         let (am, v) = get_operand_type("$cd,y");
-        assert_eq!(am, AddressMode::Zeropage);
+        assert_eq!(am, AddressMode::ZeropageY);
         assert_eq!(v, U8(0xcd));
     }
 }
