@@ -320,7 +320,6 @@ fn handle_instruction(program: &mut Program, line: &str) -> Result<(), Error> {
 fn get_operand_type(operand: &str) -> (AddressMode, Value) {
     // TODO: use lazy_static somehow!
     // We use unwrap here and know we're good because we tested the code :)
-    let implied_re = Regex::new(r"^$").unwrap();
     let zeropage_re = Regex::new(r"^\$([0-9a-f]{2})$").unwrap();
     let zeropagex_re = Regex::new(r"^\$([0-9a-f]{2})\s*,\s*x$").unwrap();
     let zeropagey_re = Regex::new(r"^\$([0-9a-f]{2})\s*,\s*y$").unwrap();
@@ -335,7 +334,7 @@ fn get_operand_type(operand: &str) -> (AddressMode, Value) {
     // for branch targets...
 
     // We use unwrap below but the regexes guarantee we got something sane
-    if implied_re.is_match(operand) {
+    if operand.is_empty() {
         return (AddressMode::Implied, Value::Null);
     } else if zeropage_re.is_match(operand) {
         let caps = zeropage_re.captures(operand).unwrap();
