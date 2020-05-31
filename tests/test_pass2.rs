@@ -1,5 +1,3 @@
-use kasm;
-
 #[test]
 fn generate_null_machine_code() {
     let is = kasm::instructions::generate_instruction_set();
