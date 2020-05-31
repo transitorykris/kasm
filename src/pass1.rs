@@ -432,3 +432,96 @@ fn get_operand_type(operand: &str) -> (AddressMode, Value) {
     warning!("Warning! Unknown addressing mode");
     (AddressMode::Unknown, Value::String(String::from(operand)))
 }
+
+#[cfg(test)]
+mod tests {
+    use super::get_operand_type;
+    use super::AddressMode;
+    use super::Value::{String, U8, U16, Null};
+
+    #[test]
+    fn test_absolute() {
+        let (am, v) = get_operand_type("$12ab");
+        assert_eq!(am, AddressMode::Absolute);
+        assert_eq!(v, U16(0x12ab));
+    }
+
+    #[test]
+    fn test_absolute_x() {
+        let (am, v) = get_operand_type("$12ab,x");
+        assert_eq!(am, AddressMode::AbsoluteX);
+        assert_eq!(v, U16(0x12ab));
+    }
+
+    #[test]
+    fn test_absolute_y() {
+        let (am, v) = get_operand_type("$12ab,y");
+        assert_eq!(am, AddressMode::AbsoluteY);
+        assert_eq!(v, U16(0x12ab));
+    }
+
+    #[test]
+    fn test_immediate() {
+        let (am, v) = get_operand_type("#$cd");
+        assert_eq!(am, AddressMode::Immediate);
+        assert_eq!(v, U8(0xcd));
+    }
+
+    #[test]
+    fn test_implied() {
+        let (am, v) = get_operand_type("");
+        assert_eq!(am, AddressMode::Implied);
+        assert_eq!(v, Null);
+    }
+
+    #[test]
+    fn test_indirect() {
+        let (am, v) = get_operand_type("($12ab)");
+        assert_eq!(am, AddressMode::Indirect);
+        assert_eq!(v, U16(0x12ab));
+    }
+
+    #[test]
+    fn test_x_indexed_indirect() {
+        let (am, v) = get_operand_type("($cd,x)");
+        assert_eq!(am, AddressMode::IndirectX);
+        assert_eq!(v, U8(0xcd));
+    }
+
+    #[test]
+    fn test_indirect_y_indexed() {
+        let (am, v) = get_operand_type("($cd),y");
+        assert_eq!(am, AddressMode::IndirectY);
+        assert_eq!(v, U8(0xcd));
+    }
+
+    #[test]
+    fn test_relative() {
+        let (am, v) = get_operand_type("$cd");
+        // NOTE: We're doubling up relative and zeropage
+        // No instructions use both addressing modes
+        assert_eq!(am, AddressMode::Zeropage);
+        assert_eq!(v, U8(0xcd));
+    }
+
+    #[test]
+    fn test_zeropage() {
+        let (am, v) = get_operand_type("$cd");
+        assert_eq!(am, AddressMode::Zeropage);
+        assert_eq!(v, U8(0xcd));
+    }
+
+    #[test]
+    fn test_zeropage_x() {
+        let (am, v) = get_operand_type("$cd,x");
+        assert_eq!(am, AddressMode::Zeropage);
+        assert_eq!(v, U8(0xcd));
+    }
+
+    #[test]
+    fn test_zeropage_y() {
+        let (am, v) = get_operand_type("$cd,y");
+        assert_eq!(am, AddressMode::Zeropage);
+        assert_eq!(v, U8(0xcd));
+    }
+}
