@@ -40,3 +40,20 @@ pub fn unescape(ch: u8) -> u8 {
     //warning!("Unknown escape code: \\{}", ch);
     ch
 }
+
+#[cfg(test)]
+mod tests {
+    use super::unescape;
+
+    #[test]
+    fn test_unescape() {
+        let value = unescape(0x61);
+        assert_eq!(0x07, value);
+    }
+
+    #[test]
+    fn test_unknown_escape() {
+        let value = unescape(0x00);
+        assert_eq!(0x00, value);
+    }
+}

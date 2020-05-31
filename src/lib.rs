@@ -23,6 +23,8 @@ use pass2::pass2;
 mod scanner;
 use scanner::scanner;
 
+mod tests;
+
 const OUTFILE_DEFAULT: &str = "a.out"; // A typical default
 
 pub struct Config {
