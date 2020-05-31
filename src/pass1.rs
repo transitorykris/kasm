@@ -437,62 +437,62 @@ fn get_operand_type(operand: &str) -> (AddressMode, Value) {
 mod tests {
     use super::get_operand_type;
     use super::AddressMode;
-    use super::Value::{String, U8, U16, Null};
+    use super::Value;
 
     #[test]
     fn test_absolute() {
         let (am, v) = get_operand_type("$12ab");
         assert_eq!(am, AddressMode::Absolute);
-        assert_eq!(v, U16(0x12ab));
+        assert_eq!(v, Value::U16(0x12ab));
     }
 
     #[test]
     fn test_absolute_x() {
         let (am, v) = get_operand_type("$12ab,x");
         assert_eq!(am, AddressMode::AbsoluteX);
-        assert_eq!(v, U16(0x12ab));
+        assert_eq!(v, Value::U16(0x12ab));
     }
 
     #[test]
     fn test_absolute_y() {
         let (am, v) = get_operand_type("$12ab,y");
         assert_eq!(am, AddressMode::AbsoluteY);
-        assert_eq!(v, U16(0x12ab));
+        assert_eq!(v, Value::U16(0x12ab));
     }
 
     #[test]
     fn test_immediate() {
         let (am, v) = get_operand_type("#$cd");
         assert_eq!(am, AddressMode::Immediate);
-        assert_eq!(v, U8(0xcd));
+        assert_eq!(v, Value::U8(0xcd));
     }
 
     #[test]
     fn test_implied() {
         let (am, v) = get_operand_type("");
         assert_eq!(am, AddressMode::Implied);
-        assert_eq!(v, Null);
+        assert_eq!(v, Value::Null);
     }
 
     #[test]
     fn test_indirect() {
         let (am, v) = get_operand_type("($12ab)");
         assert_eq!(am, AddressMode::Indirect);
-        assert_eq!(v, U16(0x12ab));
+        assert_eq!(v, Value::U16(0x12ab));
     }
 
     #[test]
     fn test_x_indexed_indirect() {
         let (am, v) = get_operand_type("($cd,x)");
         assert_eq!(am, AddressMode::IndirectX);
-        assert_eq!(v, U8(0xcd));
+        assert_eq!(v, Value::U8(0xcd));
     }
 
     #[test]
     fn test_indirect_y_indexed() {
         let (am, v) = get_operand_type("($cd),y");
         assert_eq!(am, AddressMode::IndirectY);
-        assert_eq!(v, U8(0xcd));
+        assert_eq!(v, Value::U8(0xcd));
     }
 
     #[test]
@@ -501,27 +501,79 @@ mod tests {
         // NOTE: We're doubling up relative and zeropage
         // No instructions use both addressing modes
         assert_eq!(am, AddressMode::Zeropage);
-        assert_eq!(v, U8(0xcd));
+        assert_eq!(v, Value::U8(0xcd));
     }
 
     #[test]
     fn test_zeropage() {
         let (am, v) = get_operand_type("$cd");
         assert_eq!(am, AddressMode::Zeropage);
-        assert_eq!(v, U8(0xcd));
+        assert_eq!(v, Value::U8(0xcd));
     }
 
     #[test]
     fn test_zeropage_x() {
         let (am, v) = get_operand_type("$cd,x");
         assert_eq!(am, AddressMode::ZeropageX);
-        assert_eq!(v, U8(0xcd));
+        assert_eq!(v, Value::U8(0xcd));
     }
 
     #[test]
     fn test_zeropage_y() {
         let (am, v) = get_operand_type("$cd,y");
         assert_eq!(am, AddressMode::ZeropageY);
-        assert_eq!(v, U8(0xcd));
+        assert_eq!(v, Value::U8(0xcd));
+    }
+
+    #[test]
+    fn test_label_absolute() {
+        // XXX we can't distinguish between absolute and zeropage yet!
+        let (am, v) = get_operand_type("label");
+        assert_eq!(am, AddressMode::Absolute);
+        assert_eq!(v, Value::String(String::from("label")));
+    }
+
+    #[test]
+    fn test_label_absolute_x() {
+        // XXX we can't distinguish between absolute and zeropage yet!
+        let (am, v) = get_operand_type("label,x");
+        assert_eq!(am, AddressMode::AbsoluteX);
+        assert_eq!(v, Value::String(String::from("label")));
+    }
+
+    #[test]
+    fn test_label_absolute_y() {
+        // XXX we can't distinguish between absolute and zeropage yet!
+        let (am, v) = get_operand_type("label,y");
+        assert_eq!(am, AddressMode::AbsoluteY);
+        assert_eq!(v, Value::String(String::from("label")));
+    }
+
+    #[test]
+    fn test_label_immediate() {
+        let (am, v) = get_operand_type("#label");
+        assert_eq!(am, AddressMode::Immediate);
+        assert_eq!(v, Value::String(String::from("label")));
+    }
+
+    #[test]
+    fn test_label_indirect() {
+        let (am, v) = get_operand_type("(label)");
+        assert_eq!(am, AddressMode::Indirect);
+        assert_eq!(v, Value::String(String::from("label")));
+    }
+
+    #[test]
+    fn test_label_x_indexed_indirect() {
+        let (am, v) = get_operand_type("(label,x)");
+        assert_eq!(am, AddressMode::IndirectX);
+        assert_eq!(v, Value::String(String::from("label")));
+    }
+
+    #[test]
+    fn test_label_y_indexed_indirect() {
+        let (am, v) = get_operand_type("(label),y");
+        assert_eq!(am, AddressMode::IndirectY);
+        assert_eq!(v, Value::String(String::from("label")));
     }
 }
