@@ -92,7 +92,7 @@ pub fn pass1(source: &SourceTable) -> Result<Program, Error> {
             Some(first_char) => first_char,
             None => panic!("Got a line of source with not characters!"),
         };
-        if line.line.ends_with(":") {
+        if line.line.ends_with(':') {
             match handle_label(&mut program, line.line.to_string(), line.line_number) {
                 Ok(()) => (),
                 Err(err) => return Err(err),
@@ -124,7 +124,7 @@ pub fn pass1(source: &SourceTable) -> Result<Program, Error> {
 
 // TODO: finish implement labels!
 fn handle_label(program: &mut Program, raw_label: String, line_number: Line) -> Result<(), Error> {
-    let label = String::from(raw_label.trim_end_matches(":"));
+    let label = String::from(raw_label.trim_end_matches(':'));
 
     if program.symbol_table.contains_key(&label) {
         return Err(error(
@@ -146,14 +146,14 @@ fn handle_label(program: &mut Program, raw_label: String, line_number: Line) -> 
 
 // TODO: .equ directive
 fn handle_directive(program: &mut Program, raw_line: &String) -> Result<(), Error> {
-    let trimmed = raw_line.trim().trim_start_matches(".");
+    let trimmed = raw_line.trim().trim_start_matches('.');
 
-    let split: Vec<&str> = trimmed.splitn(2, " ").collect(); // Get two parts, the directive and data
+    let split: Vec<&str> = trimmed.splitn(2, ' ').collect(); // Get two parts, the directive and data
     let dir = split[0];
     let value = String::from(split[1]);
     match dir {
         "org" => {
-            let value = value.trim_start_matches("$");
+            let value = value.trim_start_matches('$');
             let address = match str_to_u16!(value) {
                 Ok(address) => address,
                 Err(_) => {
@@ -178,7 +178,7 @@ fn handle_directive(program: &mut Program, raw_line: &String) -> Result<(), Erro
         }
         "ascii" => {
             let raw_string = String::from(value);
-            let trimmed = String::from(raw_string.trim_start_matches("\"").trim_end_matches("\""));
+            let trimmed = String::from(raw_string.trim_start_matches('\"').trim_end_matches('\"'));
             let (data, size) = ascii_to_bytes(trimmed);
             program.code.push(CodeTableEntry {
                 address: program.counter,
@@ -219,10 +219,10 @@ fn handle_directive(program: &mut Program, raw_line: &String) -> Result<(), Erro
 
 fn parse_bytes(bytes: String) -> Result<Data, Error> {
     let mut data = Vec::new();
-    let parts = bytes.split_terminator(",");
+    let parts = bytes.split_terminator(',');
 
     for part in parts {
-        let raw_value = part.trim().trim_start_matches("$");
+        let raw_value = part.trim().trim_start_matches('$');
         let value = match str_to_u8!(raw_value) {
             Ok(value) => value,
             Err(_) => {
@@ -241,7 +241,7 @@ fn parse_bytes(bytes: String) -> Result<Data, Error> {
 fn parse_equ(equ: String) -> Result<(String, u16), Error> {
     // TODO:
     // - handle multiple kinds of values
-    let mut parts = equ.split("=");
+    let mut parts = equ.split('=');
     let label = match parts.next() {
         Some(label) => label.trim().to_string(),
         None => {
@@ -253,7 +253,7 @@ fn parse_equ(equ: String) -> Result<(String, u16), Error> {
     };
 
     let raw_value = match parts.next() {
-        Some(raw_value) => raw_value.trim().trim_start_matches("$"),
+        Some(raw_value) => raw_value.trim().trim_start_matches('$'),
         None => {
             return Err(error(
                 ErrorCode::MalformedEqu,

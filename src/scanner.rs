@@ -33,7 +33,7 @@ pub fn scanner(raw_source: String) -> SourceTable {
             continue;
         }
 
-        if line.starts_with(";") {
+        if line.starts_with(';') {
             continue;
         }
 
