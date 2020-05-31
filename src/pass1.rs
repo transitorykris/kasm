@@ -80,6 +80,12 @@ impl Program {
     }
 }
 
+impl Default for Program {
+    fn default() -> Self {
+        Program::new()
+    }
+}
+
 pub fn pass1(source: &SourceTable) -> Result<Program, Error> {
     let mut program = Program::new();
 
