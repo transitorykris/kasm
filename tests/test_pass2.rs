@@ -6,7 +6,7 @@ fn generate_null_machine_code() {
     let p = kasm::pass1::Program::new();
     let mc = match kasm::pass2::pass2(is, p) {
         Ok(mc) => mc,
-        Err(_) => panic!("This should never error"),
+        Err(err) => panic!("This should never error {}", err.1),
     };
     assert_eq!(0, mc.len());
 }
@@ -27,7 +27,7 @@ fn generate_simple_machine_code() {
     );
     let mc = match kasm::pass2::pass2(is, p) {
         Ok(mc) => mc,
-        Err(_) => panic!("This should never error"),
+        Err(err) => panic!("This should never error {}", err.1),
     };
     assert_eq!(mc[0x0000], 0x00);
     assert_eq!(mc[0x1233], 0x00);
