@@ -46,7 +46,7 @@ impl Config {
         let source_file = args.pop().unwrap();
         let mut temp_val = String::new();
 
-        while args.len() > 0 {
+        while !args.is_empty() {
             let val = args.pop().unwrap();
             if val == "-o" {
                 if temp_val == "" {
