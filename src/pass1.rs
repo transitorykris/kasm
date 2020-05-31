@@ -304,7 +304,7 @@ fn handle_instruction(program: &mut Program, line: &String) -> Result<(), Error>
     let entry = CodeTableEntry {
         address: program.counter,
         content: Content::Code(Code {
-            mnemonic: mnemonic,
+            mnemonic,
             address_mode,
             value,
         }),
