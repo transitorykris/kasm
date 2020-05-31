@@ -94,7 +94,7 @@ pub fn run(config: &Config) -> Result<(), Error> {
 
     // Create a data structure containing the instruction,
     // the addressing mode, and the value
-    let pass1_code = match pass1(&scanned) {
+    let pass1_code = match pass1(scanned) {
         Ok(pass1_code) => pass1_code,
         Err(err) => return Err(err),
     };

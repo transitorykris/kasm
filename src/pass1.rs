@@ -86,7 +86,7 @@ impl Default for Program {
     }
 }
 
-pub fn pass1(source: &SourceTable) -> Result<Program, Error> {
+pub fn pass1(source: SourceTable) -> Result<Program, Error> {
     let mut program = Program::new();
 
     // TODO:
