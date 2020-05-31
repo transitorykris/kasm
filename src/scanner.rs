@@ -29,7 +29,7 @@ pub fn scanner(raw_source: String) -> SourceTable {
             None => {}
         }
 
-        if line.len() == 0 {
+        if line.is_empty() {
             continue;
         }
 

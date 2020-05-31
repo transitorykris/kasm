@@ -1705,11 +1705,9 @@ pub fn str_to_mnemonic(instruction: String) -> Result<Mnemonic, Error> {
         "txs" => Ok(Mnemonic::TXS),
         "tya" => Ok(Mnemonic::TYA),
         "wai" => Ok(Mnemonic::WAI),
-        _ => {
-            Err(error(
-                ErrorCode::UnknownInstruction,
-                format!("Unknown instruction: {}", instruction),
-            ))
-        }
+        _ => Err(error(
+            ErrorCode::UnknownInstruction,
+            format!("Unknown instruction: {}", instruction),
+        )),
     }
 }
