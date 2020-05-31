@@ -9,9 +9,9 @@ pub type SourceTable = Vec<SourceLine>;
 
 pub fn scanner(raw_source: String) -> SourceTable {
     let mut source = SourceTable::new();
-    let mut line_number = 0;
 
-    for raw_line in raw_source.split('\n') {
+    for (mut line_number, raw_line) in raw_source.split('\n').enumerate() {
+        //for raw_line in raw_source.split('\n') {
         let mut line = String::from(raw_line);
         line = line.trim().to_string();
 
@@ -34,7 +34,10 @@ pub fn scanner(raw_source: String) -> SourceTable {
             continue;
         }
 
-        source.push(SourceLine { line, line_number });
+        source.push(SourceLine {
+            line,
+            line_number: line_number as u16,
+        });
     }
 
     source
