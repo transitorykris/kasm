@@ -108,8 +108,8 @@ impl Config {
         Ok(Config {
             source_file,
             out_file,
-            padding: padding,
-            size: size,
+            padding,
+            size,
         })
     }
 }
