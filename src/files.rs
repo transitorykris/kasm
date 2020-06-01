@@ -58,7 +58,7 @@ pub fn write_out(config: &Config, output: MachineCode) -> Result<(), Error> {
     }
 
     // Pad remainder of file to size required
-    if final_output.len() > config.size as usize {
+    if config.size > 0 && final_output.len() > config.size as usize {
         warning!("Warning! Final output is larger than desired size");
     }
     for _ in final_output.len()..config.size as usize {
