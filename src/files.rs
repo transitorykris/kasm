@@ -7,6 +7,7 @@ use crate::errors::error;
 use crate::errors::Error;
 use crate::errors::ErrorCode;
 use crate::pass2::MachineCode;
+use crate::Config;
 
 pub fn read_source(file: &str) -> Result<String, Error> {
     let path = Path::new(file);
@@ -32,8 +33,8 @@ pub fn read_source(file: &str) -> Result<String, Error> {
     Ok(raw_source)
 }
 
-pub fn write_out(filename: &str, output: MachineCode) -> Result<(), Error> {
-    let path = Path::new(filename);
+pub fn write_out(config: &Config, output: MachineCode) -> Result<(), Error> {
+    let path = Path::new(&config.out_file);
     let display = path.display();
     let mut f = match File::create(&path) {
         Err(why) => {
@@ -45,7 +46,27 @@ pub fn write_out(filename: &str, output: MachineCode) -> Result<(), Error> {
         Ok(f) => f,
     };
 
-    if let Err(why) = f.write_all(&output) {
+    let mut final_output: Vec<u8> = Vec::new();
+
+    // Create out initial padding
+    let mut padding = vec![0x00; config.padding as usize];
+    final_output.append(&mut padding);
+
+    // Write out code
+    for code in output {
+        final_output.push(code);
+    }
+
+    // Pad remainder of file to size required
+    if final_output.len() > config.size as usize {
+        warning!("Warning! Final output is larger than desired size");
+    }
+    for _ in final_output.len()..config.size as usize {
+        final_output.push(0x00);
+    }
+
+    // Write the final output to the output file
+    if let Err(why) = f.write_all(&final_output) {
         return Err(error(
             ErrorCode::FileWrite,
             format!("Couldn't write {}: {}", display, why.to_string()),
