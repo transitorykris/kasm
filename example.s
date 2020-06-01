@@ -7,6 +7,16 @@
 .ascii "check this ->"  ; this is just one ; comment
 .ascii "oh no, \" double quotes"
 
+.org $0000
+
+zp:thisiszeropage:
+    brk
+    nop
+    brk
+    nop
+
+zp:alsozp:
+
 .org $1000
 
 .equ myvalue = $acbd
@@ -17,8 +27,10 @@ start:
     sta $a45f           ; Store it at the absolute location $a45f
 
     ; The assembler is hitting only a few addressing modes at the moment
-    sta ($43,x)         ; to be implemented
+    sta ($43,x)
     sta ($01),y
+    sta (zp:thisiszeropage),y
+    lda zp:alsozp
     lda myvalue         ; backwards
     lda another_value   ; forwards
 

@@ -24,11 +24,13 @@ I do not know Rust, and I don't know how to build an assembler. This is probably
 |Directive|Implemented|Notes|
 |---------|-----------|-----|
 |.ascii   |partial    |The scanner probably handles ;'s poorly|
-|.bytes   |complte    ||
+|.bytes   |complete    ||
 |.equ     |partial    |Only hands $1234 words, and will panic on bad input|
-|.org     |partial    |Does not work correctly for $00 zeropage addresses|
+|.org     |partial    |Requires zp: to be prefixed to zeropage labels|
 
 ### Instructions
+
+ * All instructions are believed to work, but some tests remain.
 
 ## License
 

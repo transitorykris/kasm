@@ -385,18 +385,13 @@ fn get_operand_type(operand: &str) -> (AddressMode, Value) {
     }
 
     // Now do it all again for labels :(
-    // Note: we don't quite know where the labels are in memory right now
     // TODO: Add #< and #> for lo byte and hi byte
-    // XXX we have no real limit on the length of a label right now
     // We use unwrap here and know we're good because we tested the code :)
     let l_absolute_re = Regex::new(r"^([a-z_][0-9a-z_]*)$").unwrap();
     let l_absolutex_re = Regex::new(r"^([a-z_][0-9a-z_]*)\s*,\s*x$").unwrap();
     let l_absolutey_re = Regex::new(r"^([a-z_][0-9a-z_]*)\s*,\s*y$").unwrap();
     let l_immediate_re = Regex::new(r"^#([a-z_][0-9a-z_]*)$").unwrap();
     let l_indirect_re = Regex::new(r"^\(([a-z_][0-9a-z_]*)\)$").unwrap();
-    let l_xindexed_re = Regex::new(r"^\(([a-z_][0-9a-z_]*)\s*,\s*x\)$").unwrap();
-    let l_yindexed_re = Regex::new(r"^\(([a-z_][0-9a-z_]*)\)\s*,\s*y$").unwrap();
-    // also missing relative mode
 
     // We use unwrap below but the regexes guarantee we got something sane
     if l_absolute_re.is_match(operand) {
@@ -419,7 +414,16 @@ fn get_operand_type(operand: &str) -> (AddressMode, Value) {
         let caps = l_indirect_re.captures(operand).unwrap();
         let label = String::from(&caps[1]);
         return (AddressMode::Indirect, Value::String(label));
-    } else if l_xindexed_re.is_match(operand) {
+    }
+
+    // kasm requires all zeropage labels to be prefixed with zp:
+    let l_xindexed_re = Regex::new(r"^\((zp:[a-z_][0-9a-z_]*)\s*,\s*x\)$").unwrap();
+    let l_yindexed_re = Regex::new(r"^\((zp:[a-z_][0-9a-z_]*)\)\s*,\s*y$").unwrap();
+    let l_zeropage_re = Regex::new(r"^(zp:[a-z_][0-9a-z_]*)$").unwrap();
+    let l_zeropagex_re = Regex::new(r"^(zp:[a-z_][0-9a-z_]*)\s*,\s*x$").unwrap();
+    let l_zeropagey_re = Regex::new(r"^(zp:[a-z_][0-9a-z_]*)\s*,\s*y$").unwrap();
+
+    if l_xindexed_re.is_match(operand) {
         let caps = l_xindexed_re.captures(operand).unwrap();
         let label = String::from(&caps[1]);
         return (AddressMode::IndirectX, Value::String(label));
@@ -427,10 +431,24 @@ fn get_operand_type(operand: &str) -> (AddressMode, Value) {
         let caps = l_yindexed_re.captures(operand).unwrap();
         let label = String::from(&caps[1]);
         return (AddressMode::IndirectY, Value::String(label));
+    } else if l_zeropage_re.is_match(operand) {
+        let caps = l_zeropage_re.captures(operand).unwrap();
+        let label = String::from(&caps[1]);
+        return (AddressMode::Zeropage, Value::String(label));
+    } else if l_zeropagex_re.is_match(operand) {
+        let caps = l_zeropagex_re.captures(operand).unwrap();
+        let label = String::from(&caps[1]);
+        return (AddressMode::ZeropageX, Value::String(label));
+    } else if l_zeropagey_re.is_match(operand) {
+        let caps = l_zeropagey_re.captures(operand).unwrap();
+        let label = String::from(&caps[1]);
+        return (AddressMode::ZeropageY, Value::String(label));
     }
 
-    warning!("Warning! Unknown addressing mode");
-    (AddressMode::Unknown, Value::String(String::from(operand)))
+    // also missing relative mode
+    // We should never get here, I think
+    panic!("Unknown addressing mode!");
+    //(AddressMode::Unknown, Value::String(String::from(operand)))
 }
 
 #[cfg(test)]
@@ -565,14 +583,14 @@ mod tests {
 
     #[test]
     fn test_label_x_indexed_indirect() {
-        let (am, v) = get_operand_type("(label,x)");
+        let (am, v) = get_operand_type("(zp:label,x)");
         assert_eq!(am, AddressMode::IndirectX);
         assert_eq!(v, Value::String(String::from("label")));
     }
 
     #[test]
     fn test_label_y_indexed_indirect() {
-        let (am, v) = get_operand_type("(label),y");
+        let (am, v) = get_operand_type("(zp:label),y");
         assert_eq!(am, AddressMode::IndirectY);
         assert_eq!(v, Value::String(String::from("label")));
     }

@@ -60,9 +60,14 @@ pub fn pass2(instruction_set: InstructionMap, program: Program) -> Result<Machin
                         match program.symbol_table.get(&label) {
                             Some(val) => {
                                 let bytes = val.address.to_be_bytes();
-                                output.append(&mut vec![bytes[1], bytes[0]]); // Note: little endian!
-                                address += 2;
-                                verbose!("{:02x} {:02x}", bytes[1], bytes[0]);
+                                if bytes.len() == 1 {
+                                    output.append(&mut vec![bytes[0]]); // Note: little endian!
+                                    verbose!("{:02x}", bytes[0]);
+                                } else {
+                                    output.append(&mut vec![bytes[1], bytes[0]]); // Note: little endian!
+                                    verbose!("{:02x} {:02x}", bytes[1], bytes[0]);
+                                }
+                                address += bytes.len() as u16;
                             }
                             // This should never happen
                             None => panic!("Found an unknown label {}", label),
