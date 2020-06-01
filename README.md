@@ -35,6 +35,7 @@ I do not know Rust, and I don't know how to build an assembler. This is probably
 ### Command line options
 
 |Option|Description|
+|------|-----------|
 |-o <output_filename> |Override the default filename `a.out`|
 |-s <size> |Size in bytes of the desired binary file|
 |-p <padding> |Size in bytes of initial padding in binary file|
