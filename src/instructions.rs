@@ -18,11 +18,6 @@ pub enum AddressMode {
     Zeropage,
     ZeropageX,
     ZeropageY,
-    Unknown, // Used in the first pass
-    #[allow(dead_code)]
-    UnknownX,
-    #[allow(dead_code)]
-    UnknownY,
 }
 
 #[derive(PartialEq, Eq, Hash)]
@@ -151,9 +146,6 @@ pub fn address_mode_length(address_mode: AddressMode) -> u16 {
         AddressMode::Zeropage => 2,
         AddressMode::ZeropageX => 2,
         AddressMode::ZeropageY => 2,
-        AddressMode::Unknown => 0,
-        AddressMode::UnknownX => 0,
-        AddressMode::UnknownY => 0,
     }
 }
 
@@ -172,9 +164,6 @@ pub fn address_mode_name(address_mode: AddressMode) -> String {
         AddressMode::Zeropage => String::from("Zeropage"),
         AddressMode::ZeropageX => String::from("ZeropageX"),
         AddressMode::ZeropageY => String::from("ZeropageY"),
-        AddressMode::Unknown => String::from("Unknown"),
-        AddressMode::UnknownX => String::from("UnknownX"),
-        AddressMode::UnknownY => String::from("UnknownY"),
     }
 }
 

@@ -444,11 +444,10 @@ fn get_operand_type(operand: &str) -> (AddressMode, Value) {
         let label = String::from(&caps[1]);
         return (AddressMode::ZeropageY, Value::String(label));
     }
-
     // also missing relative mode
+
     // We should never get here, I think
     panic!("Unknown addressing mode!");
-    //(AddressMode::Unknown, Value::String(String::from(operand)))
 }
 
 #[cfg(test)]

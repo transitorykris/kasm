@@ -73,8 +73,8 @@ impl Config {
                     Ok(pad_val) => {
                         temp_val = String::from("");
                         padding = pad_val;
-                        continue
-                    },
+                        continue;
+                    }
                     Err(_) => return Err((ErrorCode::Usage, "Invalid padding size")),
                 };
             } else if val == "-s" {
@@ -85,8 +85,8 @@ impl Config {
                     Ok(size_val) => {
                         temp_val = String::from("");
                         size = size_val;
-                        continue
-                    },
+                        continue;
+                    }
                     Err(_) => return Err((ErrorCode::Usage, "Invalid file size")),
                 };
             }
