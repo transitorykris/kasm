@@ -584,13 +584,13 @@ mod tests {
     fn test_label_x_indexed_indirect() {
         let (am, v) = get_operand_type("(zp:label,x)");
         assert_eq!(am, AddressMode::IndirectX);
-        assert_eq!(v, Value::String(String::from("label")));
+        assert_eq!(v, Value::String(String::from("zp:label")));
     }
 
     #[test]
     fn test_label_y_indexed_indirect() {
         let (am, v) = get_operand_type("(zp:label),y");
         assert_eq!(am, AddressMode::IndirectY);
-        assert_eq!(v, Value::String(String::from("label")));
+        assert_eq!(v, Value::String(String::from("zp:label")));
     }
 }
