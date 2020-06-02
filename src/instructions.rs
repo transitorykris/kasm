@@ -1595,6 +1595,7 @@ pub enum Value {
     Null,
 }
 
+// TODO: Shoudl this be Option instead of Result?
 pub fn str_to_mnemonic(instruction: String) -> Result<Mnemonic, Error> {
     match instruction.as_str() {
         "adc" => Ok(Mnemonic::ADC),
@@ -1698,5 +1699,24 @@ pub fn str_to_mnemonic(instruction: String) -> Result<Mnemonic, Error> {
             ErrorCode::UnknownInstruction,
             format!("Unknown instruction: {}", instruction),
         )),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::str_to_mnemonic;
+
+    #[test]
+    fn test_good_str_to_mnemonic() {
+        if str_to_mnemonic("sta".to_string()).is_err() {
+            panic!("Expected sta to return Mnemonic::STA");
+        };
+    }
+
+    #[test]
+    fn test_bad_str_to_mnemonic() {
+        if str_to_mnemonic("abc".to_string()).is_ok() {
+            panic!("Did not expect abc to return a valid mnemonic");
+        };
     }
 }
