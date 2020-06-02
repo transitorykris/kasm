@@ -43,6 +43,24 @@ pub fn unescape(ch: u8) -> u8 {
 
 #[cfg(test)]
 mod tests {
+    use super::ascii_to_bytes;
+
+    #[test]
+    fn test_ascii_to_bytes() {
+        // We escape the escapes because .to_string() unescapes
+        let (a, s) = ascii_to_bytes("Hello\\nWorld!\\r".to_string());
+        assert_eq!(s, 13);
+        assert_eq!(a, vec![0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x0a, 0x57, 0x6f, 0x72, 0x6c, 0x64, 0x21, 0x0d]);
+    }
+
+    #[test]
+    fn test_unknown_escape_to_bytes() {
+        // We escape the escapes because .to_string() unescapes
+        let (a, s) = ascii_to_bytes("\\H".to_string());
+        assert_eq!(s, 1);
+        assert_eq!(a, vec![0x48]);
+    }
+
     use super::unescape;
 
     #[test]
