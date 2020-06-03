@@ -149,3 +149,76 @@ pub fn run(config: &Config) -> Result<(), Error> {
 
     Ok(())
 }
+
+#[cfg(test)]
+mod tests {
+    use super::Config;
+
+    #[test]
+    fn test_config() {
+        if let Ok(c) = Config::new(&mut vec![
+            "kasm".to_string(),
+            "-o".to_string(), "test.out".to_string(),
+            "-p".to_string(), "123".to_string(),
+            "-s".to_string(), "456".to_string(),
+            "test.s".to_string()]) {
+            assert_eq!(c.out_file, "test.out");
+            assert_eq!(c.padding, 123);
+            assert_eq!(c.size, 456);
+            assert_eq!(c.source_file, "test.s");
+        } else {
+            panic!("Did not expect creating a new Config to error");
+        };
+    }
+
+    #[test]
+    fn test_defaults() {
+        if let Ok(c) = Config::new(&mut vec![
+            "kasm".to_string(),
+            "test.s".to_string()]) {
+            assert_eq!(c.out_file, "a.out");
+            assert_eq!(c.padding, 0);
+            assert_eq!(c.size, 0);
+        } else {
+            panic!("Did not expect creating a new Config to error");
+        };
+    }
+
+
+    #[test]
+    fn test_bad_padding_size() {
+        if Config::new(&mut vec![
+            "kasm".to_string(),
+            "-o".to_string(), "test.out".to_string(),
+            "-p".to_string(), "123abc".to_string(),
+            "-s".to_string(), "456".to_string(),
+            "test.s".to_string()]).is_ok() {
+                panic!("Did not expect a bad padding size to work");
+        };
+    }
+
+    #[test]
+    fn test_bad_outfile_size() {
+        if Config::new(&mut vec![
+            "kasm".to_string(),
+            "-o".to_string(), "test.out".to_string(),
+            "-p".to_string(), "123".to_string(),
+            "-s".to_string(), "_#$456".to_string(),
+            "test.s".to_string()]).is_ok() {
+                panic!("Did not expect a bad size to work");
+        };
+    }
+
+
+    #[test]
+    fn test_missing_param() {
+        if Config::new(&mut vec![
+            "kasm".to_string(),
+            "-o".to_string(), "test.out".to_string(),
+            "-p".to_string(),
+            "-s".to_string(), "456".to_string(),
+            "test.s".to_string()]).is_ok() {
+                panic!("Did not expect a missing parameter to work");
+        };
+    }
+}
