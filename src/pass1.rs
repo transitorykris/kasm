@@ -14,13 +14,14 @@ use crate::scanner::SourceTable;
 
 use regex::Regex;
 
-pub struct Label {
-    pub address: Address,
-}
-
 type LabelTable = HashMap<String, Label>;
 type Address = u16;
 type Data = Vec<u8>;
+
+// Using a struct here because we expect to extend it beyond addresses
+pub struct Label {
+    pub address: Address,
+}
 
 #[derive(Eq, PartialEq)]
 pub enum Content {
