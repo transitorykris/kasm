@@ -114,6 +114,7 @@ impl Config {
     }
 }
 
+// XXX run isn't nicely testable with the filesystem calls
 pub fn run(config: &Config) -> Result<(), Error> {
     // Read in the source file
     let source = match read_source(&config.source_file) {
