@@ -149,45 +149,6 @@ pub fn address_mode_length(address_mode: AddressMode) -> u16 {
     }
 }
 
-#[allow(dead_code)]
-pub fn address_mode_name(address_mode: AddressMode) -> String {
-    match address_mode {
-        AddressMode::Absolute => String::from("Absolute"),
-        AddressMode::AbsoluteX => String::from("AbsoluteX"),
-        AddressMode::AbsoluteY => String::from("AbsoluteY"),
-        AddressMode::Immediate => String::from("Immediate"),
-        AddressMode::Implied => String::from("Implied"),
-        AddressMode::Indirect => String::from("Indirect"),
-        AddressMode::IndirectX => String::from("IndirectX"),
-        AddressMode::IndirectY => String::from("IndirectY"),
-        AddressMode::Relative => String::from("Relative"),
-        AddressMode::Zeropage => String::from("Zeropage"),
-        AddressMode::ZeropageX => String::from("ZeropageX"),
-        AddressMode::ZeropageY => String::from("ZeropageY"),
-    }
-}
-
-#[allow(dead_code)]
-pub fn get_instruction(
-    instruction_set: &InstructionMap,
-    mnemonic: Mnemonic,
-    address_mode: AddressMode,
-) -> Result<u8, Error> {
-    match instruction_set.get(&InstructionKey {
-        mnemonic,
-        address_mode,
-    }) {
-        Some(opcode) => *opcode,
-        None => {
-            return Err(error(
-                ErrorCode::NoValidOpcode,
-                "No valid opcode".to_string(),
-            ))
-        }
-    };
-    Ok(0)
-}
-
 // Something will inevitably wrong in the below!
 pub fn generate_instruction_set() -> InstructionMap {
     let mut instruction_set = InstructionMap::new();

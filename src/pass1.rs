@@ -16,13 +16,10 @@ use regex::Regex;
 
 pub struct Label {
     pub address: Address,
-    #[allow(dead_code)]
-    line: Line,
 }
 
 type LabelTable = HashMap<String, Label>;
 type Address = u16;
-type Line = u16;
 type Data = Vec<u8>;
 
 #[derive(Eq, PartialEq)]
@@ -99,7 +96,7 @@ pub fn pass1(source: SourceTable) -> Result<Program, Error> {
             None => panic!("Got a line of source with not characters!"),
         };
         if line.line.ends_with(':') {
-            match handle_label(&mut program, &line.line, line.line_number) {
+            match handle_label(&mut program, &line.line) {
                 Ok(()) => (),
                 Err(err) => return Err(err),
             }
@@ -129,7 +126,7 @@ pub fn pass1(source: SourceTable) -> Result<Program, Error> {
 }
 
 // TODO: finish implement labels!
-fn handle_label(program: &mut Program, raw_label: &str, line_number: Line) -> Result<(), Error> {
+fn handle_label(program: &mut Program, raw_label: &str) -> Result<(), Error> {
     let label = String::from(raw_label.trim_end_matches(':'));
 
     if program.symbol_table.contains_key(&label) {
@@ -143,7 +140,6 @@ fn handle_label(program: &mut Program, raw_label: &str, line_number: Line) -> Re
         label,
         Label {
             address: program.counter,
-            line: line_number,
         },
     );
 
@@ -204,13 +200,7 @@ fn handle_directive(program: &mut Program, raw_line: &str) -> Result<(), Error> 
                 ));
             }
 
-            program.symbol_table.insert(
-                label,
-                Label {
-                    address: value,
-                    line: program.counter,
-                },
-            );
+            program.symbol_table.insert(label, Label { address: value });
         }
         _ => {
             return Err(error(
