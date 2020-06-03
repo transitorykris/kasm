@@ -302,7 +302,7 @@ fn handle_instruction(program: &mut Program, line: &str) -> Result<(), Error> {
         }
     };
 
-    let mnemonic = match str_to_mnemonic(instruction) {
+    let mnemonic = match str_to_mnemonic(&instruction) {
         Ok(string) => string,
         Err(err) => return Err(err),
     };

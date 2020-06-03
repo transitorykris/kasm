@@ -1596,8 +1596,8 @@ pub enum Value {
 }
 
 // TODO: Shoudl this be Option instead of Result?
-pub fn str_to_mnemonic(instruction: String) -> Result<Mnemonic, Error> {
-    match instruction.as_str() {
+pub fn str_to_mnemonic(instruction: &str) -> Result<Mnemonic, Error> {
+    match instruction {
         "adc" => Ok(Mnemonic::ADC),
         "and" => Ok(Mnemonic::AND),
         "asl" => Ok(Mnemonic::ASL),
@@ -1708,14 +1708,14 @@ mod tests {
 
     #[test]
     fn test_good_str_to_mnemonic() {
-        if str_to_mnemonic("sta".to_string()).is_err() {
+        if str_to_mnemonic("sta").is_err() {
             panic!("Expected sta to return Mnemonic::STA");
         };
     }
 
     #[test]
     fn test_bad_str_to_mnemonic() {
-        if str_to_mnemonic("abc".to_string()).is_ok() {
+        if str_to_mnemonic("abc").is_ok() {
             panic!("Did not expect abc to return a valid mnemonic");
         };
     }
