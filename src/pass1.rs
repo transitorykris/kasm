@@ -99,7 +99,7 @@ pub fn pass1(source: SourceTable) -> Result<Program, Error> {
             None => panic!("Got a line of source with not characters!"),
         };
         if line.line.ends_with(':') {
-            match handle_label(&mut program, line.line.to_string(), line.line_number) {
+            match handle_label(&mut program, &line.line, line.line_number) {
                 Ok(()) => (),
                 Err(err) => return Err(err),
             }
@@ -129,7 +129,7 @@ pub fn pass1(source: SourceTable) -> Result<Program, Error> {
 }
 
 // TODO: finish implement labels!
-fn handle_label(program: &mut Program, raw_label: String, line_number: Line) -> Result<(), Error> {
+fn handle_label(program: &mut Program, raw_label: &str, line_number: Line) -> Result<(), Error> {
     let label = String::from(raw_label.trim_end_matches(':'));
 
     if program.symbol_table.contains_key(&label) {
@@ -172,7 +172,7 @@ fn handle_directive(program: &mut Program, raw_line: &str) -> Result<(), Error> 
             program.counter = address;
         }
         "byte" => {
-            let data = match parse_bytes(value) {
+            let data = match parse_bytes(&value) {
                 Ok(data) => data,
                 Err(err) => return Err(err),
             };
@@ -184,7 +184,7 @@ fn handle_directive(program: &mut Program, raw_line: &str) -> Result<(), Error> 
         }
         "ascii" => {
             let trimmed = String::from(value.trim_start_matches('\"').trim_end_matches('\"'));
-            let (data, size) = ascii_to_bytes(trimmed);
+            let (data, size) = ascii_to_bytes(&trimmed);
             program.code.push(CodeTableEntry {
                 address: program.counter,
                 content: Content::Data(data),
@@ -192,7 +192,7 @@ fn handle_directive(program: &mut Program, raw_line: &str) -> Result<(), Error> 
             program.counter += size;
         }
         "equ" => {
-            let (label, value) = match parse_equ(value) {
+            let (label, value) = match parse_equ(&value) {
                 Ok((label, value)) => (label, value),
                 Err(err) => return Err(err),
             };
@@ -222,7 +222,7 @@ fn handle_directive(program: &mut Program, raw_line: &str) -> Result<(), Error> 
     Ok(())
 }
 
-fn parse_bytes(bytes: String) -> Result<Data, Error> {
+fn parse_bytes(bytes: &str) -> Result<Data, Error> {
     let mut data = Vec::new();
     let parts = bytes.split_terminator(',');
 
@@ -243,7 +243,7 @@ fn parse_bytes(bytes: String) -> Result<Data, Error> {
     Ok(data)
 }
 
-fn parse_equ(equ: String) -> Result<(String, u16), Error> {
+fn parse_equ(equ: &str) -> Result<(String, u16), Error> {
     // TODO:
     // - handle multiple kinds of values
     let mut parts = equ.split('=');

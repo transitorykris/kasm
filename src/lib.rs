@@ -123,7 +123,7 @@ pub fn run(config: &Config) -> Result<(), Error> {
     };
 
     // Scan in and clean up the raw
-    let scanned = scanner(source);
+    let scanned = scanner(&source);
 
     // Create a data structure containing details of our
     // instruction set

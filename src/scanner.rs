@@ -7,7 +7,7 @@ pub struct SourceLine {
 
 pub type SourceTable = Vec<SourceLine>;
 
-pub fn scanner(raw_source: String) -> SourceTable {
+pub fn scanner(raw_source: &str) -> SourceTable {
     let mut source = SourceTable::new();
 
     for (mut line_number, raw_line) in raw_source.split('\n').enumerate() {
