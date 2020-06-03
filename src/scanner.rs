@@ -5,6 +5,12 @@ pub struct SourceLine {
     pub line_number: Line,
 }
 
+impl SourceLine {
+    fn new(line: String, line_number: Line) -> SourceLine {
+        SourceLine { line, line_number }
+    }
+}
+
 pub type SourceTable = Vec<SourceLine>;
 
 pub fn scanner(raw_source: &str) -> SourceTable {
@@ -34,10 +40,7 @@ pub fn scanner(raw_source: &str) -> SourceTable {
             continue;
         }
 
-        source.push(SourceLine {
-            line,
-            line_number: line_number as u16,
-        });
+        source.push(SourceLine::new(line, line_number as u16));
     }
 
     source
