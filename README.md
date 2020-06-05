@@ -2,6 +2,8 @@
 
 This is Kris's Assembler for the [K64](https://github.com/transitorykris/krisos).
 
+There is a companion 6502 emulator in the works called [k6502](https://github.com/transitorykris/k6502).
+
 ## Goals
 
  * Implement the WDC 6502 [instruction set](instructions.md) -- using the [WDC6502 datasheet](https://eater.net/datasheets/w65c02s.pdf)
